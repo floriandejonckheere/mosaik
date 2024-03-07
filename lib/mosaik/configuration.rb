@@ -2,8 +2,6 @@
 
 # typed: true
 
-require "logger"
-
 module MOSAIK
   class Configuration
     extend T::Sig
@@ -14,7 +12,7 @@ module MOSAIK
 
     sig { returns(Logger) }
     def logger
-      @logger ||= Logger.new(File::NULL)
+      @logger ||= Logger.new
     end
   end
 end

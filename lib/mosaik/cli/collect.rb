@@ -6,7 +6,7 @@ module MOSAIK
       def validate; end
 
       def execute
-        puts "Starting data collection..."
+        MOSAIK.configuration.logger.info "Starting data collection..."
       end
     end
   end

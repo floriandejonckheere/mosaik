@@ -13,7 +13,7 @@ module MOSAIK
         validate
         execute
       rescue StandardError => e
-        puts e.message
+        MOSAIK.configuration.logger.fatal e.message
       end
 
       protected

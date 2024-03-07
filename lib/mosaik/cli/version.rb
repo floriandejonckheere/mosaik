@@ -6,7 +6,7 @@ module MOSAIK
       def validate; end
 
       def execute
-        puts "MOSAIK #{MOSAIK::VERSION}"
+        MOSAIK.configuration.logger.info "MOSAIK #{MOSAIK::VERSION}"
       end
     end
   end

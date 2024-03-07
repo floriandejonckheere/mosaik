@@ -34,7 +34,6 @@ module MOSAIK
       yield configuration
     end
 
-    def_delegator :configuration, :redis
     def_delegator :configuration, :logger
   end
 end

@@ -14,5 +14,12 @@ module MOSAIK
         .new(options)
         .call
     end
+
+    desc "collect", "Collect data"
+    def collect
+      Collect
+        .new(options)
+        .call
+    end
   end
 end

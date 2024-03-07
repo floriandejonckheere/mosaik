@@ -2,7 +2,6 @@
 
 require "forwardable"
 
-require "sorbet-runtime"
 require "zeitwerk"
 
 module MOSAIK

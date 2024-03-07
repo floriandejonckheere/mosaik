@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "colorize", "~> 1.1"
-  spec.add_runtime_dependency "sorbet-runtime", "~> 0.5"
   spec.add_runtime_dependency "thor", "~> 1.3"
   spec.add_runtime_dependency "zeitwerk", "~> 2.6"
 end

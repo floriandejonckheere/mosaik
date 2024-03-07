@@ -22,8 +22,4 @@ group :development, :test do
   gem "rubocop", "1.61.0", require: false
   gem "rubocop-performance", "1.20.2", require: false
   gem "rubocop-rspec", "2.27.1", require: false
-
-  # Type checker
-  gem "sorbet", "0.5.11284", require: false
-  gem "tapioca", "0.12.0", require: false
 end

@@ -60,15 +60,15 @@ module MOSAIK
 
       usage(tail: "#{File.basename($PROGRAM_NAME)}: #{e.message}")
     rescue Error => e
-      MOSAIK.configuration.logger.fatal e.message
+      MOSAIK.logger.fatal e.message
     end
     # rubocop:enable Metrics/AbcSize
 
     private
 
     def usage(code: 1, tail: nil)
-      MOSAIK.configuration.logger.info parser.to_s
-      MOSAIK.configuration.logger.info tail if tail
+      MOSAIK.logger.info parser.to_s
+      MOSAIK.logger.info tail if tail
 
       raise ExitError, code
     end

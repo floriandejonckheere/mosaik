@@ -4,7 +4,7 @@ RSpec::Matchers.define :log do |expected|
   match do |actual|
     logger = double
 
-    # Mock MOSAIK.configuration.logger
+    # Mock MOSAIK.logger
     allow(MOSAIK)
       .to receive(:logger)
       .and_return logger

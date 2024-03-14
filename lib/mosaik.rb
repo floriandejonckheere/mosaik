@@ -2,6 +2,7 @@
 
 require "forwardable"
 
+require "active_support/all"
 require "zeitwerk"
 
 module MOSAIK
@@ -11,8 +12,12 @@ module MOSAIK
     # Code loader instance
     attr_reader :loader
 
-    def configuration
-      @configuration ||= Configuration.new
+    def options
+      @options ||= Options.new
+    end
+
+    def logger
+      @logger ||= Logger.new
     end
 
     def root

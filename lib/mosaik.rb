@@ -28,12 +28,6 @@ module MOSAIK
       loader.setup
       loader.eager_load
     end
-
-    def configure
-      yield configuration
-    end
-
-    def_delegator :configuration, :logger
   end
 end
 

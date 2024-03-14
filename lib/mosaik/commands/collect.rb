@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module MOSAIK
-  class CLI
-    class Collect < Base
-      def validate; end
+  module Commands
+    class Collect < Command
+      self.description = "Collect data"
 
-      def execute
+      def start
         MOSAIK.configuration.logger.info "Starting data collection..."
       end
     end

@@ -9,6 +9,9 @@ group :development, :test do
   # Debugger
   gem "debug", "1.9.1", require: false
 
+  # Create objects
+  gem "factory_bot", "6.4.6", require: false
+
   # Generate fake data
   gem "ffaker", "2.23.0", require: false
 

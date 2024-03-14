@@ -5,6 +5,10 @@ require "bundler/setup"
 
 require "mosaik"
 
-MOSAIK::CLI
-  .new(ARGV)
-  .start
+begin
+  MOSAIK::CLI
+    .new(ARGV)
+    .start
+rescue MOSAIK::ExitError => e
+  exit(e.message.to_i)
+end

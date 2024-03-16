@@ -9,6 +9,6 @@ begin
   MOSAIK::CLI
     .new(ARGV)
     .start
-rescue MOSAIK::ExitError => e
-  exit(e.message.to_i)
+rescue MOSAIK::Error => e
+  fatal(e.message)
 end

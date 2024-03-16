@@ -40,7 +40,7 @@ describe MOSAIK::CLI do
       let(:args) { ["--help"] }
 
       it "prints usage and exits" do
-        expect { expect { cli }.to raise_error MOSAIK::ExitError }.to log "[global options]"
+        expect { expect { cli }.to raise_error SystemExit }.to log "[global options]"
       end
     end
   end
@@ -52,7 +52,7 @@ describe MOSAIK::CLI do
       let(:args) { [] }
 
       it "prints usage and exits" do
-        expect { expect { cli.start }.to raise_error MOSAIK::ExitError }.to log "[global options]"
+        expect { expect { cli.start }.to raise_error MOSAIK::UsageError }.to log "[global options]"
       end
     end
 
@@ -69,7 +69,7 @@ describe MOSAIK::CLI do
       let(:args) { ["foo"] }
 
       it "prints usage and exits" do
-        expect { expect { cli.start }.to raise_error MOSAIK::ExitError }.to log "[global options]"
+        expect { expect { cli.start }.to raise_error MOSAIK::UsageError }.to log "[global options]"
       end
     end
   end

@@ -14,7 +14,7 @@ module MOSAIK
         o.on("-d", "--directory=DIRECTORY", "Set working directory")
         o.on("-v", "--verbose", "Turn on verbose logging")
         o.on("-D", "--debug", "Turn on debug logging")
-        o.on("-h", "--help", "Display this message") { usage }
+        o.on("-h", "--help", "Display this message") { usage(exit: true) }
         o.separator("\n")
         o.on("Commands:")
         commands.each do |(name, description)|
@@ -41,7 +41,6 @@ module MOSAIK
       retry
     end
 
-    # rubocop:disable Metrics/AbcSize
     def start
       command = command_args.shift
 
@@ -55,22 +54,17 @@ module MOSAIK
         .new(*command_args)
         .start
     rescue UsageError => e
-      # Don't print tail if no message was passed
-      return usage if e.message == e.class.name
+      usage
 
-      usage(tail: "#{File.basename($PROGRAM_NAME)}: #{e.message}")
-    rescue Error => e
-      fatal e.message
+      raise
     end
-    # rubocop:enable Metrics/AbcSize
 
     private
 
-    def usage(code: 1, tail: nil)
+    def usage(exit: false)
       info parser.to_s
-      info tail if tail
 
-      raise ExitError, code
+      Kernel.exit if exit
     end
 
     def commands

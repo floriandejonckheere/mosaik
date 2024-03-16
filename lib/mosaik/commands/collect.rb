@@ -6,7 +6,7 @@ module MOSAIK
       self.description = "Collect data"
 
       def start
-        MOSAIK.logger.info "Starting data collection..."
+        info "Starting data collection..."
       end
     end
   end

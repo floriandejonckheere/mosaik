@@ -6,7 +6,7 @@ module MOSAIK
       self.description = "Show the current application version"
 
       def start
-        MOSAIK.logger.info "MOSAIK #{MOSAIK::VERSION}"
+        info "MOSAIK #{MOSAIK::VERSION}"
       end
     end
   end

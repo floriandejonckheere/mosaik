@@ -12,7 +12,7 @@ module MOSAIK
     end
 
     def level
-      ENV.fetch("LOG_LEVEL", "info")
+      MOSAIK.options.debug? ? "debug" : "info"
     end
 
     private

@@ -19,11 +19,18 @@ module MOSAIK
 
     def formatter
       proc do |severity, _time, _progname, msg|
-        abort("#{File.basename($PROGRAM_NAME)}: #{msg}".white.on_red) if severity == ::Logger::FATAL
+        msg = "#{msg.chomp}\n"
 
-        msg = "#{msg}\n"
-        msg = msg.yellow if severity == ::Logger::DEBUG
-        msg = msg.red if severity == ::Logger::ERROR
+        case severity
+        when "DEBUG"
+          msg = msg.cyan
+        when "WARN"
+          msg = msg.yellow
+        when "ERROR"
+          msg = msg.red
+        when "FATAL"
+          abort("#{File.basename($PROGRAM_NAME)}: #{msg.chomp}".white.on_red)
+        end
 
         msg
       end

@@ -53,7 +53,7 @@ module MOSAIK
       klass
         .new(*command_args)
         .start
-    rescue UsageError => e
+    rescue UsageError
       usage
 
       raise

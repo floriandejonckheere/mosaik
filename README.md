@@ -4,8 +4,12 @@
 
 Modular Optimization to Service-oriented Architecture Implementation Kit (MOSAIK)
 
-MOSAIK is a toolkit for software architects and developers to convert monolithic applications into service-oriented architectures.
+MOSAIK is an automated toolkit for software architects and developers to convert monolithic applications into service-oriented architectures.
 It provides a set of tools to analyze, extract, and refactor monolithic applications into modular monoliths or microservices.
+
+## Prerequisites
+
+MOSAIK requires your application to use the [Zeitwerk](https://github.com/fxn/zeitwerk) code loader, and to adhere to Zeitwerk's [file structure](https://github.com/fxn/zeitwerk#file-structure) and [naming conventions](https://github.com/fxn/zeitwerk#zeitwerkinflector).
 
 ## Installation
 
@@ -23,7 +27,37 @@ Or install it yourself as:
 
     $ gem install mosaik
 
+Generate the binstubs:
+
+    $ bundle binstubs mosaik
+
 ## Usage
+
+Using MOSAIK is a three-step process:
+
+### Collect
+
+The `collect` command collects information about the application to analyze and extract services from.
+
+```bash
+$ mosaik collect --help
+```
+
+### Decompose
+
+The `decompose` command decomposes the application into services.
+
+```bash
+$ mosaik decompose --help
+```
+
+### Analyze
+
+The `analyze` command analyzes the given decomposition, and evaluates the quality of the decomposition.
+
+```bash
+$ mosaik analyze --help
+```
 
 ## Releasing
 

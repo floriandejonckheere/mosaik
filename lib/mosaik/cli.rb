@@ -14,7 +14,7 @@ module MOSAIK
         o.on("-d", "--directory=DIRECTORY", "Set working directory")
         o.on("-v", "--verbose", "Turn on verbose logging")
         o.on("-D", "--debug", "Turn on debug logging")
-        o.on("-h", "--help", "Display this message") { usage(exit: true) }
+        o.on("-h", "--help", "Display this message") { usage }
         o.separator("\n")
         o.on("Commands:")
         commands.each do |(name, description)|
@@ -58,18 +58,22 @@ module MOSAIK
 
       command
         .start
-    rescue UsageError
-      usage
+    rescue UsageError => e
+      # Don't print tail if no message was passed
+      return usage if e.message == e.class.name
 
-      raise
+      usage(tail: "#{File.basename($PROGRAM_NAME)}: #{e.message}")
+    rescue Error => e
+      fatal e.message
     end
 
     private
 
-    def usage(exit: false)
+    def usage(code: 1, tail: nil)
       info parser.to_s
+      fatal tail if tail
 
-      Kernel.exit if exit
+      raise ExitError, code
     end
 
     def commands

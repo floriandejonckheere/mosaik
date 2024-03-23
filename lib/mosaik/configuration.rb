@@ -26,8 +26,8 @@ module MOSAIK
 
       new(
         directory: File.dirname(file),
-        includes: configuration["include"],
-        excludes: configuration["exclude"],
+        includes: Array(configuration["include"]),
+        excludes: Array(configuration["exclude"]),
       )
     end
   end

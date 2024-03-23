@@ -1,7 +1,27 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Configuration do
-  subject(:configuration) { described_class.new }
+  subject(:configuration) { described_class.new(directory: "/tmp", includes: ["*.rb"], excludes: ["vendor"]) }
+
+  describe "#files" do
+    it "returns only included files" do
+      allow(Dir)
+        .to receive(:[])
+        .and_call_original
+
+      allow(Dir)
+        .to receive(:[])
+        .with("/tmp/*.rb")
+        .and_return ["/tmp/foo.rb", "/tmp/bar.rb", "/tmp/vendor/baz.rb"]
+
+      allow(Dir)
+        .to receive(:[])
+        .with("/tmp/vendor")
+        .and_return ["/tmp/vendor/baz.rb"]
+
+      expect(configuration.files).to eq ["/tmp/foo.rb", "/tmp/bar.rb"]
+    end
+  end
 
   describe ".from" do
     context "when the configuration file exists" do
@@ -11,12 +31,16 @@ RSpec.describe MOSAIK::Configuration do
         expect(described_class.from(file)).to be_a(described_class)
       end
 
-      it "sets the include attribute" do
-        expect(described_class.from(file).include).to eq(["foo", "bar"])
+      it "sets the directory attribute" do
+        expect(described_class.from(file).directory).to eq("spec/fixtures")
       end
 
-      it "sets the exclude attribute" do
-        expect(described_class.from(file).exclude).to eq(["baz", "qux"])
+      it "sets the includes attribute" do
+        expect(described_class.from(file).includes).to eq(["foo", "bar"])
+      end
+
+      it "sets the excludes attribute" do
+        expect(described_class.from(file).excludes).to eq(["baz", "qux"])
       end
     end
 

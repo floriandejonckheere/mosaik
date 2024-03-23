@@ -2,11 +2,21 @@
 
 module MOSAIK
   class Configuration
-    attr_reader :include, :exclude
+    attr_reader :directory, :includes, :excludes
 
-    def initialize(include = [], exclude = [])
-      @include = include
-      @exclude = exclude
+    def initialize(directory:, includes: [], excludes: [])
+      @directory = directory
+      @includes = includes
+      @excludes = excludes
+    end
+
+    def files
+      @files ||= begin
+        included_files = Dir[*includes.map { |i| "#{directory}/#{i}" }]
+        excluded_files = Dir[*excludes.map { |e| "#{directory}/#{e}" }]
+
+        included_files - excluded_files
+      end
     end
 
     def self.from(file)
@@ -15,8 +25,9 @@ module MOSAIK
       configuration = YAML.load_file(file)
 
       new(
-        configuration["include"],
-        configuration["exclude"],
+        directory: File.dirname(file),
+        includes: configuration["include"],
+        excludes: configuration["exclude"],
       )
     end
   end

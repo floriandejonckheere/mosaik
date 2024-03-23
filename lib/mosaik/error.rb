@@ -12,4 +12,7 @@ module MOSAIK
 
   # Raised when options are invalid
   class OptionError < Error; end
+
+  # Raise when configuration is invalid
+  class ConfigurationError < Error; end
 end

@@ -1,0 +1,10 @@
+---
+# List of patterns for folder paths to include
+include:
+  - foo
+  - bar
+
+# List of patterns for folder paths to exclude
+exclude:
+  - baz
+  - qux

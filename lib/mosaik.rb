@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "forwardable"
+require "yaml"
 
 require "active_support/all"
 require "zeitwerk"
@@ -14,6 +15,10 @@ module MOSAIK
 
     def options
       @options ||= Options.new
+    end
+
+    def configuration
+      @configuration ||= Configuration.from(File.join(options.directory, "mosaik.yml"))
     end
 
     def logger

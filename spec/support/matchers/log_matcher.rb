@@ -9,26 +9,23 @@ RSpec::Matchers.define :log do |expected|
       .to receive(:logger)
       .and_return logger
 
-    # Store logs with level 'info'
-    allow(logger)
-      .to receive(:info) { |s| (@messages ||= []) << s.strip.uncolorize }
-      .and_return nil
-
-    # Discard logs with other levels
-    [:error, :warn, :debug].each do |level|
+    # Store logged messages by log level
+    [:debug, :info, :warn, :error, :fatal].each do |level|
       allow(logger)
-        .to receive(level)
+        .to receive(level) { |s| ((@messages ||= {})[level] ||= []) << s.strip.uncolorize }
         .and_return nil
     end
 
     actual.call
 
-    expect(@messages)
+    expect(@messages.values.flatten)
       .to(be_any { |m| m =~ (expected.is_a?(Regexp) ? expected : /#{Regexp.escape expected}/i) })
   end
 
   failure_message do |_actual|
     messages = @messages
+      &.values
+      &.flatten
       &.map
       &.with_index { |m, i| "\n#{(i + 1).to_s.rjust(5)}) #{m.uncolorize}" }
       &.join || "nothing"

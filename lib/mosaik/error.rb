@@ -9,4 +9,7 @@ module MOSAIK
 
   # Raised when CLI arguments are invalid
   class UsageError < Error; end
+
+  # Raised when options are invalid
+  class OptionError < Error; end
 end

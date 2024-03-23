@@ -45,6 +45,26 @@ describe MOSAIK::CLI do
     end
   end
 
+  describe "#prepare" do
+    let(:args) { ["version"] }
+
+    context "when the directory does not exist" do
+      let(:args) { ["--directory", "/foo"] }
+
+      it "raises an error" do
+        expect { expect { cli.prepare }.to raise_error MOSAIK::ExitError }.to log "invalid directory: /foo"
+      end
+    end
+
+    context "when the directory is not a directory" do
+      let(:args) { ["--directory", __FILE__] }
+
+      it "raises an error" do
+        expect { expect { cli.prepare }.to raise_error MOSAIK::ExitError }.to log "not a directory: #{__FILE__}"
+      end
+    end
+  end
+
   describe "#start" do
     let(:args) { ["version", "foo"] }
 

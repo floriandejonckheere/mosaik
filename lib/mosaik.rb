@@ -3,6 +3,7 @@
 require "forwardable"
 
 require "active_support/all"
+require "parser/current"
 require "zeitwerk"
 
 module MOSAIK

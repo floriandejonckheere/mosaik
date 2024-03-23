@@ -29,7 +29,10 @@ module MOSAIK
       @loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
 
       # Register inflections
-      require root.join("config/inflections.rb")
+      require root.join("config/initializers/inflections.rb")
+
+      # Load initializers
+      Dir[root.join("config/initializers/*.rb")].each { |f| require f }
 
       loader.setup
       loader.eager_load

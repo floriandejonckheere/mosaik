@@ -11,5 +11,7 @@ FactoryBot.define do
 
   factory :collect_command, parent: :command, class: "MOSAIK::Commands::Collect"
 
+  factory :init_command, parent: :command, class: "MOSAIK::Commands::Init"
+
   factory :version_command, parent: :command, class: "MOSAIK::Commands::Version"
 end

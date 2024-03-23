@@ -33,6 +33,15 @@ Generate the binstubs:
 
 ## Usage
 
+Create a new configuration file:
+
+```bash
+$ mosaik init
+```
+
+This will create a new `mosaik.yml` configuration file in the current directory.
+The `mosaik.yml` file tells MOSAIK which files should be included or excluded from the decomposition.
+
 Using MOSAIK is a three-step process:
 
 ### Collect

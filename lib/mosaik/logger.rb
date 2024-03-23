@@ -19,6 +19,7 @@ module MOSAIK
 
     def formatter
       proc do |severity, _time, _progname, msg|
+        msg = msg.inspect unless msg.is_a?(String)
         msg = "#{msg.chomp}\n"
 
         case severity
@@ -29,7 +30,7 @@ module MOSAIK
         when "ERROR"
           msg = msg.red
         when "FATAL"
-          abort("#{File.basename($PROGRAM_NAME)}: #{msg.chomp}".white.on_red)
+          msg = msg.white.on_red
         end
 
         msg

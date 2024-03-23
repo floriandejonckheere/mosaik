@@ -12,8 +12,8 @@ module MOSAIK
       @args = args
     end
 
-    def start
-      raise NotImplementedError
-    end
+    def prepare; end
+
+    def start; end
   end
 end

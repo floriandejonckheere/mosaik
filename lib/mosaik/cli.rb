@@ -42,16 +42,21 @@ module MOSAIK
     end
 
     def start
-      command = command_args.shift
+      command_name = command_args.shift
 
-      raise UsageError, "no command specified" unless command
+      raise UsageError, "no command specified" unless command_name
 
-      klass = "MOSAIK::Commands::#{command.camelize}".safe_constantize
+      klass = "MOSAIK::Commands::#{command_name.camelize}".safe_constantize
 
-      raise UsageError, "unknown command: #{command}" unless klass
+      raise UsageError, "unknown command: #{command_name}" unless klass
 
-      klass
+      command = klass
         .new(*command_args)
+
+      command
+        .prepare
+
+      command
         .start
     rescue UsageError
       usage

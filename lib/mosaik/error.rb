@@ -13,6 +13,9 @@ module MOSAIK
   # Raised when options are invalid
   class OptionError < Error; end
 
-  # Raise when configuration is invalid
+  # Raised when configuration is invalid
   class ConfigurationError < Error; end
+
+  # Raised when file type is unknown
+  class UnknownFileType < Error; end
 end

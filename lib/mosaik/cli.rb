@@ -41,6 +41,7 @@ module MOSAIK
       retry
     end
 
+    # rubocop:disable Metrics/AbcSize
     def start
       command_name = command_args.shift
 
@@ -65,7 +66,10 @@ module MOSAIK
       usage(tail: "#{File.basename($PROGRAM_NAME)}: #{e.message}")
     rescue Error => e
       fatal e.message
+
+      raise ExitError, 1
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 

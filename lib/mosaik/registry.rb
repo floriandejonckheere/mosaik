@@ -3,20 +3,31 @@
 module MOSAIK
   class Registry
     include Enumerable
-    def [](constant_path)
-      # Split constant path by ::
-      current_hierarchy = hierarchy
-      current_constant = nil
 
+    attr_reader :top
+
+    def initialize
+      # Create a top-level constant to represent the root of the hierarchy
+      @top = Constant.new(nil)
+    end
+
+    def [](constant_path)
+      current_constant = top
+
+      # Split constant path by ::
       constant_path.split("::").inject(nil) do |fully_qualified_constant_name, constant_name|
         # Generate fully qualified constant name
         fully_qualified_constant_name = [fully_qualified_constant_name, constant_name].compact.join("::")
 
         # Look up or create constant
-        current_constant, descendants = current_hierarchy[fully_qualified_constant_name] ||= [Constant.new(fully_qualified_constant_name), {}]
+        next_constant = current_constant.descendants.find { |c| c.name == fully_qualified_constant_name }
+        next_constant ||= Constant.new(fully_qualified_constant_name, current_constant)
 
-        # Descend into hierarchy
-        current_hierarchy = descendants
+        # Add constant to hierarchy
+        current_constant.descendants << next_constant
+
+        # Descend into the next constant
+        current_constant = next_constant
 
         fully_qualified_constant_name
       end
@@ -25,21 +36,14 @@ module MOSAIK
     end
 
     def each(&)
-      dfs(hierarchy, &)
+      dfs(top, &)
     end
 
-    private
+    def dfs(constant, &block)
+      constant.descendants.each do |descendant|
+        yield descendant
 
-    def hierarchy
-      # { "Foo" => [#<Constant "Foo">, { "Bar" => [#<Constant "Foo::Bar">, {}], "Baz" => [#<Constant "Foo::Baz">, {}] }] }
-      @hierarchy ||= {}
-    end
-
-    def dfs(hierarchy, &block)
-      hierarchy.each_value do |(constant, descendants)|
-        yield constant
-
-        dfs(descendants, &block)
+        dfs(descendant, &block)
       end
     end
   end

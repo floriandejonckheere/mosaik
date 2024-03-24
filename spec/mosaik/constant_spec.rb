@@ -12,6 +12,14 @@ RSpec.describe MOSAIK::Constant do
     expect(constant.methods).to eq({})
   end
 
+  it "has a parent" do
+    expect(constant.parent).to be_nil
+  end
+
+  it "has an empty set of descendants" do
+    expect(constant.descendants).to be_empty
+  end
+
   describe "#hash" do
     it "returns the hash of the name" do
       expect(constant.hash).to eq constant.name.hash

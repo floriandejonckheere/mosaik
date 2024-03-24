@@ -23,6 +23,28 @@ RSpec.describe MOSAIK::Registry do
 
       expect(constant.name).to eq "Foo::Bar"
     end
+
+    it "stores the constants hierarchically" do
+      registry["Foo::Bar"]
+      registry["Foo::Baz::Bat"]
+
+      foo = registry["Foo"]
+
+      expect(foo.descendants.map(&:name)).to eq ["Foo::Bar", "Foo::Baz"]
+      expect(foo.parent.name).to be_nil
+
+      foo_bar = registry["Foo::Bar"]
+      expect(foo_bar.descendants.map(&:name)).to eq []
+      expect(foo_bar.parent.name).to eq "Foo"
+
+      foo_baz = registry["Foo::Baz"]
+      expect(foo_baz.descendants.map(&:name)).to eq ["Foo::Baz::Bat"]
+      expect(foo_baz.parent.name).to eq "Foo"
+
+      foo_baz_bat = registry["Foo::Baz::Bat"]
+      expect(foo_baz_bat.descendants.map(&:name)).to eq []
+      expect(foo_baz_bat.parent.name).to eq "Foo::Baz"
+    end
   end
 
   describe "#each" do

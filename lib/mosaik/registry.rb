@@ -7,11 +7,21 @@ module MOSAIK
     attr_reader :hierarchy
 
     def initialize
-      @hierarchy = Hierarchy.new
+      @hierarchy = {}
     end
 
-    def [](constant_name)
-      constants[constant_name]
+    def [](constant_path)
+      # Split constant path by ::
+      current_hierarchy = hierarchy
+
+      constant_path.split("::").each do |constant_name|
+        current_hierarchy[constant_name] ||= {}
+
+        # Descend into hierarchy
+        current_hierarchy = current_hierarchy[constant_name]
+      end
+
+      constants[constant_path]
     end
 
     def each(...)

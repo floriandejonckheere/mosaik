@@ -17,5 +17,11 @@ RSpec.describe MOSAIK::Registry do
 
       expect(constant1).to eq constant2
     end
+
+    it "registers the constant in the hierarchy" do
+      registry["Foo::Bar"]
+
+      expect(registry.hierarchy).to eq({ "Foo" => { "Bar" => {} } })
+    end
   end
 end

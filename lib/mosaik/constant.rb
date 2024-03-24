@@ -7,7 +7,7 @@ module MOSAIK
     def initialize(name)
       @name = name
 
-      @methods = Hash.new
+      @methods = {}
     end
 
     def add_method(method_name, file = nil, line_num = nil)

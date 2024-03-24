@@ -8,7 +8,7 @@ RSpec.describe MOSAIK::Registry do
       constant = registry["Foo"]
 
       expect(constant).to be_a MOSAIK::Constant
-      expect(constant.name).to eq("Foo")
+      expect(constant.name).to eq "Foo"
     end
 
     it "returns the same constant for the same name" do
@@ -18,10 +18,23 @@ RSpec.describe MOSAIK::Registry do
       expect(constant1).to eq constant2
     end
 
-    it "registers the constant in the hierarchy" do
-      registry["Foo::Bar"]
+    it "returns nested constants" do
+      constant = registry["Foo::Bar"]
 
-      expect(registry.hierarchy).to eq({ "Foo" => { "Bar" => {} } })
+      expect(constant.name).to eq "Foo::Bar"
+    end
+  end
+
+  describe "#each" do
+    it "yields each constant in depth-first order" do
+      registry["Foo"]
+      registry["Foo::Bar"]
+      registry["Foo::Baz::Bat"]
+
+      constants = []
+      registry.each { |constant| constants << constant.name }
+
+      expect(constants).to eq ["Foo", "Foo::Bar", "Foo::Baz", "Foo::Baz::Bat"]
     end
   end
 end

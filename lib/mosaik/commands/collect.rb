@@ -36,14 +36,14 @@ module MOSAIK
         end
 
         # Print the hierarchy recursively
-        print_hierarchy(registry.hierarchy)
+        print_hierarchy(registry.instance_variable_get(:@hierarchy))
       end
 
       private
 
       def print_hierarchy(hierarchy, level = 0)
-        hierarchy.each_key do |constant_name, descendants|
-          debug ("  " * level) + constant_name
+        hierarchy.each_value do |constant, descendants|
+          debug ("  " * level) + constant.name
 
           print_hierarchy(descendants, level + 1)
         end

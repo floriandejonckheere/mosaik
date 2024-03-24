@@ -19,7 +19,7 @@ module MOSAIK
         self.current_class = current_class ? "#{current_class}::#{class_name}" : class_name
 
         # Register class
-        registry.hierarchy[current_class]
+        registry[current_class]
 
         debug "Class #{current_class} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
@@ -37,7 +37,7 @@ module MOSAIK
         self.current_class = current_class ? "#{current_class}::#{module_name}" : module_name
 
         # Register module
-        registry.hierarchy[current_class]
+        registry[current_class]
 
         debug "Module #{current_class} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 

@@ -107,4 +107,7 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+
+  # Redirect logger output to a file
+  MOSAIK.logger = Logger.new(MOSAIK.root.join("tmp/mosaik.test.log"))
 end

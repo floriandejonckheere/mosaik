@@ -13,6 +13,8 @@ module MOSAIK
     # Code loader instance
     attr_reader :loader
 
+    attr_writer :logger
+
     def options
       @options ||= Options.new
     end

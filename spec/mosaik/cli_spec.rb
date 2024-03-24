@@ -3,8 +3,6 @@
 describe MOSAIK::CLI do
   subject(:cli) { described_class.new(args) }
 
-  around { |example| suppress_output { example.run } }
-
   describe "options" do
     describe "--directory" do
       let(:args) { ["--directory", "/foo/bar/.."] }

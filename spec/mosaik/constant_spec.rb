@@ -14,13 +14,13 @@ RSpec.describe MOSAIK::Constant do
 
   describe "#==" do
     it "returns true when the name is the same" do
-      other = described_class.new constant.name
+      other = build(:constant, name: constant.name)
 
       expect(constant).to eq(other)
     end
 
     it "returns false when the name is different" do
-      other = described_class.new("other")
+      other = build(:constant, name: "Other")
 
       expect(constant).not_to eq(other)
     end

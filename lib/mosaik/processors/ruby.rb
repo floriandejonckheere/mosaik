@@ -86,13 +86,15 @@ module MOSAIK
         constant_name = constant_name_from(receiver)
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
+
+        registry.constants[current_class].methods[current_method].references << Reference.new(registry.constants[constant_name], callee)
       end
 
       private
 
       def method_from(node)
         receiver = node.children[0]
-        callee = node.children[1]
+        callee = node.children[1].to_s
 
         # If the receiver is a send, descend to the child node
         # We are only interested in the first callee
@@ -105,7 +107,8 @@ module MOSAIK
         # If current node is a send, descend to the child node
         return constant_name_from(node.children[0]) if node&.type == :send
 
-        # If current node is not a constant, return empty string
+        # If current node is not a constant, return current namespace
+        # FIXME: fully qualify the constant
         return "" unless node&.type == :const
 
         # Current constant name

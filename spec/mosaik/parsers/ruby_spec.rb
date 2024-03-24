@@ -9,18 +9,26 @@ RSpec.describe MOSAIK::Parsers::Ruby do
   it "parses a Ruby file" do
     parser.parse(file, registry)
 
-    constant = MOSAIK::Constant.new("App::User")
+    # Test constants
+    user = build(:constant, name: "App::User")
+    user_validator = build(:constant, name: "Validators::User") # FIXME: fully qualify the constant
 
-    expect(registry.constants.values).to eq [constant]
+    expect(registry.constants.values).to eq [user, user_validator]
 
-    initialize = MOSAIK::Method.new(constant, "initialize", file, 5)
-    name = MOSAIK::Method.new(constant, "name", file, 11)
-    email = MOSAIK::Method.new(constant, "email", file, 15)
-    admin = MOSAIK::Method.new(constant, "admin", file, 19)
-    # TODO: admin_ = MOSAIK::Method.new(constant, "admin?", file, 23)
-    valid_ = MOSAIK::Method.new(constant, "valid?", file, 25)
-    to_s = MOSAIK::Method.new(constant, "to_s", file, 29)
+    # Test methods
+    initialize = build(:method, constant: user, name: "initialize")
+    name = build(:method, constant: user, name: "name")
+    email = build(:method, constant: user, name: "email")
+    admin = build(:method, constant: user, name: "admin")
+    # TODO: admin_ = build(:method, constant:, "admin?")
+    valid_ = build(:method, constant: user, name: "valid?")
+    to_s = build(:method, constant: user, name: "to_s")
 
     expect(registry.constants.values.first.methods.values).to eq [initialize, name, email, admin, valid_, to_s]
+
+    # Test references
+    reference = build(:reference, constant: user_validator, method: "valid?")
+
+    expect(registry.constants.values.first.methods["valid?"].references).to eq [reference]
   end
 end

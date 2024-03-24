@@ -19,8 +19,6 @@ module MOSAIK
         # Build fully qualified class name
         self.current_class = current_class ? "#{current_class}::#{class_name}" : class_name
 
-        debug "Processing class: #{class_name} => #{current_class}"
-
         # Traverse the AST
         node.children.each { |c| process(c) }
 

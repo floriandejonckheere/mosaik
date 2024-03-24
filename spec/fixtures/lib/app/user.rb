@@ -2,15 +2,29 @@
 
 module App
   class User
-    attr_reader :name, :email, :admin
-
     def initialize(name, email, admin: false)
       @name = name
       @email = email
       @admin = admin
     end
 
+    def name
+      @name
+    end
+
+    def email
+      @email
+    end
+
+    def admin
+      @admin
+    end
+
     alias admin? admin
+
+    def valid?
+      Validators::User.valid?(self)
+    end
 
     def to_s
       "#{name} <#{email}>"

@@ -44,6 +44,10 @@ RSpec/MessageSpies:
 RSpec/MultipleExpectations:
   Enabled: false
 
+Style/AccessorGrouping:
+  Exclude:
+    - spec/fixtures/**/*.rb
+    -
 Style/Documentation:
   Enabled: false
 
@@ -70,6 +74,10 @@ Style/StringLiterals:
 
 Style/SymbolArray:
   EnforcedStyle: brackets
+
+Style/TrivialAccessors:
+  Exclude:
+    - spec/fixtures/**/*.rb
 
 Style/WordArray:
   EnforcedStyle: brackets

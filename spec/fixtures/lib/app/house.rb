@@ -2,10 +2,16 @@
 
 module App
   class House
-    attr_reader :address
-
     def initialize(address)
       @address = address
+    end
+
+    def address
+      @address
+    end
+
+    def valid?
+      Validators::House.valid?(self)
     end
   end
 end

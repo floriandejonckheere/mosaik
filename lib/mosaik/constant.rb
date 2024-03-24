@@ -9,5 +9,13 @@ module MOSAIK
 
       @methods = []
     end
+
+    def to_s
+      "#{name} (#{methods.size} methods)"
+    end
+
+    def inspect
+      "#<Constant #{self}>"
+    end
   end
 end

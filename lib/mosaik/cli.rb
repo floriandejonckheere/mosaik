@@ -5,31 +5,12 @@ require "English"
 
 module MOSAIK
   class CLI
-    attr_reader :parser, :args, :command_args
+    attr_reader :args, :command_args
 
     def initialize(args)
-      @parser = OptionParser.new("#{File.basename($PROGRAM_NAME)} [global options] command [command options]") do |o|
-        o.on("Global options:")
-        o.on("-d", "--directory=DIRECTORY", "Set working directory")
-        o.on("-v", "--verbose", "Turn on verbose logging")
-        o.on("-D", "--debug", "Turn on debug logging")
-        o.on("-h", "--help", "Display this message") { usage }
-        o.separator("\n")
-        o.on("Commands:")
-        commands.each do |(name, description)|
-          o.on("    #{name.ljust(33)}#{description}")
-        end
-        o.separator("\n")
-      end
-
       @args = args
       @command_args = []
 
-      parse!
-    end
-    # rubocop:enable Metrics/AbcSize
-
-    def parse!
       # Parse command line arguments (in order) and extract non-option arguments
       # (unrecognized option values). Raise for invalid option arguments (unrecognized
       # option keys). "--foo FOO --bar BAR" will result in "--foo" and "FOO" being parsed
@@ -50,7 +31,6 @@ module MOSAIK
       raise ExitError, 1
     end
 
-    # rubocop:disable Metrics/AbcSize
     def start
       command_name = command_args.shift
 
@@ -81,6 +61,22 @@ module MOSAIK
     # rubocop:enable Metrics/AbcSize
 
     private
+
+    def parser
+      @parser ||= OptionParser.new("#{File.basename($PROGRAM_NAME)} [global options] command [command options]") do |o|
+        o.on("Global options:")
+        o.on("-d", "--directory=DIRECTORY", "Set working directory")
+        o.on("-v", "--verbose", "Turn on verbose logging")
+        o.on("-D", "--debug", "Turn on debug logging")
+        o.on("-h", "--help", "Display this message") { usage }
+        o.separator("\n")
+        o.on("Commands:")
+        commands.each do |(name, description)|
+          o.on("    #{name.ljust(33)}#{description}")
+        end
+        o.separator("\n")
+      end
+    end
 
     def usage(code: 1, tail: nil)
       info parser.to_s

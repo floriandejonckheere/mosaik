@@ -15,4 +15,11 @@ FactoryBot.define do
     file { "lib/mosaik/constant.rb" }
     line { 6 }
   end
+
+  factory :reference, class: MOSAIK::Reference do
+    initialize_with { new(constant, method) }
+
+    constant
+    add_attribute :method
+  end
 end

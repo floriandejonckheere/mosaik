@@ -20,8 +20,8 @@ module MOSAIK
 
     def to_s
       [
-        "#{file}:#{line}",
         name,
+        "#{file}:#{line}",
         "(#{references.size} references)",
       ].compact.join(" ")
     end

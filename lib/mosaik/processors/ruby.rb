@@ -18,6 +18,9 @@ module MOSAIK
         # Build fully qualified class name
         self.current_class = current_class ? "#{current_class}::#{class_name}" : class_name
 
+        # Register class
+        registry.hierarchy[current_class]
+
         debug "Class #{current_class} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
         # Traverse the AST
@@ -32,6 +35,9 @@ module MOSAIK
 
         # Build fully qualified class name
         self.current_class = current_class ? "#{current_class}::#{module_name}" : module_name
+
+        # Register module
+        registry.hierarchy[current_class]
 
         debug "Module #{current_class} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
@@ -89,6 +95,12 @@ module MOSAIK
 
         registry.constants[current_class].methods[current_method].references << Reference.new(registry.constants[constant_name], callee)
       end
+      #
+      # # Constants
+      # def on_const(node)
+      #
+      #   warn "Const #{node.children[1]} (#{current_class}) in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
+      # end
 
       private
 

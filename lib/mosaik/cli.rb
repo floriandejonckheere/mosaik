@@ -7,7 +7,6 @@ module MOSAIK
   class CLI
     attr_reader :parser, :args, :command_args
 
-    # rubocop:disable Metrics/AbcSize
     def initialize(args)
       @parser = OptionParser.new("#{File.basename($PROGRAM_NAME)} [global options] command [command options]") do |o|
         o.on("Global options:")

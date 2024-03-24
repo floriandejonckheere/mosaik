@@ -95,12 +95,6 @@ module MOSAIK
 
         registry[current_class].methods[current_method].references << Reference.new(registry[constant_name], callee)
       end
-      #
-      # # Constants
-      # def on_const(node)
-      #
-      #   warn "Const #{node.children[1]} (#{current_class}) in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
-      # end
 
       private
 

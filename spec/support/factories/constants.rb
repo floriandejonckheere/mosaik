@@ -8,8 +8,9 @@ FactoryBot.define do
   end
 
   factory :method, class: MOSAIK::Method do
-    initialize_with { new(name, file, line) }
+    initialize_with { new(constant, name, file, line) }
 
+    constant
     name { "initialize" }
     file { "lib/mosaik/constant.rb" }
     line { 6 }

@@ -6,24 +6,20 @@ RSpec.describe MOSAIK::Parsers::Ruby do
   let(:file) { "spec/fixtures/lib/app/user.rb" }
   let(:registry) { MOSAIK::Registry.new }
 
-  it "parses constants" do
+  it "parses a Ruby file" do
     parser.parse(file, registry)
 
     constant = MOSAIK::Constant.new("App::User")
 
-    expect(registry.constants.values).to contain_exactly constant
-  end
+    expect(registry.constants.values).to eq [constant]
 
-  it "parses methods" do
-    parser.parse(file, registry)
-
-    initialize = MOSAIK::Method.new("initialize", file, 5)
-    name = MOSAIK::Method.new("name", file, 11)
-    email = MOSAIK::Method.new("email", file, 15)
-    admin = MOSAIK::Method.new("admin", file, 19)
-    # TODO: admin_ = MOSAIK::Method.new("admin?", file, 23)
-    valid_ = MOSAIK::Method.new("valid?", file, 25)
-    to_s = MOSAIK::Method.new("to_s", file, 29)
+    initialize = MOSAIK::Method.new(constant, "initialize", file, 5)
+    name = MOSAIK::Method.new(constant, "name", file, 11)
+    email = MOSAIK::Method.new(constant, "email", file, 15)
+    admin = MOSAIK::Method.new(constant, "admin", file, 19)
+    # TODO: admin_ = MOSAIK::Method.new(constant, "admin?", file, 23)
+    valid_ = MOSAIK::Method.new(constant, "valid?", file, 25)
+    to_s = MOSAIK::Method.new(constant, "to_s", file, 29)
 
     expect(registry.constants.values.first.methods.values).to eq [initialize, name, email, admin, valid_, to_s]
   end

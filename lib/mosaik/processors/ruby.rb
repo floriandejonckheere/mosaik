@@ -49,7 +49,7 @@ module MOSAIK
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
 
-        registry.constants[current_class].methods[method_name] = Method.new(method_name, file, line_num)
+        registry.constants[current_class].methods[method_name] = Method.new(registry.constants[current_class], method_name, file, line_num)
       end
 
       # Class methods
@@ -63,7 +63,7 @@ module MOSAIK
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
 
-        registry.constants[current_class].methods[method_name] = Method.new(method_name, file, line_num)
+        registry.constants[current_class].methods[method_name] = Method.new(registry.constants[current_class], method_name, file, line_num)
       end
 
       # Method bodies

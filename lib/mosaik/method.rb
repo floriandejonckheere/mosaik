@@ -2,9 +2,10 @@
 
 module MOSAIK
   class Method
-    attr_reader :name, :file, :line, :references
+    attr_reader :constant, :name, :file, :line, :references
 
-    def initialize(name, file, line)
+    def initialize(constant, name, file, line)
+      @constant = constant
       @name = name
       @file = file
       @line = line
@@ -13,7 +14,8 @@ module MOSAIK
     end
 
     def ==(other)
-      name == other.name &&
+      constant == other.constant &&
+        name == other.name &&
         file == other.file &&
         line == other.line
     end

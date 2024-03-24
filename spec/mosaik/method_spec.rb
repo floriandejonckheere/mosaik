@@ -23,4 +23,30 @@ RSpec.describe MOSAIK::Method do
   it "has an empty array of references" do
     expect(method.references).to eq([])
   end
+
+  describe "#==" do
+    it "returns true when the name, file, and line are the same" do
+      other = described_class.new(name, file, line)
+
+      expect(method).to eq(other)
+    end
+
+    it "returns false when the name is different" do
+      other = described_class.new("other", file, line)
+
+      expect(method).not_to eq(other)
+    end
+
+    it "returns false when the file is different" do
+      other = described_class.new(name, "other.rb", line)
+
+      expect(method).not_to eq(other)
+    end
+
+    it "returns false when the line is different" do
+      other = described_class.new(name, file, 2)
+
+      expect(method).not_to eq(other)
+    end
+  end
 end

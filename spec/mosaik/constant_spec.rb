@@ -13,4 +13,18 @@ RSpec.describe MOSAIK::Constant do
   it "has an empty array of methods" do
     expect(constant.methods).to eq([])
   end
+
+  describe "#==" do
+    it "returns true when the name is the same" do
+      other = described_class.new(name)
+
+      expect(constant).to eq(other)
+    end
+
+    it "returns false when the name is different" do
+      other = described_class.new("other")
+
+      expect(constant).not_to eq(other)
+    end
+  end
 end

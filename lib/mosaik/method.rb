@@ -12,6 +12,12 @@ module MOSAIK
       @references = []
     end
 
+    def ==(other)
+      name == other.name &&
+        file == other.file &&
+        line == other.line
+    end
+
     def to_s
       "#{file}:#{line} #{name} (#{references.size} references)"
     end

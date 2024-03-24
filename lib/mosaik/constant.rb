@@ -10,6 +10,10 @@ module MOSAIK
       @methods = []
     end
 
+    def ==(other)
+      name == other.name
+    end
+
     def to_s
       "#{name} (#{methods.size} methods)"
     end

@@ -21,32 +21,20 @@ RSpec.describe MOSAIK::Method do
   end
 
   describe "#==" do
-    it "returns true when the constant, name, file, and line are the same" do
-      other = build(:method, constant: method.constant, name: method.name, file: method.file, line: method.line)
+    it "returns true when the constant and name are the same" do
+      other = build(:method, constant: method.constant, name: method.name)
 
       expect(method).to eq(other)
     end
 
     it "returns false when the constant is different" do
-      other = build(:method, constant: build(:constant, name: "Other"), name: method.name, file: method.file, line: method.line)
+      other = build(:method, constant: build(:constant, name: "Other"))
 
       expect(method).not_to eq(other)
     end
 
     it "returns false when the name is different" do
-      other = build(:method, constant: method.constant, name: "other", file: method.file, line: method.line)
-
-      expect(method).not_to eq(other)
-    end
-
-    it "returns false when the file is different" do
-      other = build(:method, constant: method.constant, name: method.name, file: "other.rb", line: method.line)
-
-      expect(method).not_to eq(other)
-    end
-
-    it "returns false when the line is different" do
-      other = build(:method, constant: method.constant, name: method.name, file: method.file, line: 6)
+      other = build(:method, constant: method.constant, name: "other")
 
       expect(method).not_to eq(other)
     end

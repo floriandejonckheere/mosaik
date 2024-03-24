@@ -4,7 +4,7 @@ module MOSAIK
   class Method
     attr_reader :constant, :name, :file, :line, :references
 
-    def initialize(constant, name, file, line)
+    def initialize(constant, name, file = nil, line = nil)
       @constant = constant
       @name = name
       @file = file
@@ -15,13 +15,15 @@ module MOSAIK
 
     def ==(other)
       constant == other.constant &&
-        name == other.name &&
-        file == other.file &&
-        line == other.line
+        name == other.name
     end
 
     def to_s
-      "#{file}:#{line} #{name} (#{references.size} references)"
+      [
+        "#{file}:#{line}",
+        name,
+        "(#{references.size} references)",
+      ].compact.join(" ")
     end
 
     def inspect

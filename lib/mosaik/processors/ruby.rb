@@ -46,7 +46,7 @@ module MOSAIK
         line_num = node.loc.line
         method_name = node.children[0]
 
-        registry.constants[current_class].methods << Method.new(method_name.to_s, nil, line_num)
+        registry.constants[current_class].methods << Method.new(method_name.to_s, file, line_num)
       end
 
       # Class methods
@@ -54,7 +54,7 @@ module MOSAIK
         line_num = node.loc.line
         method_name = "self.#{node.children[1]}"
 
-        registry.constants[current_class].methods << Method.new(method_name.to_s, nil, line_num)
+        registry.constants[current_class].methods << Method.new(method_name.to_s, file, line_num)
       end
 
       def on_begin(node)

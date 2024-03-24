@@ -10,6 +10,7 @@ module MOSAIK
           ".rb" => Parsers::Ruby.new,
         }
 
+        # Instantiate a constant registry
         registry = Registry.new
 
         # Parse file with an appropriate parser

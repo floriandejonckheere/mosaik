@@ -10,7 +10,7 @@ module MOSAIK
           .parse_file(file)
 
         Processors::Ruby
-          .new(file, registry)
+          .new(registry)
           .process(ast)
       end
     end

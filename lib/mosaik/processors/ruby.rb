@@ -3,13 +3,12 @@
 module MOSAIK
   module Processors
     class Ruby < AST::Processor
-      attr_reader :file, :registry
+      attr_reader :registry
       attr_accessor :current_class
 
-      def initialize(file, registry)
+      def initialize(registry)
         super()
 
-        @file = file
         @registry = registry
       end
 
@@ -42,6 +41,7 @@ module MOSAIK
       # Instance methods
       def on_def(node)
         line_num = node.loc.line
+        file = node.loc.expression.source_buffer.name
         method_name = node.children[0]
 
         registry.constants[current_class].methods << Method.new(method_name.to_s, file, line_num)
@@ -50,6 +50,7 @@ module MOSAIK
       # Class methods
       def on_defs(node)
         line_num = node.loc.line
+        file = node.loc.expression.source_buffer.name
         method_name = "self.#{node.children[1]}"
 
         registry.constants[current_class].methods << Method.new(method_name.to_s, file, line_num)

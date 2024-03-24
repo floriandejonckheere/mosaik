@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = "Toolkit for converting monolithic applications into modular, service-oriented architectures."
   spec.homepage      = "https://github.com/floriandejonckheere/mosaik"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 3.3")
+  spec.required_ruby_version = Gem::Requirement.new("~> 3.3")
 
   spec.metadata["source_code_uri"] = "https://github.com/floriandejonckheere/mosaik.git"
   spec.metadata["rubygems_mfa_required"] = "true"

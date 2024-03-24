@@ -4,7 +4,7 @@ module MOSAIK
   module Parsers
     class Ruby
       def parse(file)
-        ast = Parser::CurrentRuby
+        ast = Parser::Ruby33
           .parse_file(file)
 
         processor

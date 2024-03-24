@@ -23,7 +23,7 @@ module MOSAIK
         end
 
         # Print the registry
-        registry.constants.each_value do |constant|
+        registry.each do |constant|
           debug constant
 
           constant.methods.each_value do |method|

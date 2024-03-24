@@ -58,7 +58,7 @@ module MOSAIK
 
         debug "Class instance method #{current_class}##{method_name} in #{file}:#{line_num}"
 
-        registry.constants[current_class].methods[method_name] = Method.new(registry.constants[current_class], method_name, file, line_num)
+        registry[current_class].methods[method_name] = Method.new(registry[current_class], method_name, file, line_num)
 
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
@@ -74,7 +74,7 @@ module MOSAIK
 
         debug "Class method #{current_class}.#{node.children[1]} in #{file}:#{line_num}"
 
-        registry.constants[current_class].methods[method_name] = Method.new(registry.constants[current_class], method_name, file, line_num)
+        registry[current_class].methods[method_name] = Method.new(registry[current_class], method_name, file, line_num)
 
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
@@ -93,7 +93,7 @@ module MOSAIK
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
-        registry.constants[current_class].methods[current_method].references << Reference.new(registry.constants[constant_name], callee)
+        registry[current_class].methods[current_method].references << Reference.new(registry[constant_name], callee)
       end
       #
       # # Constants

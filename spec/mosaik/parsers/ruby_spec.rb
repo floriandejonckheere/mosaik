@@ -13,7 +13,7 @@ RSpec.describe MOSAIK::Parsers::Ruby do
     user = build(:constant, name: "App::User")
     user_validator = build(:constant, name: "Validators::User") # FIXME: fully qualify the constant
 
-    expect(registry.constants.values).to eq [user, user_validator]
+    expect(registry).to contain_exactly user, user_validator
 
     # Test methods
     initialize = build(:method, constant: user, name: "initialize")
@@ -24,11 +24,11 @@ RSpec.describe MOSAIK::Parsers::Ruby do
     valid_ = build(:method, constant: user, name: "valid?")
     to_s = build(:method, constant: user, name: "to_s")
 
-    expect(registry.constants.values.first.methods.values).to eq [initialize, name, email, admin, valid_, to_s]
+    expect(registry.first.methods.values).to eq [initialize, name, email, admin, valid_, to_s]
 
     # Test references
     reference = build(:reference, constant: user_validator, method: "valid?")
 
-    expect(registry.constants.values.first.methods["valid?"].references).to eq [reference]
+    expect(registry.first.methods["valid?"].references).to eq [reference]
   end
 end

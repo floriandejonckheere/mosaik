@@ -14,8 +14,6 @@ module MOSAIK
 
         # Parse file with an appropriate parser
         MOSAIK.configuration.files.each do |file|
-          debug "Parsing file: #{file}"
-
           parsers
             .fetch(File.extname(file))
             .parse(file, registry)

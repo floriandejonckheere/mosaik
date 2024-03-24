@@ -19,6 +19,8 @@ module MOSAIK
         # Build fully qualified class name
         self.current_class = current_class ? "#{current_class}::#{class_name}" : class_name
 
+        debug "Processing class: #{class_name} => #{current_class}"
+
         # Traverse the AST
         node.children.each { |c| process(c) }
 
@@ -30,7 +32,7 @@ module MOSAIK
         module_name = node.children[0].children[1].to_s
 
         # Build fully qualified class name
-        self.current_class = current_class ? "#{module_name}::#{current_class}" : module_name
+        self.current_class = current_class ? "#{current_class}::#{module_name}" : module_name
 
         # Traverse the AST
         node.children.each { |c| process(c) }

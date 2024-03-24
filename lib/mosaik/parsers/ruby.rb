@@ -4,6 +4,8 @@ module MOSAIK
   module Parsers
     class Ruby
       def parse(file, registry)
+        debug "Parsing file: #{file}"
+
         ast = Parser::Ruby33
           .parse_file(file)
 

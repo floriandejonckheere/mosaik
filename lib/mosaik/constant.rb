@@ -7,7 +7,7 @@ module MOSAIK
     def initialize(name)
       @name = name
 
-      @methods = []
+      @methods = Hash.new { |h, k| h[k] = [] }
     end
 
     def ==(other)

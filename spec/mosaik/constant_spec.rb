@@ -10,8 +10,8 @@ RSpec.describe MOSAIK::Constant do
     expect(constant.name).to eq(name)
   end
 
-  it "has an empty array of methods" do
-    expect(constant.methods).to eq([])
+  it "has an empty hash of methods" do
+    expect(constant.methods).to eq({})
   end
 
   describe "#==" do

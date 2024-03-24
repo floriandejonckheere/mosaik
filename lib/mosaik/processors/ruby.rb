@@ -42,9 +42,9 @@ module MOSAIK
       def on_def(node)
         line_num = node.loc.line
         file = node.loc.expression.source_buffer.name
-        method_name = node.children[0]
+        method_name = node.children[0].to_s
 
-        registry.constants[current_class].methods << Method.new(method_name.to_s, file, line_num)
+        registry.constants[current_class].methods[method_name] = Method.new(method_name, file, line_num)
       end
 
       # Class methods
@@ -53,7 +53,7 @@ module MOSAIK
         file = node.loc.expression.source_buffer.name
         method_name = "self.#{node.children[1]}"
 
-        registry.constants[current_class].methods << Method.new(method_name.to_s, file, line_num)
+        registry.constants[current_class].methods[method_name] = Method.new(method_name, file, line_num)
       end
 
       def on_begin(node)

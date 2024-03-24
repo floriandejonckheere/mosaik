@@ -16,6 +16,6 @@ RSpec.describe MOSAIK::Parsers::Ruby do
     initialize = MOSAIK::Method.new("initialize", file, 7)
     to_s = MOSAIK::Method.new("to_s", file, 15)
 
-    expect(registry.constants.values.first.methods).to contain_exactly initialize, to_s
+    expect(registry.constants.values.first.methods.values).to contain_exactly initialize, to_s
   end
 end

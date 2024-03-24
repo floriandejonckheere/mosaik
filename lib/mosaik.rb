@@ -4,6 +4,7 @@ require "forwardable"
 require "yaml"
 
 require "active_support/all"
+require "ruby-graphviz"
 require "zeitwerk"
 
 module MOSAIK

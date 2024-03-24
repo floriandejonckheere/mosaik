@@ -36,11 +36,11 @@ RSpec.describe MOSAIK::Configuration do
       end
 
       it "sets the includes attribute" do
-        expect(described_class.from(file).includes).to eq(["foo", "bar"])
+        expect(described_class.from(file).includes).to eq(["**/*.{rb,rake,erb}"])
       end
 
       it "sets the excludes attribute" do
-        expect(described_class.from(file).excludes).to eq(["baz", "qux"])
+        expect(described_class.from(file).excludes).to eq(["{bin,node_modules,script,tmp,vendor}/**/*"])
       end
     end
 

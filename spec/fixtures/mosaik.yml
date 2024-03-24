@@ -1,10 +1,8 @@
 ---
 # List of patterns for folder paths to include
 include:
-  - foo
-  - bar
+  - "**/*.{rb,rake,erb}"
 
 # List of patterns for folder paths to exclude
 exclude:
-  - baz
-  - qux
+  - "{bin,node_modules,script,tmp,vendor}/**/*"

@@ -33,10 +33,8 @@ module MOSAIK
               debug "    #{reference}"
             end
           end
-        end
 
-        # Print the hierarchy
-        registry.each do |constant|
+          # Print the hierarchy
           debug ("  " * constant.name.scan("::").count) + constant.name
         end
       end

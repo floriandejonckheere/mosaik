@@ -2,22 +2,18 @@
 # typed: true
 
 RSpec.describe MOSAIK::Method do
-  subject(:method) { described_class.new(name, file, line) }
-
-  let(:name) { "test" }
-  let(:file) { "test.rb" }
-  let(:line) { 1 }
+  subject(:method) { build(:method, name: "test", file: "test.rb", line: 5) }
 
   it "has a name" do
-    expect(method.name).to eq(name)
+    expect(method.name).to eq "test"
   end
 
   it "has a file" do
-    expect(method.file).to eq(file)
+    expect(method.file).to eq "test.rb"
   end
 
   it "has a line" do
-    expect(method.line).to eq(line)
+    expect(method.line).to eq 5
   end
 
   it "has an empty array of references" do
@@ -26,25 +22,25 @@ RSpec.describe MOSAIK::Method do
 
   describe "#==" do
     it "returns true when the name, file, and line are the same" do
-      other = described_class.new(name, file, line)
+      other = described_class.new(method.name, method.file, method.line)
 
       expect(method).to eq(other)
     end
 
     it "returns false when the name is different" do
-      other = described_class.new("other", file, line)
+      other = described_class.new("other", method.file, method.line)
 
       expect(method).not_to eq(other)
     end
 
     it "returns false when the file is different" do
-      other = described_class.new(name, "other.rb", line)
+      other = described_class.new(method.name, "other", method.line)
 
       expect(method).not_to eq(other)
     end
 
     it "returns false when the line is different" do
-      other = described_class.new(name, file, 2)
+      other = described_class.new(method.name, method.file, 2)
 
       expect(method).not_to eq(other)
     end

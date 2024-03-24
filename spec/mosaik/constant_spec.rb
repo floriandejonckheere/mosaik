@@ -2,12 +2,10 @@
 # typed: true
 
 RSpec.describe MOSAIK::Constant do
-  subject(:constant) { described_class.new(name) }
-
-  let(:name) { "MOSAIK::Constant" }
+  subject(:constant) { build(:constant, name: "Name") }
 
   it "has a name" do
-    expect(constant.name).to eq(name)
+    expect(constant.name).to eq "Name"
   end
 
   it "has an empty hash of methods" do
@@ -16,7 +14,7 @@ RSpec.describe MOSAIK::Constant do
 
   describe "#==" do
     it "returns true when the name is the same" do
-      other = described_class.new(name)
+      other = described_class.new constant.name
 
       expect(constant).to eq(other)
     end

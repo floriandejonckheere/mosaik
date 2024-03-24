@@ -14,6 +14,10 @@ module MOSAIK
       methods[method_name] = Method.new(self, method_name, file, line_num)
     end
 
+    def hash
+      name.hash
+    end
+
     def ==(other)
       name == other.name
     end

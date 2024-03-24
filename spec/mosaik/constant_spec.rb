@@ -12,6 +12,12 @@ RSpec.describe MOSAIK::Constant do
     expect(constant.methods).to eq({})
   end
 
+  describe "#hash" do
+    it "returns the hash of the name" do
+      expect(constant.hash).to eq constant.name.hash
+    end
+  end
+
   describe "#==" do
     it "returns true when the name is the same" do
       other = build(:constant, name: constant.name)

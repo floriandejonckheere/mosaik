@@ -3,7 +3,15 @@
 module MOSAIK
   module Processors
     class Ruby < AST::Processor
+      attr_reader :file, :registry
       attr_accessor :current_class
+
+      def initialize(file, registry)
+        super()
+
+        @file = file
+        @registry = registry
+      end
 
       def on_class(node)
         class_name = node.children[0].children[1].to_s
@@ -36,7 +44,7 @@ module MOSAIK
         line_num = node.loc.line
         method_name = node.children[0]
 
-        class_list[current_class] << { name: method_name.to_s, line: line_num }
+        registry.constants[current_class].methods << Method.new(method_name.to_s, nil, line_num)
       end
 
       # Class methods
@@ -44,15 +52,11 @@ module MOSAIK
         line_num = node.loc.line
         method_name = "self.#{node.children[1]}"
 
-        class_list[current_class] << { name: method_name.to_s, line: line_num }
+        registry.constants[current_class].methods << Method.new(method_name.to_s, nil, line_num)
       end
 
       def on_begin(node)
         node.children.each { |c| process(c) }
-      end
-
-      def class_list
-        @class_list ||= Hash.new { |h, k| h[k] = [] }
       end
     end
   end

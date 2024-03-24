@@ -10,15 +10,22 @@ module MOSAIK
           ".rb" => Parsers::Ruby.new,
         }
 
+        registry = Registry.new
+
         # Parse file with an appropriate parser
         MOSAIK.configuration.files.each do |file|
-          info "Parsing file: #{file}"
+          debug "Parsing file: #{file}"
 
           parsers
             .fetch(File.extname(file))
-            .parse(file)
+            .parse(file, registry)
         rescue KeyError
           raise UnknownFileType, "No parser for file type: #{File.extname(file)}"
+        end
+
+        # Print the registry
+        registry.constants.each_value do |constant|
+          info constant
         end
       end
     end

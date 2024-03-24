@@ -3,21 +3,13 @@
 module MOSAIK
   module Parsers
     class Ruby
-      def parse(file)
+      def parse(file, registry)
         ast = Parser::Ruby33
           .parse_file(file)
 
-        processor
+        Processors::Ruby
+          .new(file, registry)
           .process(ast)
-
-        puts processor
-          .class_list
-      end
-
-      private
-
-      def processor
-        @processor ||= Processors::Ruby.new
       end
     end
   end

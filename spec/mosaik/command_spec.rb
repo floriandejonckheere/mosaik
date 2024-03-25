@@ -12,6 +12,10 @@ RSpec.describe MOSAIK::Command do
       argument "--number NUMBER", Integer, "Number argument"
       argument "--a-string A_STRING", "A string argument"
       argument "--boolean", "Boolean argument"
+
+      def self.name
+        "MOSAIK::Commands::Test"
+      end
     end
   end
 

@@ -9,7 +9,7 @@ module MOSAIK
                output: "mosaik.dot",
                force: false
 
-      argument "-t", "--type TYPE", "Type of collection (default: static)"
+      argument "-t", "--type TYPE", "Type of collection (default: static, available: static, dynamic, contributor)"
       argument "-o", "--output OUTPUT", "Output file (default: mosaik.dot)"
       argument "-f", "--force", "Overwrite existing file"
 
@@ -24,6 +24,10 @@ module MOSAIK
           Collection::Static
             .new
             .call
+        when "dynamic"
+          # TODO
+        when "contributor"
+          # TODO
         end
       end
     end

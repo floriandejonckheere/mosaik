@@ -3,6 +3,12 @@
 module MOSAIK
   module Collection
     class Static
+      attr_reader :options
+
+      def initialize(options)
+        @options = options
+      end
+
       PARSERS = {
         ".rb" => Parsers::Ruby,
       }.freeze

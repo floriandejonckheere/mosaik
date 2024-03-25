@@ -22,7 +22,7 @@ module MOSAIK
         case options[:type]
         when "static"
           Collection::Static
-            .new
+            .new(options)
             .call
         when "dynamic"
           # TODO

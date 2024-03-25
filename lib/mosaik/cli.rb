@@ -11,11 +11,16 @@ module MOSAIK
       @args = args
       @command_args = []
 
+      parse
+    end
+
+    def parse
       # Parse command line arguments (in order) and extract non-option arguments
       # (unrecognized option values). Raise for invalid option arguments (unrecognized
       # option keys). "--foo FOO --bar BAR" will result in "--foo" and "FOO" being parsed
       # correctly, "--bar" and "BAR" will be extracted.
-      parser.order!(args, into: MOSAIK.options) { |value| command_args << value }
+      # This needs to be in a separate method due to the retry logic.
+      parser.order!(args, into: MOSAIK.options) { |value| @command_args << value }
     rescue OptionParser::InvalidOption => e
       @command_args += e.args
       retry
@@ -32,6 +37,7 @@ module MOSAIK
     end
 
     def start
+      # Extract command name
       command_name = command_args.shift
 
       raise UsageError, "no command specified" unless command_name
@@ -40,6 +46,13 @@ module MOSAIK
 
       raise UsageError, "unknown command: #{command_name}" unless klass
 
+      # Add command arguments to global argument parser (for the usage message)
+      klass.arguments.each do |args, kwargs, block|
+        parser.on(*args, **kwargs, &block)
+      end
+      parser.separator("\n")
+
+      # Execute command
       command = klass
         .new(*command_args)
 

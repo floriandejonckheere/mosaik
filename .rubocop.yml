@@ -53,6 +53,9 @@ RSpec/MessageSpies:
 RSpec/MultipleExpectations:
   Enabled: false
 
+RSpec/NestedGroups:
+  Enabled: false
+
 Style/AccessorGrouping:
   Exclude:
     - spec/fixtures/**/*.rb

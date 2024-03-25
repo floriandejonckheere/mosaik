@@ -27,7 +27,6 @@ module MOSAIK
     end
 
     def prepare
-      # Validate options
       raise OptionError, "invalid directory: #{MOSAIK.options.directory}" unless File.exist?(MOSAIK.options.directory)
       raise OptionError, "not a directory: #{MOSAIK.options.directory}" unless File.directory?(MOSAIK.options.directory)
     rescue Error => e

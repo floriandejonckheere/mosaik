@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MOSAIK
-  module Collection
+  module Collectors
     class Static
       attr_reader :options
 

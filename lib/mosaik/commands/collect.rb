@@ -21,7 +21,7 @@ module MOSAIK
       def start
         case options[:type]
         when "static"
-          Collection::Static
+          Collectors::Static
             .new(options)
             .call
         when "dynamic"

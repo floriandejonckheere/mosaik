@@ -2,19 +2,19 @@
 
 module MOSAIK
   class Configuration
-    attr_reader :directory, :paths, :includes, :excludes
+    attr_reader :directory, :load_paths, :includes, :excludes
 
-    def initialize(directory:, paths: [], includes: [], excludes: [])
+    def initialize(directory:, load_paths: [], includes: [], excludes: [])
       @directory = directory
-      @paths = paths
+      @load_paths = load_paths
       @includes = includes
       @excludes = excludes
     end
 
     def files
       @files ||= begin
-        included_files = Dir[*paths.flat_map { |p| includes.map { |i| File.join(directory, p, i) } }]
-        excluded_files = Dir[*paths.flat_map { |p| excludes.map { |e| File.join(directory, p, e) } }]
+        included_files = Dir[*load_paths.flat_map { |p| includes.map { |i| File.join(directory, p, i) } }]
+        excluded_files = Dir[*load_paths.flat_map { |p| excludes.map { |e| File.join(directory, p, e) } }]
 
         included_files - excluded_files
       end

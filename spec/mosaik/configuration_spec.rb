@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Configuration do
-  subject(:configuration) { described_class.new(directory: "/tmp", paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"]) }
+  subject(:configuration) { described_class.new(directory: "/tmp", load_paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"]) }
 
   describe "#files" do
     it "returns only included files" do

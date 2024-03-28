@@ -12,15 +12,15 @@ module MOSAIK
 
         template = <<~YAML
           ---
-          # Paths to search for files
-          paths:
-            - lib
+          # Application load paths
+          load_paths:
+            - .
 
-          # List of patterns for folder paths to include
+          # List of patterns for files to include
           include:
             - "**/*.{rb,rake,erb}"
 
-          # List of patterns for folder paths to exclude
+          # List of patterns for files to exclude
           exclude:
             - "{bin,node_modules,script,tmp,vendor}/**/*"
         YAML

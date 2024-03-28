@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-RSpec.describe MOSAIK::Command do
+RSpec.describe MOSAIK::Arguments do
   let(:command_class) do
-    Class.new(described_class) do
+    Class.new do
+      include MOSAIK::Arguments
+
       self.description = "A command"
 
       defaults number: 1,

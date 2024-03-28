@@ -14,6 +14,9 @@ module MOSAIK
       argument "-f", "--force", "Overwrite existing file"
       argument "-r", "--render", "Render a PNG image of the graph"
 
+      # History options
+      argument "--since DATE", "Include only commits from a specific date"
+
       def prepare
         raise OptionError, "unknown collection type: #{options[:type]}" unless options[:type].in? ["static", "history"]
         raise OptionError, "file already exists: #{options[:output]}, use --force to overwrite" if File.exist?(options[:output]) && !options[:force]

@@ -34,7 +34,7 @@ Generate the binstubs:
 
 ## Usage
 
-Create a new configuration file:
+In the root directory of your project, create a new configuration file:
 
 ```bash
 $ mosaik init

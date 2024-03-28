@@ -4,6 +4,7 @@ require "forwardable"
 require "yaml"
 
 require "active_support/all"
+require "git"
 require "ruby-graphviz"
 require "zeitwerk"
 

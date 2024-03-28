@@ -7,10 +7,10 @@ module MOSAIK
   class Resolver
     attr_reader :directory, :load_paths, :overrides
 
-    def initialize(directory, load_paths)
+    def initialize(directory, load_paths, overrides = {})
       @directory = directory
       @load_paths = load_paths
-      @overrides = {}
+      @overrides = overrides
     end
 
     def override(**overrides)

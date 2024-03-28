@@ -1,4 +1,8 @@
 ---
+# Paths to search for files
+paths:
+  - .
+
 # List of patterns for folder paths to include
 include:
   - "**/*.{rb,rake,erb}"

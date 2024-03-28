@@ -12,6 +12,10 @@ module MOSAIK
 
         template = <<~YAML
           ---
+          # Paths to search for files
+          paths:
+            - lib
+
           # List of patterns for folder paths to include
           include:
             - "**/*.{rb,rake,erb}"

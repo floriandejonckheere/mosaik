@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Configuration do
-  subject(:configuration) { described_class.new(directory: "/tmp", includes: ["*.rb"], excludes: ["vendor"]) }
+  subject(:configuration) { described_class.new(directory: "/tmp", paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"]) }
 
   describe "#files" do
     it "returns only included files" do
@@ -11,15 +11,15 @@ RSpec.describe MOSAIK::Configuration do
 
       allow(Dir)
         .to receive(:[])
-        .with("/tmp/*.rb")
-        .and_return ["/tmp/foo.rb", "/tmp/bar.rb", "/tmp/vendor/baz.rb"]
+        .with("/tmp/lib/*.rb")
+        .and_return ["/tmp/lib/foo.rb", "/tmp/lib/bar.rb", "/tmp/lib/vendor/baz.rb"]
 
       allow(Dir)
         .to receive(:[])
-        .with("/tmp/vendor")
-        .and_return ["/tmp/vendor/baz.rb"]
+        .with("/tmp/lib/vendor")
+        .and_return ["/tmp/lib/vendor/baz.rb"]
 
-      expect(configuration.files).to eq ["/tmp/foo.rb", "/tmp/bar.rb"]
+      expect(configuration.files).to eq ["/tmp/lib/foo.rb", "/tmp/lib/bar.rb"]
     end
   end
 

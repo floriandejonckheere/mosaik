@@ -9,12 +9,12 @@ module MOSAIK
                output: "mosaik.dot",
                force: false
 
-      argument "-t", "--type TYPE", "Type of collection (default: static, available: static, dynamic, contributor)"
+      argument "-t", "--type TYPE", "Type of collection (default: static, available: static, history)"
       argument "-o", "--output OUTPUT", "Output file (default: mosaik.dot)"
       argument "-f", "--force", "Overwrite existing file"
 
       def prepare
-        raise OptionError, "unknown collection type: #{options[:type]}" unless ["static"].include?(options[:type])
+        raise OptionError, "unknown collection type: #{options[:type]}" unless options[:type].in? ["static", "history"]
         raise OptionError, "file already exists: #{options[:output]}, use --force to overwrite" if File.exist?(options[:output]) && !options[:force]
       end
 
@@ -24,10 +24,10 @@ module MOSAIK
           Collectors::Static
             .new(options)
             .call
-        when "dynamic"
-          # TODO
-        when "contributor"
-          # TODO
+        when "history"
+          Collectors::History
+            .new(options)
+            .call
         end
       end
     end

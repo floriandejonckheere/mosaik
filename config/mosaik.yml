@@ -1,7 +1,7 @@
 ---
 # Application load paths
 load_paths:
-  - .
+  - lib
 
 # List of patterns for files to include
 include:
@@ -10,3 +10,7 @@ include:
 # List of patterns for files to exclude
 exclude:
   - "{bin,node_modules,script,tmp,vendor}/**/*"
+
+# Dictionary of constant name overrides
+overrides:
+  foobar: FooBar

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Configuration do
-  subject(:configuration) { described_class.new(directory: "/tmp", load_paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"]) }
+  subject(:configuration) { described_class.new(directory: "/tmp", load_paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"], overrides: { "foobar" => "FooBar" }) }
 
   describe "#files" do
     it "returns only included files" do
@@ -25,22 +25,30 @@ RSpec.describe MOSAIK::Configuration do
 
   describe ".from" do
     context "when the configuration file exists" do
-      let(:file) { "spec/fixtures/mosaik.yml" }
+      let(:file) { MOSAIK.root.join("spec/fixtures/mosaik.yml") }
 
       it "creates a new configuration instance" do
-        expect(described_class.from(file)).to be_a(described_class)
+        expect(described_class.from(file)).to be_a described_class
       end
 
       it "sets the directory attribute" do
-        expect(described_class.from(file).directory).to eq("spec/fixtures")
+        expect(described_class.from(file).directory).to eq MOSAIK.root.join("spec/fixtures").to_s
+      end
+
+      it "sets the load_paths attribute" do
+        expect(described_class.from(file).load_paths).to eq ["lib"]
       end
 
       it "sets the includes attribute" do
-        expect(described_class.from(file).includes).to eq(["**/*.{rb,rake,erb}"])
+        expect(described_class.from(file).includes).to eq ["**/*.{rb,rake,erb}"]
       end
 
       it "sets the excludes attribute" do
-        expect(described_class.from(file).excludes).to eq(["{bin,node_modules,script,tmp,vendor}/**/*"])
+        expect(described_class.from(file).excludes).to eq ["{bin,node_modules,script,tmp,vendor}/**/*"]
+      end
+
+      it "sets the overrides attribute" do
+        expect(described_class.from(file).overrides).to eq "foobar" => "FooBar"
       end
     end
 
@@ -48,7 +56,7 @@ RSpec.describe MOSAIK::Configuration do
       let(:file) { "spec/fixtures/missing.yml" }
 
       it "raises an error" do
-        expect { described_class.from(file) }.to raise_error(MOSAIK::ConfigurationError, "Configuration file not found: #{file}")
+        expect { described_class.from(file) }.to raise_error MOSAIK::ConfigurationError, "Configuration file not found: #{file}"
       end
     end
   end

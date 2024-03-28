@@ -24,6 +24,9 @@ module MOSAIK
       # Get the path without the file name
       path = File.dirname(abspath)
 
+      # Remove the directory prefix
+      path = path.gsub(%r(#{directory}/?), "")
+
       # Return unless the path is in the load paths
       return unless load_paths.any? { |load_path| path.start_with?(load_path) }
 

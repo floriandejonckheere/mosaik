@@ -7,7 +7,7 @@ RSpec.describe MOSAIK::Resolver do
     let(:directory) { "/tmp" }
     let(:load_paths) { ["lib", "app"] }
 
-    it "resolves file paths to constant names" do
+    it "resolves relative file paths to constant names" do
       expect(resolver.resolve("lib/mosaik.rb"))
         .to eq("Mosaik")
 
@@ -21,10 +21,27 @@ RSpec.describe MOSAIK::Resolver do
         .to eq("Users::User")
     end
 
+    it "resolves absolute file paths to constant names" do
+      expect(resolver.resolve("/tmp/lib/mosaik.rb"))
+        .to eq("Mosaik")
+
+      expect(resolver.resolve("/tmp/lib/mosaik/version.rb"))
+        .to eq("Mosaik::Version")
+
+      expect(resolver.resolve("/tmp/app/user.rb"))
+        .to eq("User")
+
+      expect(resolver.resolve("/tmp/app/users/user.rb"))
+        .to eq("Users::User")
+    end
+
     it "resolves file paths with custom overrides" do
       resolver.override("mosaik" => "MOSAIK")
 
       expect(resolver.resolve("lib/mosaik/version.rb"))
+        .to eq("MOSAIK::Version")
+
+      expect(resolver.resolve("/tmp/lib/mosaik/version.rb"))
         .to eq("MOSAIK::Version")
     end
 
@@ -33,6 +50,9 @@ RSpec.describe MOSAIK::Resolver do
         .to be_nil
 
       expect(resolver.resolve("mosaik.rb"))
+        .to be_nil
+
+      expect(resolver.resolve("/var/mosaik.rb"))
         .to be_nil
     end
   end

@@ -10,22 +10,7 @@ module MOSAIK
 
         raise ConfigurationError, "Configuration file already exists at #{configuration_file}" if File.exist?(configuration_file)
 
-        template = <<~YAML
-          ---
-          # Application load paths
-          load_paths:
-            - .
-
-          # List of patterns for files to include
-          include:
-            - "**/*.{rb,rake,erb}"
-
-          # List of patterns for files to exclude
-          exclude:
-            - "{bin,node_modules,script,tmp,vendor}/**/*"
-        YAML
-
-        File.write(configuration_file, template)
+        FileUtils.cp(MOSAIK.root.join("config/mosaik.yml"), configuration_file)
 
         info "Configuration written to #{configuration_file}"
       end

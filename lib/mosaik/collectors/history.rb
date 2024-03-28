@@ -2,13 +2,7 @@
 
 module MOSAIK
   module Collectors
-    class History
-      attr_reader :options
-
-      def initialize(options)
-        @options = options
-      end
-
+    class History < Collector
       def call
         git = Git.open(MOSAIK.options.directory, log: ::Logger.new(File::NULL))
 

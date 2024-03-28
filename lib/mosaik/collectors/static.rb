@@ -2,13 +2,7 @@
 
 module MOSAIK
   module Collectors
-    class Static
-      attr_reader :options
-
-      def initialize(options)
-        @options = options
-      end
-
+    class Static < Collector
       PARSERS = {
         ".rb" => Parsers::Ruby,
       }.freeze
@@ -43,10 +37,7 @@ module MOSAIK
           debug ("  " * constant.name.scan("::").count) + constant.name
         end
 
-        # Construct a call graph
-        graph = GraphViz.new(:call_graph, type: :digraph)
-
-        registry.each { |constant| construct(constant, graph) }
+        registry.each { |constant| construct(constant) } # rubocop:disable Style/CombinableLoops
 
         # Write the graph to a file
         graph.output(dot: options[:output])
@@ -56,7 +47,7 @@ module MOSAIK
 
       private
 
-      def construct(constant, graph)
+      def construct(constant)
         # Get or create the node for the constant
         node = graph.get_node(constant.name) || graph.add_node(constant.name)
 

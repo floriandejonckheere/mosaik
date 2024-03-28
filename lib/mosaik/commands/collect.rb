@@ -33,6 +33,7 @@ module MOSAIK
 
         # Collect data and add to graph
         collector
+          .new(options, graph)
           .call
 
         # Write the graph to a file
@@ -52,10 +53,8 @@ module MOSAIK
         case options[:type]
         when "static"
           Collectors::Static
-            .new(options, graph)
         when "history"
           Collectors::History
-            .new(options, graph)
         end
       end
 

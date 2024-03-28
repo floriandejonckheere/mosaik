@@ -12,6 +12,10 @@ RSpec.describe MOSAIK::Commands::Collect do
   describe "#prepare" do
     describe "--output" do
       it "does not raise an error if the output file does not exist" do
+        allow(File)
+          .to receive(:exist?)
+          .and_return false
+
         expect { command.prepare }.not_to raise_error
       end
 
@@ -40,6 +44,10 @@ RSpec.describe MOSAIK::Commands::Collect do
 
     describe "--type" do
       it "does not raise an error if the type is valid" do
+        allow(File)
+          .to receive(:exist?)
+          .and_return false
+
         expect { command.prepare }.not_to raise_error
       end
 

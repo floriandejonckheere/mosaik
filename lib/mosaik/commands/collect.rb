@@ -32,16 +32,8 @@ module MOSAIK
         end
 
         # Collect data and add to graph
-        case options[:type]
-        when "static"
-          Collectors::Static
-            .new(options, graph)
-            .call
-        when "history"
-          Collectors::History
-            .new(options, graph)
-            .call
-        end
+        collector
+          .call
 
         # Write the graph to a file
         graph.output(dot: options[:output])
@@ -55,6 +47,17 @@ module MOSAIK
       end
 
       private
+
+      def collector
+        case options[:type]
+        when "static"
+          Collectors::Static
+            .new(options, graph)
+        when "history"
+          Collectors::History
+            .new(options, graph)
+        end
+      end
 
       def resolver
         @resolver ||= Resolver.new(

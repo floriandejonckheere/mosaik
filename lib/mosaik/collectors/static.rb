@@ -38,11 +38,6 @@ module MOSAIK
         end
 
         registry.each { |constant| construct(constant) } # rubocop:disable Style/CombinableLoops
-
-        # Write the graph to a file
-        graph.output(dot: options[:output])
-
-        info "Call graph written to #{options[:output]}"
       end
 
       private

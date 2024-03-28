@@ -41,6 +41,11 @@ module MOSAIK
             .new(options, graph)
             .call
         end
+
+        # Write the graph to a file
+        graph.output(dot: options[:output])
+
+        info "Graph written to #{options[:output]}"
       end
 
       private

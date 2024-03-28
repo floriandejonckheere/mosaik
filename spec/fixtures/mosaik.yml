@@ -1,12 +1,1 @@
----
-# Application load paths
-load_paths:
-  - .
-
-# List of patterns for files to include
-include:
-  - "**/*.{rb,rake,erb}"
-
-# List of patterns for files to exclude
-exclude:
-  - "{bin,node_modules,script,tmp,vendor}/**/*"
+../../config/mosaik.yml

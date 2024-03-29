@@ -8,7 +8,7 @@ module MOSAIK
         git = Git.open(MOSAIK.options.directory, log: ::Logger.new(File::NULL))
 
         # Fetch commits, limited to the last 1000 commits
-        commits = git.log(10)
+        commits = git.log(100)
 
         # Limit commits to the load paths
         commits = commits.path(MOSAIK.configuration.load_paths.map { |l| File.join(MOSAIK.options.directory, l) })
@@ -43,6 +43,8 @@ module MOSAIK
             .permutation(2)
             .each { |(a, b)| matrix[a][b] += 1 }
         end
+
+        debug "Building graph..."
 
         # For each non-zero element in the matrix, add an edge to the graph
         matrix.each do |a, row|

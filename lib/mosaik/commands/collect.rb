@@ -39,11 +39,15 @@ module MOSAIK
           .new(options, graph)
           .call
 
+        debug "Writing graph..."
+
         # Write the graph to a file
         graph.output(dot: options[:output])
         info "Graph written to #{options[:output]}"
 
         return unless options[:render]
+
+        debug "Rendering graph..."
 
         # Render the graph to a PNG image
         graph.output(png: "#{File.basename(options[:output], '.dot')}.png")

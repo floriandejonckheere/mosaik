@@ -43,6 +43,10 @@ module MOSAIK
         .join("::")
     end
 
+    def resolve!(abspath)
+      resolve(abspath) || raise(ResolveError, "cannot resolve #{abspath} in: #{load_paths.join(', ')}")
+    end
+
     private
 
     def camelize(string)

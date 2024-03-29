@@ -18,4 +18,7 @@ module MOSAIK
 
   # Raised when file type is unknown
   class UnknownFileType < Error; end
+
+  # Raised when a file cannot be resolved
+  class ResolveError < Error; end
 end

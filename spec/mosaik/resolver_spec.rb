@@ -3,10 +3,10 @@
 RSpec.describe MOSAIK::Resolver do
   subject(:resolver) { described_class.new(directory, load_paths) }
 
-  describe "#resolve" do
-    let(:directory) { "/tmp" }
-    let(:load_paths) { ["lib", "app"] }
+  let(:directory) { "/tmp" }
+  let(:load_paths) { ["lib", "app"] }
 
+  describe "#resolve" do
     it "resolves relative file paths to constant names" do
       expect(resolver.resolve("lib/mosaik.rb"))
         .to eq("Mosaik")
@@ -54,6 +54,13 @@ RSpec.describe MOSAIK::Resolver do
 
       expect(resolver.resolve("/var/mosaik.rb"))
         .to be_nil
+    end
+  end
+
+  describe "#resolve!" do
+    it "raises an error when a file cannot be resolved" do
+      expect { resolver.resolve!("tmp/mosaik.rb") }
+        .to raise_error MOSAIK::ResolveError
     end
   end
 end

@@ -66,7 +66,7 @@ module MOSAIK
 
       usage(tail: "#{File.basename($PROGRAM_NAME)}: #{e.message}")
     rescue Error => e
-      fatal e.message
+      fatal "#{File.basename($PROGRAM_NAME)}: #{e.message}"
 
       raise ExitError, 1
     end

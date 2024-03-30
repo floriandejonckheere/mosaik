@@ -46,11 +46,13 @@ module MOSAIK
       end
 
       def tsort_each_node(&)
-        vertices.keys.each(&)
+        vertices.values.each(&)
       end
 
       def tsort_each_child(vertex, &)
-        vertices[vertex].edges.each(&)
+        vertices[vertex.value].edges.each_key do |key|
+          yield vertices[key]
+        end
       end
 
       def inspect

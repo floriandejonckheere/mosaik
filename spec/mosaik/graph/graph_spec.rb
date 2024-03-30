@@ -247,4 +247,23 @@ RSpec.describe MOSAIK::Graph::Graph do
       expect(graph.vertices).to be_empty
     end
   end
+
+  describe "#tsort" do
+    it "topologically sorts the vertices" do
+      vertex1 = build(:vertex, value: "vertex1")
+      vertex2 = build(:vertex, value: "vertex2")
+      vertex3 = build(:vertex, value: "vertex3")
+
+      graph.add_vertex(vertex1)
+      graph.add_vertex(vertex2)
+      graph.add_vertex(vertex3)
+
+      expect(graph.tsort.map(&:value)).to eq ["vertex1", "vertex2", "vertex3"]
+
+      graph.add_directed_edge(vertex1, vertex2)
+      graph.add_directed_edge(vertex2, vertex3)
+
+      expect(graph.tsort.map(&:value)).to eq ["vertex3", "vertex2", "vertex1"]
+    end
+  end
 end

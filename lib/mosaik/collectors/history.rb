@@ -52,7 +52,7 @@ module MOSAIK
             next if value.zero?
 
             # Add an edge from the node to the receiver
-            graph.add_edge(graph.find_node(a), graph.find_node(b), label: value)
+            graph.add_edge(a, b, label: value)
           end
         end
       end

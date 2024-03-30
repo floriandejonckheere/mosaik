@@ -19,14 +19,14 @@ module MOSAIK
 
       def start
         # Construct graph of classes based on file path
-        graph = GraphViz.new(:class_graph, type: :digraph)
+        graph = Graph::Graph.new
 
         MOSAIK.configuration.files.each do |file|
           # Resolve file path to class name
           class_name = resolver.resolve(file)
 
           # Add class to graph
-          graph.add_node(class_name)
+          graph.find_or_add_vertex(class_name)
         end
 
         # Collect data and add to graph

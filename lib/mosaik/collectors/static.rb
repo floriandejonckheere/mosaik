@@ -43,19 +43,19 @@ module MOSAIK
       private
 
       def construct(constant)
-        # Get or create the node for the constant
-        node = graph.get_node(constant.name) || graph.add_node(constant.name)
+        # Find or create the node for the constant
+        caller = graph.find_or_add_vertex(constant.name)
 
         # TODO: method-level granularity
         constant.methods.each_value do |method|
           method.references.each do |reference|
-            # Get or create the the receiver node
-            receiver = graph.get_node(reference.constant.name) || graph.add_node(reference.constant.name)
+            # Find or create the the receiver node
+            receiver = graph.find_or_add_vertex(reference.constant.name)
 
-            debug "Edge from #{constant.name} to #{reference.constant.name}##{reference.method}"
+            debug "Edge from #{caller.value} to #{receiver.value}##{reference.method}"
 
             # Add an edge from the constant to the receiver
-            graph.add_edge(node, receiver, label: reference.method)
+            graph.add_edge(caller.value, receiver.value, label: reference.method)
           end
         end
       end

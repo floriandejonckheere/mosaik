@@ -17,6 +17,14 @@ module MOSAIK
         vertices[vertex.value] = vertex
       end
 
+      def add_edge(from, to, weight = nil)
+        vertices[from.value].add_edge(to, weight)
+      end
+
+      def remove_edge(from, to)
+        vertices[from.value].remove_edge(to)
+      end
+
       def find_vertex(value)
         vertices[value]
       end

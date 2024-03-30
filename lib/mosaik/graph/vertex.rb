@@ -5,13 +5,17 @@ module MOSAIK
     class Vertex
       attr_reader :value, :edges
 
-      def initialize(value, edges = Set.new)
+      def initialize(value, edges = {})
         @value = value
         @edges = edges
       end
 
-      def add_edge(vertex)
-        edges << vertex.value
+      def add_edge(vertex, weight = nil)
+        edges[vertex.value] = weight
+      end
+
+      def remove_edge(vertex)
+        edges.delete(vertex.value)
       end
 
       def inspect

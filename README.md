@@ -61,12 +61,12 @@ The `identify` command identifies microservice candidates within the monolithic 
 $ mosaik identify --help
 ```
 
-### Analyze
+### Evaluate
 
-The `analyze` command analyzes the given decomposition, and evaluates the quality of the decomposition.
+The `evaluate` command analyzes the given microservices architecture, and evaluates the quality.
 
 ```bash
-$ mosaik analyze --help
+$ mosaik evaluate --help
 ```
 
 ## Releasing

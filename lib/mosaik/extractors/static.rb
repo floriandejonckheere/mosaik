@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module MOSAIK
-  module Collectors
-    class Static < Collector
+  module Extractors
+    class Static < Extractor
       PARSERS = {
         ".rb" => Parsers::Ruby,
       }.freeze

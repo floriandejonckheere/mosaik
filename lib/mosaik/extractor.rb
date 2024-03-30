@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MOSAIK
-  class Collector
+  class Extractor
     attr_reader :options, :graph
 
     def initialize(options, graph)

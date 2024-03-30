@@ -2,19 +2,19 @@
 
 module MOSAIK
   module Commands
-    class Collect < Command
-      self.description = "Collect data"
+    class Extract < Command
+      self.description = "Extract information"
 
       defaults type: "static"
 
-      argument "-t", "--type TYPE", "Type of collection (default: static, available: static, history)"
+      argument "-t", "--type TYPE", "Type of extraction (default: static, available: static, history)"
       argument "-f", "--force", "Overwrite existing file"
 
       # History options
       argument "--since DATE", "Include only commits from a specific date"
 
       def prepare
-        raise OptionError, "unknown collection type: #{options[:type]}" unless options[:type].in? ["static", "history"]
+        raise OptionError, "unknown extraction type: #{options[:type]}" unless options[:type].in? ["static", "history"]
       end
 
       def start
@@ -29,20 +29,20 @@ module MOSAIK
           graph.find_or_add_vertex(class_name)
         end
 
-        # Collect data and add to graph
-        collector
+        # Extract data and add to graph
+        extractor
           .new(options, graph)
           .call
       end
 
       private
 
-      def collector
+      def extractor
         case options[:type]
         when "static"
-          Collectors::Static
+          Extractors::Static
         when "history"
-          Collectors::History
+          Extractors::History
         end
       end
 

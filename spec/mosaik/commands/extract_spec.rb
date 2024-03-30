@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe MOSAIK::Commands::Collect do
+RSpec.describe MOSAIK::Commands::Extract do
   subject(:command) { described_class.new(*arguments) }
 
   let(:arguments) { [] }
@@ -19,7 +19,7 @@ RSpec.describe MOSAIK::Commands::Collect do
         let(:arguments) { ["--type", "invalid"] }
 
         it "raises an error" do
-          expect { command.prepare }.to raise_error(MOSAIK::OptionError, "unknown collection type: invalid")
+          expect { command.prepare }.to raise_error(MOSAIK::OptionError, "unknown extraction type: invalid")
         end
       end
     end

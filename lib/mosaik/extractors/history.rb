@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module MOSAIK
-  module Collectors
-    class History < Collector
+  module Extractors
+    class History < Extractor
       def call
         # Open the git repository
         git = Git.open(MOSAIK.options.directory, log: ::Logger.new(File::NULL))

@@ -9,7 +9,7 @@ FactoryBot.define do
     end
   end
 
-  factory :collect_command, parent: :command, class: "MOSAIK::Commands::Collect"
+  factory :extract_command, parent: :command, class: "MOSAIK::Commands::Extract"
 
   factory :init_command, parent: :command, class: "MOSAIK::Commands::Init"
 

@@ -45,12 +45,12 @@ The `mosaik.yml` file tells MOSAIK which files should be included or excluded fr
 
 Using MOSAIK is a three-step process:
 
-### Collect
+### Extract
 
-The `collect` command collects information about the application to analyze and extract services from.
+The `extract` command extracts information about the application to analyze and extract services from.
 
 ```bash
-$ mosaik collect --help
+$ mosaik extract --help
 ```
 
 ### Decompose

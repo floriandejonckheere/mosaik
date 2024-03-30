@@ -7,7 +7,7 @@ module MOSAIK
         # Open the git repository
         git = Git.open(MOSAIK.options.directory, log: ::Logger.new(File::NULL))
 
-        # Fetch commits, limited to the last 1000 commits
+        # Fetch commits, limited to the last N commits
         commits = git.log(100)
 
         # Limit commits to the load paths
@@ -18,10 +18,10 @@ module MOSAIK
 
         info "Analyzing #{commits.count} commits"
 
-        # Create a nested mapping for each pair of nodes in the graph
+        # Create a co-change matrix for each pair of files
         matrix = Hash.new { |h, k| h[k] = Hash.new(0) }
 
-        # Calculate the aggregated local coupling
+        # Iterate over each commit
         commits.each do |commit|
           # Get the files for the commit
           files = commit.diff_parent.stats[:files]
@@ -38,7 +38,7 @@ module MOSAIK
 
           debug "Commit #{commit.sha} (#{constants.count} constants: #{constants.join(', ')})"
 
-          # Calculate the local coupling
+          # Increment the local coupling between each pair of files
           constants
             .permutation(2)
             .each { |(a, b)| matrix[a][b] += 1 }
@@ -46,13 +46,13 @@ module MOSAIK
 
         debug "Building graph..."
 
-        # For each non-zero element in the matrix, add an edge to the graph
+        # For each non-zero element in the matrix, add a weighted edge to the graph
         matrix.each do |a, row|
           row.each do |b, value|
             next if value.zero?
 
             # Add an edge from the node to the receiver
-            graph.add_edge(a, b, label: value)
+            graph.add_directed_edge(a, b, label: value)
           end
         end
       end

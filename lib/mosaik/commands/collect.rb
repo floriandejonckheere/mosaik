@@ -5,21 +5,16 @@ module MOSAIK
     class Collect < Command
       self.description = "Collect data"
 
-      defaults type: "static",
-               output: "mosaik.dot",
-               force: false
+      defaults type: "static"
 
       argument "-t", "--type TYPE", "Type of collection (default: static, available: static, history)"
-      argument "-o", "--output OUTPUT", "Output file (default: mosaik.dot)"
       argument "-f", "--force", "Overwrite existing file"
-      argument "-r", "--render", "Render a PNG image of the graph"
 
       # History options
       argument "--since DATE", "Include only commits from a specific date"
 
       def prepare
         raise OptionError, "unknown collection type: #{options[:type]}" unless options[:type].in? ["static", "history"]
-        raise OptionError, "file already exists: #{options[:output]}, use --force to overwrite" if File.exist?(options[:output]) && !options[:force]
       end
 
       def start
@@ -38,20 +33,6 @@ module MOSAIK
         collector
           .new(options, graph)
           .call
-
-        debug "Writing graph..."
-
-        # Write the graph to a file
-        graph.output(dot: options[:output])
-        info "Graph written to #{options[:output]}"
-
-        return unless options[:render]
-
-        debug "Rendering graph..."
-
-        # Render the graph to a PNG image
-        graph.output(png: "#{File.basename(options[:output], '.dot')}.png")
-        info "Graph rendered to #{"#{File.basename(options[:output], '.dot')}.png"}"
       end
 
       private

@@ -18,8 +18,11 @@ module MOSAIK
 
         info "Analyzing #{commits.count} commits"
 
-        # Create a co-change matrix for each pair of files
-        matrix = Hash.new { |h, k| h[k] = Hash.new(0) }
+        # Create a co-change matrix for each pair of constants (logical coupling)
+        co_changes = Hash.new { |h, k| h[k] = Hash.new(0) }
+
+        # Create a contributor matrix for each constant (contributor coupling)
+        contributors = Hash.new { |h, k| h[k] = Set.new }
 
         # Iterate over each commit
         commits.each do |commit|
@@ -32,28 +35,37 @@ module MOSAIK
             .select { |file| file.in? MOSAIK.configuration.files }
 
           # Resolve file paths to class name
-          constants = files.map do |file|
-            resolver.resolve!(file)
-          end
+          constants = files.map { |file| resolver.resolve!(file) }
 
           debug "Commit #{commit.sha} (#{constants.count} constants: #{constants.join(', ')})"
 
-          # Increment the local coupling between each pair of files
+          # Increment the co-change number between each pair of constants (logical coupling)
           constants
             .permutation(2)
-            .each { |(a, b)| matrix[a][b] += 1 }
+            .each { |(a, b)| co_changes[a][b] += 1 }
+
+          # Add the commit author to the contributors for each constant (contributor coupling)
+          constants.each { |constant| contributors[constant] << commit.author.email }
         end
 
         debug "Building graph..."
 
-        # For each non-zero element in the matrix, add a weighted edge to the graph
-        matrix.each do |a, row|
+        # For each non-zero pair of constants in the co-change matrix (logical coupling)
+        co_changes.each do |a, row|
           row.each do |b, value|
             next if value.zero?
 
-            # Add an edge from the node to the receiver
-            graph.add_directed_edge(a, b, label: value)
+            # Add a weighted edge to the graph
+            graph.add_directed_edge(a, b, value)
           end
+        end
+
+        # For each non-empty pair of constants in the contributor matrix (contributor coupling)
+        contributors.keys.permutation(2).each do |(a, b)|
+          next if contributors[a].empty? || contributors[b].empty?
+
+          # Add a weighted edge to the graph (weight is the cardinality of the intersection of sets)
+          graph.add_directed_edge(a, b, (contributors[a] & contributors[b]).count)
         end
       end
 

@@ -41,7 +41,7 @@ $ mosaik init
 ```
 
 This will create a new `mosaik.yml` configuration file in the current directory.
-The `mosaik.yml` file tells MOSAIK which files should be included or excluded from the decomposition.
+The `mosaik.yml` file tells MOSAIK which files should be included or excluded from the process.
 
 Using MOSAIK is a three-step process:
 
@@ -53,12 +53,12 @@ The `extract` command extracts information about the application to analyze and 
 $ mosaik extract --help
 ```
 
-### Decompose
+### Identify
 
-The `decompose` command decomposes the application into services.
+The `identify` command identifies microservice candidates within the monolithic application.
 
 ```bash
-$ mosaik decompose --help
+$ mosaik identify --help
 ```
 
 ### Analyze

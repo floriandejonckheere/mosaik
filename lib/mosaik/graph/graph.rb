@@ -41,6 +41,10 @@ module MOSAIK
         vertices[value]
       end
 
+      def find_or_add_vertex(value)
+        find_vertex(value) || add_vertex(value)
+      end
+
       def remove_vertex(value)
         vertices.delete(value)
       end

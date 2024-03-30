@@ -186,6 +186,24 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
   end
 
+  describe "#find_or_add_vertex" do
+    it "finds a vertex" do
+      graph.add_vertex("vertex")
+
+      vertex = graph.find_or_add_vertex("vertex")
+
+      expect(vertex).to be_a MOSAIK::Graph::Vertex
+      expect(vertex.value).to eq "vertex"
+    end
+
+    it "adds a vertex" do
+      vertex = graph.find_or_add_vertex("vertex")
+
+      expect(vertex).to be_a MOSAIK::Graph::Vertex
+      expect(vertex.value).to eq "vertex"
+    end
+  end
+
   describe "#remove_vertex" do
     it "removes a vertex" do
       graph.add_vertex("vertex")

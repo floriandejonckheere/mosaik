@@ -13,36 +13,36 @@ module MOSAIK
         @vertices = {}
       end
 
-      def add_vertex(vertex)
-        vertices[vertex.value] = vertex
+      def add_vertex(value)
+        vertices[value] = Vertex.new(value)
       end
 
       def add_directed_edge(from, to, weight = nil)
-        vertices[from.value].add_edge(to, weight)
+        vertices[from].add_edge(to, weight)
       end
       alias add_edge add_directed_edge
 
       def add_undirected_edge(from, to, weight = nil)
-        vertices[from.value].add_edge(to, weight)
-        vertices[to.value].add_edge(from, weight)
+        vertices[from].add_edge(to, weight)
+        vertices[to].add_edge(from, weight)
       end
 
       def remove_directed_edge(from, to)
-        vertices[from.value].remove_edge(to)
+        vertices[from].remove_edge(to)
       end
       alias remove_edge remove_directed_edge
 
       def remove_undirected_edge(from, to)
-        vertices[from.value].remove_edge(to)
-        vertices[to.value].remove_edge(from)
+        vertices[from].remove_edge(to)
+        vertices[to].remove_edge(from)
       end
 
       def find_vertex(value)
         vertices[value]
       end
 
-      def remove_vertex(vertex)
-        vertices.delete(vertex.value)
+      def remove_vertex(value)
+        vertices.delete(value)
       end
 
       def tsort_each_node(&)

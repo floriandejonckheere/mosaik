@@ -10,12 +10,12 @@ module MOSAIK
         @edges = edges
       end
 
-      def add_edge(vertex, weight = nil)
-        edges[vertex.value] = weight
+      def add_edge(to, weight = nil)
+        edges[to] = weight
       end
 
-      def remove_edge(vertex)
-        edges.delete(vertex.value)
+      def remove_edge(value)
+        edges.delete(value)
       end
 
       def inspect

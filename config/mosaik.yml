@@ -14,14 +14,3 @@ exclude:
 # Dictionary of constant name overrides
 overrides:
   foobar: FooBar
-
-# Weights for coupling criteria
-weights:
-  # Structural coupling
-  structural: 1
-
-  # Logical coupling
-  logical: 1
-
-  # Contributor coupling
-  contributor: 1

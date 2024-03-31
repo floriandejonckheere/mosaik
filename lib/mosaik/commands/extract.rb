@@ -5,8 +5,15 @@ module MOSAIK
     class Extract < Command
       self.description = "Extract information"
 
-      defaults since: nil,
+      defaults structural: 1,
+               logical: 1,
+               contributor: 1,
+               since: nil,
                limit: 100
+
+      argument "--structural N", Integer, "Weight of structural coupling extraction (default: 1)"
+      argument "--logical N", Integer, "Weight of logical coupling extraction (default: 1)"
+      argument "--contributor N", Integer, "Weight of coupling extraction (default: 1)"
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"

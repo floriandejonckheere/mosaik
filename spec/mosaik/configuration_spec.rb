@@ -50,12 +50,6 @@ RSpec.describe MOSAIK::Configuration do
       it "sets the overrides attribute" do
         expect(described_class.from(file).overrides).to eq "foobar" => "FooBar"
       end
-
-      it "sets the weights attribute" do
-        expect(described_class.from(file).weights.structural).to eq 1
-        expect(described_class.from(file).weights.logical).to eq 1
-        expect(described_class.from(file).weights.contributor).to eq 1
-      end
     end
 
     context "when the configuration file does not exist" do

@@ -2,15 +2,14 @@
 
 module MOSAIK
   class Configuration
-    attr_reader :directory, :load_paths, :includes, :excludes, :overrides, :weights
+    attr_reader :directory, :load_paths, :includes, :excludes, :overrides
 
-    def initialize(directory:, load_paths: [], includes: [], excludes: [], overrides: {}, weights: {})
+    def initialize(directory:, load_paths: [], includes: [], excludes: [], overrides: {})
       @directory = directory
       @load_paths = load_paths
       @includes = includes
       @excludes = excludes
       @overrides = overrides
-      @weights = Weights.new(weights)
     end
 
     def files
@@ -33,7 +32,6 @@ module MOSAIK
         includes: Array(configuration["include"]),
         excludes: Array(configuration["exclude"]),
         overrides: configuration["overrides"] || {},
-        weights: configuration["weights"] || {},
       )
     end
   end

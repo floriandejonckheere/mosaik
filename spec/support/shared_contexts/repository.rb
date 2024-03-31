@@ -28,7 +28,25 @@ RSpec.shared_context "with a git repository" do
     File.write(File.join(directory, "lib/app/foo.rb"), "class App::Foo; end")
     File.write(File.join(directory, "lib/app/bar.rb"), "class App::Bar; end")
     git.add
-    git.commit("Set up application structure", author: "Author 1 <author1@example.com>")
+    git.commit("Add App::Foo and App::Bar", author: "Author 1 <author1@example.com>")
+
+    # Add more classes
+    File.write(File.join(directory, "lib/app/foo.rb"), "class App::Foo; def initialize; end; end")
+    File.write(File.join(directory, "lib/app/bat.rb"), "class App::Bat; end")
+    git.add
+    git.commit("Add App::Bat", author: "Author 1 <author1@example.com>")
+
+    # Add more classes
+    File.write(File.join(directory, "lib/app/foo.rb"), "class App::Foo; end")
+    File.write(File.join(directory, "lib/app/bak.rb"), "class App::Bak; end")
+    git.add
+    git.commit("Add App::Bak", author: "Author 1 <author1@example.com>")
+
+    # Add more classes
+    File.write(File.join(directory, "lib/app/bat.rb"), "class App::Bat; def initialize; end; end")
+    File.write(File.join(directory, "lib/app/baz.rb"), "class App::Baz; end")
+    git.add
+    git.commit("Add App::Baz", author: "Author 1 <author1@example.com>")
 
     # Mock the configuration
     allow(MOSAIK)

@@ -38,8 +38,11 @@ RSpec.describe MOSAIK::Extractors::Evolution do
 
       # Extract all vertices with source and destination
       expect(graph.vertices.transform_values { |v| v.edges.keys }).to eq(
-        "App::Foo" => ["App::Bar"],
+        "App::Foo" => ["App::Bak", "App::Bat", "App::Bar"],
         "App::Bar" => ["App::Foo"],
+        "App::Bat" => ["App::Baz", "App::Foo"],
+        "App::Bak" => ["App::Foo"],
+        "App::Baz" => ["App::Bat"]
       )
     end
   end

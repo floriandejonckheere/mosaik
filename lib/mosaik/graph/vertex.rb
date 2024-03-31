@@ -23,7 +23,7 @@ module MOSAIK
       end
 
       def inspect
-        "#<#{self.class.name} id=#{id} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')} edges=[#{edges.join(', ')}]>"
+        "#<#{self.class.name} id=#{id} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')} edges=#{edges.count}>"
       end
     end
   end

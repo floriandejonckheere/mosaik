@@ -63,7 +63,7 @@ module MOSAIK
       end
 
       def inspect
-        "#<#{self.class.name} vertices=#{vertices.each_value.map(&:inspect)}>"
+        "#<#{self.class.name} vertices=#{vertices.values.map(&:inspect)}>"
       end
     end
   end

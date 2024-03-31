@@ -24,9 +24,9 @@ module MOSAIK
       end
 
       def start
-        # Construct graph of classes based on file path
-        graph = Graph::Graph.new
+        info "Extracting information from the codebase (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
+        # Add a vertex for each constant in the load path
         MOSAIK.configuration.files.each do |file|
           # Resolve file path to class name
           class_name = resolver.resolve(file)
@@ -35,21 +35,21 @@ module MOSAIK
           graph.find_or_add_vertex(class_name)
         end
 
-        # Extract data and add to graph
-        extractor
+        # Extract structural coupling information and add to graph
+        Extractors::Structural
+          .new(options, graph)
+          .call
+
+        # Extract evolutionary (logical and contributor) coupling information and add to graph
+        Extractors::Evolution
           .new(options, graph)
           .call
       end
 
       private
 
-      def extractor
-        case options[:type]
-        when "structural"
-          Extractors::Structural
-        when "evolution"
-          Extractors::Evolution
-        end
+      def graph
+        @graph ||= Graph::Graph.new
       end
 
       def resolver

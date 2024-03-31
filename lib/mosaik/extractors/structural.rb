@@ -8,6 +8,8 @@ module MOSAIK
       }.freeze
 
       def call
+        return unless options[:structural].positive?
+
         # Instantiate a constant registry
         registry = Registry.new
 

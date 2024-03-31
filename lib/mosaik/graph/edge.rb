@@ -12,6 +12,10 @@ module MOSAIK
         @attributes = attributes
       end
 
+      def to_dot
+        attributes.map { |k, v| "#{k}=#{v}" }.join(", ")
+      end
+
       def inspect
         "#<#{self.class.name} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')}>"
       end

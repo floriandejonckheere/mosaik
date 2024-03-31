@@ -62,6 +62,19 @@ module MOSAIK
         end
       end
 
+      def to_dot
+        <<~DOT
+          digraph {
+            #{vertices.values.map(&:to_dot).join("\n  ")}
+          }
+        DOT
+      end
+
+      def to_png(file)
+        File.write("#{file}.dot", to_dot)
+        system("dot -Tpng #{file}.dot -o #{file}.png")
+      end
+
       def inspect
         "#<#{self.class.name} vertices=#{vertices.values.map(&:inspect)}>"
       end

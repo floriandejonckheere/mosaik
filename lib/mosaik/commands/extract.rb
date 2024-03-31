@@ -49,6 +49,12 @@ module MOSAIK
           .new(options, graph)
           .tap(&:validate)
           .call
+
+        # Write graph to file
+        debug graph.to_dot
+        graph.to_png("mosaik")
+
+        info "Graph written to mosaik.dot and rendered to mosaik.png"
       end
 
       private

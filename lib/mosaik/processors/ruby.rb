@@ -6,13 +6,13 @@ module MOSAIK
     # Abstract Syntax Tree parser for Ruby code
     #
     class Ruby < AST::Processor
-      attr_reader :registry
+      attr_reader :tree
       attr_accessor :current_class, :current_method
 
-      def initialize(registry)
+      def initialize(tree)
         super()
 
-        @registry = registry
+        @tree = tree
       end
 
       def on_class(node)
@@ -22,7 +22,7 @@ module MOSAIK
         self.current_class = current_class ? "#{current_class}::#{class_name}" : class_name
 
         # Register class
-        registry[current_class]
+        tree[current_class]
 
         debug "Class #{current_class} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
@@ -40,7 +40,7 @@ module MOSAIK
         self.current_class = current_class ? "#{current_class}::#{module_name}" : module_name
 
         # Register module
-        registry[current_class]
+        tree[current_class]
 
         debug "Module #{current_class} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
@@ -61,7 +61,7 @@ module MOSAIK
 
         debug "Class instance method #{current_class}##{method_name} in #{file}:#{line_num}"
 
-        registry[current_class].add_method(method_name, file, line_num)
+        tree[current_class].add_method(method_name, file, line_num)
 
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
@@ -77,7 +77,7 @@ module MOSAIK
 
         debug "Class method #{current_class}.#{node.children[1]} in #{file}:#{line_num}"
 
-        registry[current_class].add_method(method_name, file, line_num)
+        tree[current_class].add_method(method_name, file, line_num)
 
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
@@ -99,7 +99,7 @@ module MOSAIK
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
-        registry[current_class].methods[current_method].references << Syntax::Reference.new(registry[constant_name], callee)
+        tree[current_class].methods[current_method].references << Syntax::Reference.new(tree[constant_name], callee)
       end
 
       private

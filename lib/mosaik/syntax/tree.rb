@@ -5,7 +5,7 @@ module MOSAIK
     ##
     # Tree of constants in the codebase
     #
-    class Registry
+    class Tree
       include Enumerable
 
       attr_reader :top

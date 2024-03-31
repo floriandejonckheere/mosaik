@@ -22,4 +22,6 @@ FactoryBot.define do
     constant
     add_attribute :method
   end
+
+  factory :tree, class: MOSAIK::Syntax::Tree
 end

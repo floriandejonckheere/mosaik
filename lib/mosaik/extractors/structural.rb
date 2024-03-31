@@ -13,21 +13,21 @@ module MOSAIK
       def call
         return unless options[:structural].positive?
 
-        # Instantiate a constant registry
-        registry = Syntax::Registry.new
+        # Instantiate a constant tree
+        tree = Syntax::Tree.new
 
         # Parse file with an appropriate parser
         MOSAIK.configuration.files.each do |file|
           PARSERS
             .fetch(File.extname(file))
             .new
-            .parse(file, registry)
+            .parse(file, tree)
         rescue KeyError
           raise UnknownFileType, "No parser for file type: #{File.extname(file)}"
         end
 
-        # Print the registry
-        registry.each do |constant|
+        # Print the constant tree
+        tree.each do |constant|
           debug constant
 
           constant.methods.each_value do |method|
@@ -42,7 +42,7 @@ module MOSAIK
           debug ("  " * constant.name.scan("::").count) + constant.name
         end
 
-        registry.each { |constant| construct(constant) } # rubocop:disable Style/CombinableLoops
+        tree.each { |constant| construct(constant) } # rubocop:disable Style/CombinableLoops
       end
 
       private

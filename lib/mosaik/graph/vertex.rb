@@ -3,10 +3,10 @@
 module MOSAIK
   module Graph
     class Vertex
-      attr_reader :value, :edges
+      attr_reader :id, :edges
 
-      def initialize(value, edges = {})
-        @value = value
+      def initialize(id, edges = {})
+        @id = id
         @edges = edges
       end
 
@@ -14,12 +14,12 @@ module MOSAIK
         edges[to] = weight
       end
 
-      def remove_edge(value)
-        edges.delete(value)
+      def remove_edge(id)
+        edges.delete(id)
       end
 
       def inspect
-        "#<#{self.class.name} value=#{value} edges=[#{edges.join(', ')}]>"
+        "#<#{self.class.name} id=#{id} edges=[#{edges.join(', ')}]>"
       end
     end
   end

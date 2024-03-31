@@ -13,8 +13,8 @@ module MOSAIK
         @vertices = {}
       end
 
-      def add_vertex(value)
-        vertices[value] = Vertex.new(value)
+      def add_vertex(id)
+        vertices[id] = Vertex.new(id)
       end
 
       def add_directed_edge(from, to, weight = nil)
@@ -37,16 +37,16 @@ module MOSAIK
         vertices[to].remove_edge(from)
       end
 
-      def find_vertex(value)
-        vertices[value]
+      def find_vertex(id)
+        vertices[id]
       end
 
-      def find_or_add_vertex(value)
-        find_vertex(value) || add_vertex(value)
+      def find_or_add_vertex(id)
+        find_vertex(id) || add_vertex(id)
       end
 
-      def remove_vertex(value)
-        vertices.delete(value)
+      def remove_vertex(id)
+        vertices.delete(id)
       end
 
       def tsort_each_node(&)
@@ -54,7 +54,7 @@ module MOSAIK
       end
 
       def tsort_each_child(vertex, &)
-        vertices[vertex.value].edges.each_key do |key|
+        vertices[vertex.id].edges.each_key do |key|
           yield vertices[key]
         end
       end

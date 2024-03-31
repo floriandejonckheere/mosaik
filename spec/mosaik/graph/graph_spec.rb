@@ -182,7 +182,7 @@ RSpec.describe MOSAIK::Graph::Graph do
       vertex = graph.find_vertex("vertex")
 
       expect(vertex).to be_a MOSAIK::Graph::Vertex
-      expect(vertex.value).to eq "vertex"
+      expect(vertex.id).to eq "vertex"
     end
   end
 
@@ -193,14 +193,14 @@ RSpec.describe MOSAIK::Graph::Graph do
       vertex = graph.find_or_add_vertex("vertex")
 
       expect(vertex).to be_a MOSAIK::Graph::Vertex
-      expect(vertex.value).to eq "vertex"
+      expect(vertex.id).to eq "vertex"
     end
 
     it "adds a vertex" do
       vertex = graph.find_or_add_vertex("vertex")
 
       expect(vertex).to be_a MOSAIK::Graph::Vertex
-      expect(vertex.value).to eq "vertex"
+      expect(vertex.id).to eq "vertex"
     end
   end
 
@@ -220,12 +220,12 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_vertex("vertex2")
       graph.add_vertex("vertex3")
 
-      expect(graph.tsort.map(&:value)).to eq ["vertex1", "vertex2", "vertex3"]
+      expect(graph.tsort.map(&:id)).to eq ["vertex1", "vertex2", "vertex3"]
 
       graph.add_directed_edge("vertex1", "vertex2")
       graph.add_directed_edge("vertex2", "vertex3")
 
-      expect(graph.tsort.map(&:value)).to eq ["vertex3", "vertex2", "vertex1"]
+      expect(graph.tsort.map(&:id)).to eq ["vertex3", "vertex2", "vertex1"]
     end
   end
 end

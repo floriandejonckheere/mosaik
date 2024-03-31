@@ -20,14 +20,15 @@ RSpec.describe MOSAIK::Graph::Vertex do
       vertex.add_edge("child", key: "value")
 
       expect(vertex.edges.keys).to eq ["child"]
-      expect(vertex.edges["child"].attributes).to eq key: "value"
+      expect(vertex.edges["child"].first.attributes).to eq key: "value"
     end
 
-    it "does not add an edge twice" do
+    it "adds an edge twice" do
       vertex.add_edge("child")
       vertex.add_edge("child")
 
       expect(vertex.edges.keys).to eq ["child"]
+      expect(vertex.edges["child"].size).to eq 2
     end
   end
 end

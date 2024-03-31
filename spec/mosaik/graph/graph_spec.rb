@@ -32,16 +32,17 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_directed_edge("vertex1", "vertex2", key: "value")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+      expect(graph.find_vertex("vertex1").edges["vertex2"].first.attributes).to eq key: "value"
     end
 
-    it "does not add a directed edge twice" do
+    it "adds a directed edge twice" do
       graph.add_vertex("vertex1")
       graph.add_vertex("vertex2")
       graph.add_directed_edge("vertex1", "vertex2")
       graph.add_directed_edge("vertex1", "vertex2")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+      expect(graph.find_vertex("vertex1").edges["vertex2"].size).to eq 2
     end
   end
 
@@ -60,16 +61,17 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_undirected_edge("vertex1", "vertex2", key: "value")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+      expect(graph.find_vertex("vertex1").edges["vertex2"].first.attributes).to eq key: "value"
     end
 
-    it "does not add an undirected edge twice" do
+    it "adds an undirected edge twice" do
       graph.add_vertex("vertex1")
       graph.add_vertex("vertex2")
       graph.add_undirected_edge("vertex1", "vertex2")
       graph.add_undirected_edge("vertex1", "vertex2")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+      expect(graph.find_vertex("vertex1").edges["vertex2"].size).to eq 2
     end
   end
 

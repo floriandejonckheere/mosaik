@@ -40,7 +40,7 @@ module MOSAIK
       raise OptionError, "not a directory: #{options[:directory]}" unless File.directory?(options[:directory])
 
       # Set log level
-      MOSAIK.logger.level = Logger::DEBUG if options[:debug]
+      MOSAIK.logger.level = "debug" if options[:debug]
 
       # Set configuration
       MOSAIK.configuration = Configuration.from(File.join(options[:directory], "mosaik.yml"))

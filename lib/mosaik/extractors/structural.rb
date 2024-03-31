@@ -60,7 +60,8 @@ module MOSAIK
             debug "Edge from #{caller.value} to #{receiver.value}##{reference.method}"
 
             # Add an edge from the constant to the receiver
-            graph.add_directed_edge(caller.value, receiver.value, method: reference.method)
+            # FIXME: aggregate edges with the same method
+            graph.add_directed_edge(caller.value, receiver.value, method: reference.method, weight: options[:structural])
           end
         end
       end

@@ -62,6 +62,7 @@ module MOSAIK
               next if value.zero?
 
               # Add a weighted edge to the graph
+              # FIXME: aggregate with existing edges
               graph.add_directed_edge(a, b, weight: value * options[:logical])
             end
           end
@@ -76,6 +77,7 @@ module MOSAIK
           next if contributors[a].empty? || contributors[b].empty?
 
           # Add a weighted edge to the graph (weight is the cardinality of the intersection of sets)
+          # FIXME: aggregate with existing edges
           graph.add_directed_edge(a, b, weight: (contributors[a] & contributors[b]).count * options[:contributor])
         end
       end

@@ -5,12 +5,15 @@ module MOSAIK
     class Extract < Command
       self.description = "Extract information"
 
-      defaults type: "static"
+      defaults type: "static",
+               since: nil,
+               limit: 100
 
       argument "-t", "--type TYPE", "Type of extraction (default: static, available: static, evolution)"
 
       # History options
       argument "--since DATE", "Include only commits from a specific date"
+      argument "--limit N", Integer, "Limit the number of commits to analyze (default: 100)"
 
       def prepare
         raise OptionError, "unknown extraction type: #{options[:type]}" unless options[:type].in? ["static", "evolution"]

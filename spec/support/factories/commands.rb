@@ -2,10 +2,11 @@
 
 FactoryBot.define do
   factory :command, class: "MOSAIK::Command" do
-    initialize_with { new(nil, *args) }
+    initialize_with { new(options, *arguments) }
 
     transient do
-      args { [] }
+      options { {} }
+      arguments { [] }
     end
   end
 

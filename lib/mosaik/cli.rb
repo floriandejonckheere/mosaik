@@ -8,9 +8,15 @@ module MOSAIK
   # Command line interface
   #
   class CLI
-    attr_reader :args, :command_args
+    attr_reader :options, :args, :command_args
 
     def initialize(args)
+      @options = {
+        directory: Dir.pwd,
+        verbose: false,
+        debug: false,
+      }
+
       @args = args
       @command_args = []
 
@@ -23,15 +29,21 @@ module MOSAIK
       # option keys). "--foo FOO --bar BAR" will result in "--foo" and "FOO" being parsed
       # correctly, "--bar" and "BAR" will be extracted.
       # This needs to be in a separate method due to the retry logic.
-      parser.order!(args, into: MOSAIK.options) { |value| @command_args << value }
+      parser.order!(args, into: options) { |value| @command_args << value }
     rescue OptionParser::InvalidOption => e
       @command_args += e.args
       retry
     end
 
     def prepare
-      raise OptionError, "invalid directory: #{MOSAIK.options.directory}" unless File.exist?(MOSAIK.options.directory)
-      raise OptionError, "not a directory: #{MOSAIK.options.directory}" unless File.directory?(MOSAIK.options.directory)
+      raise OptionError, "invalid directory: #{options[:directory]}" unless File.exist?(options[:directory])
+      raise OptionError, "not a directory: #{options[:directory]}" unless File.directory?(options[:directory])
+
+      # Set log level
+      MOSAIK.logger.level = Logger::DEBUG if options[:debug]
+
+      # Set configuration
+      MOSAIK.configuration = Configuration.from(File.join(options[:directory], "mosaik.yml"))
     rescue Error => e
       fatal e.message
 
@@ -56,7 +68,7 @@ module MOSAIK
 
       # Execute command
       command = klass
-        .new(*command_args)
+        .new(options, *command_args)
 
       command
         .prepare
@@ -77,10 +89,11 @@ module MOSAIK
 
     private
 
+    # rubocop:disable Metrics/AbcSize
     def parser
       @parser ||= OptionParser.new("#{File.basename($PROGRAM_NAME)} [global options] command [command options]") do |o|
         o.on("Global options:")
-        o.on("-d", "--directory=DIRECTORY", "Set working directory")
+        o.on("-d", "--directory=DIRECTORY", "Set working directory") { |value| options[:directory] = File.expand_path(value) }
         o.on("-v", "--verbose", "Turn on verbose logging")
         o.on("-D", "--debug", "Turn on debug logging")
         o.on("-h", "--help", "Display this message") { usage }
@@ -92,6 +105,7 @@ module MOSAIK
         o.separator("\n")
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def usage(code: 1, tail: nil)
       info parser.to_s

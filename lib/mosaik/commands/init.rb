@@ -9,7 +9,7 @@ module MOSAIK
       self.description = "Initialize configuration"
 
       def start
-        configuration_file = File.join(MOSAIK.options.directory, "mosaik.yml")
+        configuration_file = File.join(options[:directory], "mosaik.yml")
 
         raise ConfigurationError, "Configuration file already exists at #{configuration_file}" if File.exist?(configuration_file)
 

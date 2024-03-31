@@ -10,13 +10,13 @@ module MOSAIK
         return unless options[:logical].positive? || options[:contributor].positive?
 
         # Open the git repository
-        git = Git.open(MOSAIK.options.directory, log: ::Logger.new(File::NULL))
+        git = Git.open(options[:directory], log: ::Logger.new(File::NULL))
 
         # Fetch commits, limited to the last N commits
         commits = git.log(options[:limit]) if options[:limit]
 
         # Limit commits to the load paths
-        commits = commits.path(MOSAIK.configuration.load_paths.map { |l| File.join(MOSAIK.options.directory, l) })
+        commits = commits.path(MOSAIK.configuration.load_paths.map { |l| File.join(options[:directory], l) })
 
         # Limit commits to a specific date
         commits = commits.since(options[:since]) if options[:since]
@@ -86,7 +86,7 @@ module MOSAIK
 
       def resolver
         @resolver ||= Resolver.new(
-          MOSAIK.options.directory,
+          options[:directory],
           MOSAIK.configuration.load_paths,
           MOSAIK.configuration.overrides,
         )

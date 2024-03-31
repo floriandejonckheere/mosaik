@@ -31,10 +31,6 @@ RSpec.describe MOSAIK::Configuration do
         expect(described_class.from(file)).to be_a described_class
       end
 
-      it "sets the directory attribute" do
-        expect(described_class.from(file).directory).to eq MOSAIK.root.join("spec/fixtures").to_s
-      end
-
       it "sets the load_paths attribute" do
         expect(described_class.from(file).load_paths).to eq ["lib"]
       end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Base class for commands
+  #
   class Command
-    ##
-    # Base class for commands
-    #
     include Arguments
 
     def prepare; end

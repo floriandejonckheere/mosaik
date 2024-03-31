@@ -57,7 +57,7 @@ module MOSAIK
 
       def resolver
         @resolver ||= Resolver.new(
-          MOSAIK.options.directory,
+          options[:directory],
           MOSAIK.configuration.load_paths,
           MOSAIK.configuration.overrides,
         )

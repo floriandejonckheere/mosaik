@@ -11,11 +11,7 @@ module MOSAIK
   #
   class Logger < SimpleDelegator
     def initialize
-      super(::Logger.new($stdout, level:, formatter:))
-    end
-
-    def level
-      MOSAIK.options.debug? ? "debug" : "info"
+      super(::Logger.new($stdout, formatter:))
     end
 
     private

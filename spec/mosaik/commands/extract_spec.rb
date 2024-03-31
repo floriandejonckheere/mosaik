@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Commands::Extract do
-  subject(:command) { described_class.new(*arguments) }
+  subject(:command) { build(:extract_command, arguments:) }
 
   let(:arguments) { [] }
 

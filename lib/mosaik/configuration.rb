@@ -5,7 +5,7 @@ module MOSAIK
   # Configuration parser (mosaik.yml)
   #
   class Configuration
-    attr_reader :directory, :load_paths, :includes, :excludes, :overrides
+    attr_reader :load_paths, :includes, :excludes, :overrides
 
     def initialize(directory:, load_paths: [], includes: [], excludes: [], overrides: {})
       @directory = directory
@@ -37,5 +37,10 @@ module MOSAIK
         overrides: configuration["overrides"] || {},
       )
     end
+
+    private
+
+    # Only used internally
+    attr_reader :directory
   end
 end

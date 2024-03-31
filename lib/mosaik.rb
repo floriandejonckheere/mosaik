@@ -14,15 +14,11 @@ module MOSAIK
     # Code loader instance
     attr_reader :loader
 
+    # Logger
     attr_writer :logger
 
-    def options
-      @options ||= Options.new
-    end
-
-    def configuration
-      @configuration ||= Configuration.from(File.join(options.directory, "mosaik.yml"))
-    end
+    # Configuration
+    attr_accessor :configuration
 
     def logger
       @logger ||= Logger.new

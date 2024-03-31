@@ -27,7 +27,7 @@ RSpec.describe MOSAIK::Arguments do
 
   describe "#initialize" do
     it "parses command arguments" do
-      command = command_class.new("--number", "2", "--a-string", "another string", "--boolean")
+      command = command_class.new({}, "--number", "2", "--a-string", "another string", "--boolean")
 
       expect(command.options).to eq number: 2, a_string: "another string", boolean: true
     end

@@ -18,9 +18,9 @@ module MOSAIK
 
       attr_reader :options
 
-      def initialize(*command_args)
+      def initialize(options, *command_args)
         # Initialize options with default values
-        @options = self.class.options.dup
+        @options = options.merge(self.class.options.dup)
 
         # Parse command arguments
         self.class.parser.parse!(command_args, into: @options)

@@ -10,7 +10,7 @@ describe MOSAIK::CLI do
       it "sets the working directory" do
         cli
 
-        expect(MOSAIK.options.directory).to eq "/foo"
+        expect(cli.options[:directory]).to eq "/foo"
       end
     end
 
@@ -20,7 +20,7 @@ describe MOSAIK::CLI do
       it "turns on verbose output" do
         cli
 
-        expect(MOSAIK.options).to be_verbose
+        expect(cli.options[:verbose]).to be true
       end
     end
 
@@ -30,7 +30,7 @@ describe MOSAIK::CLI do
       it "turns on debug output" do
         cli
 
-        expect(MOSAIK.options).to be_debug
+        expect(cli.options[:debug]).to be true
       end
     end
 

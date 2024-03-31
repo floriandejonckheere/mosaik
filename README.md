@@ -68,6 +68,15 @@ The `evaluate` command analyzes the given microservices architecture, and evalua
 ```bash
 $ mosaik evaluate --help
 ```
+## Development and Testing
+
+Some test make use of a simulated git repository. If you want to use this repository for development, run the following command:
+
+```bash
+$ rspec spec/mosaik/repository_spec.rb --tag repository
+```
+
+The simulated git repository will be copied to `tmp/repository` and can be used for development.
 
 ## Releasing
 

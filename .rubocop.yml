@@ -8,6 +8,7 @@ AllCops:
   Exclude:
     - examples/**/*
     - vendor/**/*
+    - tmp/**/*
 
 Layout/LineLength:
   Enabled: false

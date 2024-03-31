@@ -57,11 +57,11 @@ module MOSAIK
             # Find or create the the receiver node
             receiver = graph.find_or_add_vertex(reference.constant.name)
 
-            debug "Edge from #{caller.value} to #{receiver.value}##{reference.method}"
+            debug "Edge from #{caller.id} to #{receiver.id}##{reference.method}"
 
             # Add an edge from the constant to the receiver
             # FIXME: aggregate edges with the same method
-            graph.add_directed_edge(caller.value, receiver.value, method: reference.method, weight: options[:structural])
+            graph.add_directed_edge(caller.id, receiver.id, method: reference.method, weight: options[:structural])
           end
         end
       end

@@ -61,6 +61,9 @@ module MOSAIK
             row.each do |b, value|
               next if value.zero?
 
+              graph.find_or_add_vertex(a)
+              graph.find_or_add_vertex(b)
+
               # Add a weighted edge to the graph
               # FIXME: aggregate with existing edges
               graph.add_directed_edge(a, b, weight: value * options[:logical])
@@ -75,6 +78,9 @@ module MOSAIK
 
         contributors.keys.permutation(2).each do |(a, b)|
           next if contributors[a].empty? || contributors[b].empty?
+
+          graph.find_or_add_vertex(a)
+          graph.find_or_add_vertex(b)
 
           # Add a weighted edge to the graph (weight is the cardinality of the intersection of sets)
           # FIXME: aggregate with existing edges

@@ -3,10 +3,8 @@
 RSpec.describe MOSAIK::Extractors::Evolution do
   subject(:extractor) { described_class.new(options, graph) }
 
-  let(:options) { { directory: MOSAIK.root, logical: 1, contributor: 1 } }
+  let(:options) { { directory: MOSAIK.root, limit: 100, logical: 1, contributor: 1 } }
   let(:graph) { build(:graph) }
-
-  let(:configuration) { build(:configuration) }
 
   describe "#validate" do
     it "does not raise an error" do
@@ -19,6 +17,30 @@ RSpec.describe MOSAIK::Extractors::Evolution do
       it "raises an error" do
         expect { extractor.validate }.to raise_error MOSAIK::OptionError, "directory is not a git repository"
       end
+    end
+  end
+
+  context "when the weights are zero" do
+    let(:options) { { logical: 0, contributor: 0 } }
+
+    it "does not extract evolutionary coupling information" do
+      expect { extractor.call }.not_to(change { graph.vertices.count })
+    end
+  end
+
+  describe "logical coupling" do
+    let(:options) { { directory:, limit: 100, logical: 1, contributor: 0 } }
+
+    include_context "with a git repository"
+
+    it "constructs a logical coupling graph" do
+      extractor.call
+
+      # Extract all vertices with source and destination
+      expect(graph.vertices.transform_values { |v| v.edges.keys }).to eq(
+        "App::Foo" => ["App::Bar"],
+        "App::Bar" => ["App::Foo"],
+      )
     end
   end
 end

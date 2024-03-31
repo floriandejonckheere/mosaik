@@ -17,10 +17,10 @@ module MOSAIK
         git = Git.open(options[:directory], log: ::Logger.new(File::NULL))
 
         # Fetch commits, limited to the last N commits
-        commits = git.log(options[:limit]) if options[:limit]
+        commits = git.log(options[:limit])
 
         # Limit commits to the load paths
-        commits = commits.path(MOSAIK.configuration.load_paths.map { |l| File.join(options[:directory], l) })
+        commits = commits.path(MOSAIK.configuration.load_paths)
 
         # Limit commits to a specific date
         commits = commits.since(options[:since]) if options[:since]
@@ -38,9 +38,9 @@ module MOSAIK
           # Get the files for the commit
           files = commit.diff_parent.stats[:files]
 
-          # Reject files not in the load paths
+          # Select only included files
           files = files
-            .map { |file, _| File.join(MOSAIK.options.directory, file) }
+            .map { |file, _| File.join(options[:directory], file) }
             .select { |file| file.in? MOSAIK.configuration.files }
 
           # Resolve file paths to class name

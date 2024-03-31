@@ -6,21 +6,15 @@ RSpec.describe MOSAIK::Commands::Extract do
   let(:arguments) { [] }
 
   describe "#prepare" do
-    describe "--type" do
-      it "does not raise an error if the type is valid" do
-        allow(File)
-          .to receive(:exist?)
-          .and_return false
+    it "does not raise an error" do
+      expect { command.prepare }.not_to raise_error
+    end
 
-        expect { command.prepare }.not_to raise_error
-      end
+    describe "--limit" do
+      let(:arguments) { ["--limit", "-1"] }
 
-      context "when the type is invalid" do
-        let(:arguments) { ["--type", "invalid"] }
-
-        it "raises an error" do
-          expect { command.prepare }.to raise_error(MOSAIK::OptionError, "unknown extraction type: invalid")
-        end
+      it "raises an error" do
+        expect { command.prepare }.to raise_error(MOSAIK::OptionError, "negative value: -1")
       end
     end
   end

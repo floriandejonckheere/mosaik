@@ -5,18 +5,22 @@ module MOSAIK
     class Extract < Command
       self.description = "Extract information"
 
-      defaults type: "structural",
+      defaults structural: 1,
+               logical: 1,
+               contributor: 1,
                since: nil,
                limit: 100
 
-      argument "-t", "--type TYPE", "Type of extraction (default: structural, available: structural, evolution)"
+      argument "--structural N", Integer, "Weight of structural coupling extraction (default: 1)"
+      argument "--logical N", Integer, "Weight of logical coupling extraction (default: 1)"
+      argument "--contributor N", Integer, "Weight of coupling extraction (default: 1)"
 
-      # History options
+      # Evolution options
       argument "--since DATE", "Include only commits from a specific date"
       argument "--limit N", Integer, "Limit the number of commits to analyze (default: 100)"
 
       def prepare
-        raise OptionError, "unknown extraction type: #{options[:type]}" unless options[:type].in? ["structural", "evolution"]
+        raise OptionError, "negative value: #{options[:limit]}" if options[:limit].negative?
       end
 
       def start

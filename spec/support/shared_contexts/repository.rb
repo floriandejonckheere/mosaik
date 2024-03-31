@@ -6,57 +6,58 @@ RSpec.shared_context "with a git repository" do
 
   let(:configuration) { MOSAIK::Configuration.from(File.join(directory, "mosaik.yml")) }
 
+  let(:john) { "John Doe <john@example.com>" }
+  let(:jane) { "Jane Doe <jane@example.com>" }
+
+  def commit(author, **files_with_content)
+    # Write the files with content
+    files_with_content.each do |file, content|
+      FileUtils.mkdir_p(File.join(directory, File.dirname(file)))
+      File.write(File.join(directory, file), content)
+    end
+
+    # Add and commit the files
+    git.add
+    git.commit("Add #{files_with_content.keys.join(', ')}", author:)
+  end
+
   before do
     # Set up committer configuration
     git.config("user.name", "Author 1")
-    git.config("user.email", "author1@example.com")
+    git.config("user.email", "john@example.com")
 
     # Setup the repository with initial commit
-    File.write(File.join(directory, "README.md"), "# Test Repository")
-    git.add
-    git.commit("Initial commit", author: "Author 1 <author1@example.com>")
+    commit john,
+           "README.md" => "# Test Repository"
 
     # Add MOSAIK configuration
-    FileUtils.cp(MOSAIK.root.join("config/mosaik.yml"), File.join(directory, "mosaik.yml"))
-    git.add
-    git.commit("Add MOSAIK configuration", author: "Author 1 <author1@example.com>")
+    commit john,
+           "mosaik.yml" => File.read(MOSAIK.root.join("config/mosaik.yml"))
 
     # Add application structure
-    FileUtils.mkdir(File.join(directory, "lib"))
-    File.write(File.join(directory, "lib/app.rb"), "class App; end")
-    git.add
-    git.commit("Set up application structure", author: "Author 1 <author1@example.com>")
+    commit john,
+           "lib/app.rb" => "class App; end"
 
     # Add classes
-    FileUtils.mkdir(File.join(directory, "lib", "app"))
-    File.write(File.join(directory, "lib/app/foo.rb"), "class App::Foo; end")
-    File.write(File.join(directory, "lib/app/bar.rb"), "class App::Bar; end")
-    git.add
-    git.commit("Add App::Foo and App::Bar", author: "Author 1 <author1@example.com>")
+    commit john,
+           "lib/app/foo.rb" => "class App::Foo; end",
+           "lib/app/bar.rb" => "class App::Bar; end"
 
-    # Add more classes
-    File.write(File.join(directory, "lib/app/foo.rb"), "class App::Foo; def initialize; end; end")
-    File.write(File.join(directory, "lib/app/bat.rb"), "class App::Bat; end")
-    git.add
-    git.commit("Add App::Bat", author: "Author 1 <author1@example.com>")
+    commit jane,
+           "lib/app/foo.rb" => "class App::Foo; def initialize; end; end",
+           "lib/app/bat.rb" => "class App::Bat; end"
 
-    # Add more classes
-    File.write(File.join(directory, "lib/app/foo.rb"), "class App::Foo; end")
-    File.write(File.join(directory, "lib/app/bak.rb"), "class App::Bak; end")
-    git.add
-    git.commit("Add App::Bak", author: "Author 1 <author1@example.com>")
+    commit john,
+           "lib/app/foo.rb" => "class App::Foo; end",
+           "lib/app/bak.rb" => "class App::Bak; end"
 
-    # Add more classes
-    File.write(File.join(directory, "lib/app/bat.rb"), "class App::Bat; def initialize; end; end")
-    File.write(File.join(directory, "lib/app/baz.rb"), "class App::Baz; end")
-    git.add
-    git.commit("Add App::Baz", author: "Author 1 <author1@example.com>")
+    commit jane,
+           "lib/app/bat.rb" => "class App::Bat; def initialize; end; end",
+           "lib/app/baz.rb" => "class App::Baz; end"
 
-    # Add more classes
-    File.write(File.join(directory, "lib/app/bat.rb"), "class App::Bat; end")
-    File.write(File.join(directory, "lib/app/baz.rb"), "class App::Baz; def initialize; end; end")
-    git.add
-    git.commit("modify App::Bat and App::Baz", author: "Author 1 <author1@example.com>")
+    commit john,
+           "lib/app/bat.rb" => "class App::Bat; end",
+           "lib/app/baz.rb" => "class App::Baz; def initialize; end; end"
 
     # Mock the configuration
     allow(MOSAIK)

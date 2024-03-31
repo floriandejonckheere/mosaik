@@ -2,7 +2,7 @@
 
 module MOSAIK
   module Extractors
-    class Static < Extractor
+    class Structural < Extractor
       PARSERS = {
         ".rb" => Parsers::Ruby,
       }.freeze

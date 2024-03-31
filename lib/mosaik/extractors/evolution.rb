@@ -6,6 +6,10 @@ module MOSAIK
     # Evolutionary (logical and contributor) coupling extraction
     #
     class Evolution < Extractor
+      def validate
+        raise OptionError, "directory is not a git repository" unless File.directory?(File.join(options[:directory], ".git"))
+      end
+
       def call
         return unless options[:logical].positive? || options[:contributor].positive?
 

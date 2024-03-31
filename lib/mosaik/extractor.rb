@@ -12,6 +12,8 @@ module MOSAIK
       @graph = graph
     end
 
+    def validate; end
+
     def call
       raise NotImplementedError
     end

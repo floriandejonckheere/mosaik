@@ -41,11 +41,13 @@ module MOSAIK
         # Extract structural coupling information and add to graph
         Extractors::Structural
           .new(options, graph)
+          .tap(&:validate)
           .call
 
         # Extract evolutionary (logical and contributor) coupling information and add to graph
         Extractors::Evolution
           .new(options, graph)
+          .tap(&:validate)
           .call
       end
 

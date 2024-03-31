@@ -7,6 +7,10 @@ RSpec.shared_context "with a git repository" do
   let(:configuration) { MOSAIK::Configuration.from(File.join(directory, "mosaik.yml")) }
 
   before do
+    # Set up committer configuration
+    git.config("user.name", "Author 1")
+    git.config("user.email", "author1@example.com")
+
     # Setup the repository with initial commit
     File.write(File.join(directory, "README.md"), "# Test Repository")
     git.add

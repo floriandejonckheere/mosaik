@@ -42,7 +42,7 @@ RSpec.describe MOSAIK::Extractors::Evolution do
         "App::Bar" => ["App::Foo"],
         "App::Bat" => ["App::Baz", "App::Foo"],
         "App::Bak" => ["App::Foo"],
-        "App::Baz" => ["App::Bat"]
+        "App::Baz" => ["App::Bat"],
       )
     end
   end

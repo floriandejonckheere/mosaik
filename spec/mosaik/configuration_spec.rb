@@ -25,7 +25,7 @@ RSpec.describe MOSAIK::Configuration do
 
   describe ".from" do
     context "when the configuration file exists" do
-      let(:file) { MOSAIK.root.join("spec/fixtures/mosaik.yml") }
+      let(:file) { MOSAIK.root.join("config/mosaik.yml") }
 
       it "creates a new configuration instance" do
         expect(described_class.from(file)).to be_a described_class

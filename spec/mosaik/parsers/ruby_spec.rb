@@ -3,8 +3,46 @@
 RSpec.describe MOSAIK::Parsers::Ruby do
   subject(:parser) { described_class.new }
 
-  let(:file) { "spec/fixtures/lib/app/user.rb" }
+  let(:file) { Tempfile.new(["ruby", ".rb"]) }
   let(:tree) { MOSAIK::Syntax::Tree.new }
+
+  before do
+    File.write file, <<~RUBY
+      # frozen_string_literal: true
+
+      module App
+        class User
+          def initialize(name, email, admin: false)
+            @name = name
+            @email = email
+            @admin = admin
+          end
+
+          def name
+            @name
+          end
+
+          def email
+            @email
+          end
+
+          def admin
+            @admin
+          end
+
+          alias admin? admin
+
+          def valid?
+            Validators::User.valid?(self)
+          end
+
+          def to_s
+            "\#{name} <\#{email}>"
+          end
+        end
+      end
+    RUBY
+  end
 
   it "parses a Ruby file" do
     parser.parse(file, tree)

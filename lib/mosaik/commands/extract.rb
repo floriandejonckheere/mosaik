@@ -7,14 +7,14 @@ module MOSAIK
 
       defaults type: "static"
 
-      argument "-t", "--type TYPE", "Type of extraction (default: static, available: static, history)"
+      argument "-t", "--type TYPE", "Type of extraction (default: static, available: static, evolution)"
       argument "-f", "--force", "Overwrite existing file"
 
       # History options
       argument "--since DATE", "Include only commits from a specific date"
 
       def prepare
-        raise OptionError, "unknown extraction type: #{options[:type]}" unless options[:type].in? ["static", "history"]
+        raise OptionError, "unknown extraction type: #{options[:type]}" unless options[:type].in? ["static", "evolution"]
       end
 
       def start
@@ -41,8 +41,8 @@ module MOSAIK
         case options[:type]
         when "static"
           Extractors::Static
-        when "history"
-          Extractors::History
+        when "evolution"
+          Extractors::Evolution
         end
       end
 

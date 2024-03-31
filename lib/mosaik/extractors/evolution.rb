@@ -2,7 +2,7 @@
 
 module MOSAIK
   module Extractors
-    class History < Extractor
+    class Evolution < Extractor
       def call
         # Open the git repository
         git = Git.open(MOSAIK.options.directory, log: ::Logger.new(File::NULL))

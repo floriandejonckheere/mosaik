@@ -16,7 +16,7 @@ module MOSAIK
       end
 
       def on_class(node)
-        class_name = node.children[0].children[1].to_s
+        class_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
         self.current_class = current_class ? "#{current_class}::#{class_name}" : class_name
@@ -34,7 +34,7 @@ module MOSAIK
       end
 
       def on_module(node)
-        module_name = node.children[0].children[1].to_s
+        module_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
         self.current_class = current_class ? "#{current_class}::#{module_name}" : module_name

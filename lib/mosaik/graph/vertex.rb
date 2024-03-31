@@ -11,8 +11,8 @@ module MOSAIK
         @attributes = attributes
       end
 
-      def add_edge(to, weight = nil)
-        edges[to] = weight
+      def add_edge(to, **attributes)
+        edges[to] = Edge.new(attributes)
       end
 
       def remove_edge(id)

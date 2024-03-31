@@ -17,14 +17,14 @@ module MOSAIK
         vertices[id] = Vertex.new(id, attributes)
       end
 
-      def add_directed_edge(from, to, weight = nil)
-        vertices[from].add_edge(to, weight)
+      def add_directed_edge(from, to, attributes = {})
+        vertices[from].add_edge(to, **attributes)
       end
       alias add_edge add_directed_edge
 
-      def add_undirected_edge(from, to, weight = nil)
-        vertices[from].add_edge(to, weight)
-        vertices[to].add_edge(from, weight)
+      def add_undirected_edge(from, to, attributes = {})
+        vertices[from].add_edge(to, **attributes)
+        vertices[to].add_edge(from, **attributes)
       end
 
       def remove_directed_edge(from, to)

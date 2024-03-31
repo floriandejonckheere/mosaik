@@ -26,6 +26,15 @@ RSpec.describe MOSAIK::Graph::Graph do
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
     end
 
+    it "adds a directed edge with attributes" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+      graph.add_directed_edge("vertex1", "vertex2", key: "value")
+
+      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+    end
+
     it "does not add a directed edge twice" do
       graph.add_vertex("vertex1")
       graph.add_vertex("vertex2")
@@ -33,27 +42,6 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_directed_edge("vertex1", "vertex2")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-    end
-
-    describe "weighted" do
-      it "adds a directed weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_directed_edge("vertex1", "vertex2", 5)
-
-        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex1").edges["vertex2"]).to eq 5
-      end
-
-      it "overrides a directed weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_directed_edge("vertex1", "vertex2", 5)
-        graph.add_directed_edge("vertex1", "vertex2", 10)
-
-        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex1").edges["vertex2"]).to eq 10
-      end
     end
   end
 
@@ -66,6 +54,15 @@ RSpec.describe MOSAIK::Graph::Graph do
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
     end
 
+    it "adds an undirected edge with attributes" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+      graph.add_undirected_edge("vertex1", "vertex2", key: "value")
+
+      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+    end
+
     it "does not add an undirected edge twice" do
       graph.add_vertex("vertex1")
       graph.add_vertex("vertex2")
@@ -73,27 +70,6 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_undirected_edge("vertex1", "vertex2")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-    end
-
-    describe "weighted" do
-      it "adds an undirected weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_undirected_edge("vertex1", "vertex2", 5)
-
-        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex1").edges["vertex2"]).to eq 5
-      end
-
-      it "overrides an undirected weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_undirected_edge("vertex1", "vertex2", 5)
-        graph.add_undirected_edge("vertex1", "vertex2", 10)
-
-        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex1").edges["vertex2"]).to eq 10
-      end
     end
   end
 
@@ -116,27 +92,6 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(graph.find_vertex("vertex1").edges).to be_empty
     end
-
-    describe "weighted" do
-      it "removes a directed weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_directed_edge("vertex1", "vertex2", 5)
-
-        graph.remove_directed_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
-      end
-
-      it "does not remove a non-existing directed weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-
-        graph.remove_directed_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
-      end
-    end
   end
 
   describe "#remove_undirected_edge" do
@@ -157,27 +112,6 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.remove_undirected_edge("vertex1", "vertex2")
 
       expect(graph.find_vertex("vertex1").edges).to be_empty
-    end
-
-    describe "weighted" do
-      it "removes a directed weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_directed_edge("vertex1", "vertex2", 5)
-
-        graph.remove_directed_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
-      end
-
-      it "does not remove a non-existing directed weighted edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-
-        graph.remove_directed_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
-      end
     end
   end
 
@@ -207,6 +141,12 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(vertex).to be_a MOSAIK::Graph::Vertex
       expect(vertex.id).to eq "vertex"
+    end
+
+    it "adds a vertex with attributes" do
+      vertex = graph.find_or_add_vertex("vertex", key: "value")
+
+      expect(vertex.attributes).to eq key: "value"
     end
   end
 

@@ -9,4 +9,10 @@ FactoryBot.define do
     id { "vertex" }
     attrs { { key: "value" } }
   end
+
+  factory :edge, class: "MOSAIK::Graph::Edge" do
+    initialize_with { new(attrs) }
+
+    attrs { { key: "value" } }
+  end
 end

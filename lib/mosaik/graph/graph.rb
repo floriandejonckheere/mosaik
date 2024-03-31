@@ -13,8 +13,8 @@ module MOSAIK
         @vertices = {}
       end
 
-      def add_vertex(id)
-        vertices[id] = Vertex.new(id)
+      def add_vertex(id, attributes = {})
+        vertices[id] = Vertex.new(id, attributes)
       end
 
       def add_directed_edge(from, to, weight = nil)
@@ -41,8 +41,8 @@ module MOSAIK
         vertices[id]
       end
 
-      def find_or_add_vertex(id)
-        find_vertex(id) || add_vertex(id)
+      def find_or_add_vertex(id, attributes = {})
+        find_vertex(id) || add_vertex(id, attributes)
       end
 
       def remove_vertex(id)

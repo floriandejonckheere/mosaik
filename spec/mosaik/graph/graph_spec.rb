@@ -9,6 +9,12 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(graph.vertices).not_to be_empty
     end
+
+    it "adds a vertex with attributes" do
+      graph.add_vertex("vertex", key: "value")
+
+      expect(graph.find_vertex("vertex").attributes).to eq key: "value"
+    end
   end
 
   describe "#add_edge, #add_directed_edge" do

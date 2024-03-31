@@ -4,8 +4,9 @@ FactoryBot.define do
   factory :graph, class: "MOSAIK::Graph::Graph"
 
   factory :vertex, class: "MOSAIK::Graph::Vertex" do
-    initialize_with { new(id) }
+    initialize_with { new(id, attrs) }
 
     id { "vertex" }
+    attrs { { key: "value" } }
   end
 end

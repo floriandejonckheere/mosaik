@@ -2,8 +2,9 @@
 
 FactoryBot.define do
   factory :configuration, class: MOSAIK::Configuration do
-    initialize_with { new(load_paths:, includes:, excludes:, overrides:) }
+    initialize_with { new(directory:, load_paths:, includes:, excludes:, overrides:) }
 
+    directory { MOSAIK.root.join("spec", "fixtures") }
     load_paths { ["lib"] }
     includes { ["**/*.{rb,rake,erb}"] }
     excludes { ["{bin,node_modules,script,tmp,vendor}/**/*"] }

@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Configuration do
-  subject(:configuration) { described_class.new(load_paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"], overrides: { "foobar" => "FooBar" }) }
+  subject(:configuration) { described_class.new(directory: "/tmp", load_paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"], overrides: { "foobar" => "FooBar" }) }
 
   describe "#files" do
     it "returns only included files" do
-      allow(MOSAIK)
-        .to receive(:options)
-        .and_return instance_double("MOSAIK::Option", directory: "/tmp")
       allow(Dir)
         .to receive(:[])
         .and_call_original
@@ -32,6 +29,10 @@ RSpec.describe MOSAIK::Configuration do
 
       it "creates a new configuration instance" do
         expect(described_class.from(file)).to be_a described_class
+      end
+
+      it "sets the directory attribute" do
+        expect(described_class.from(file).directory).to eq MOSAIK.root.join("spec/fixtures").to_s
       end
 
       it "sets the load_paths attribute" do

@@ -22,11 +22,11 @@ module MOSAIK
       argument "--since DATE", "Include only commits from a specific date"
       argument "--limit N", Integer, "Limit the number of commits to analyze (default: 100)"
 
-      def prepare
+      def validate
         raise OptionError, "negative value: #{options[:limit]}" if options[:limit].negative?
       end
 
-      def start
+      def call
         info "Extracting information from the codebase (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
         # Add a vertex for each constant in the load path

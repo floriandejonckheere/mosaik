@@ -8,7 +8,7 @@ module MOSAIK
     class Version < Command
       self.description = "Show the current application version"
 
-      def start
+      def call
         info "MOSAIK #{MOSAIK::VERSION}"
       end
     end

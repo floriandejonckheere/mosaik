@@ -43,14 +43,14 @@ describe MOSAIK::CLI do
     end
   end
 
-  describe "#prepare" do
+  describe "#validate" do
     let(:args) { ["version"] }
 
     context "when the directory does not exist" do
       let(:args) { ["--directory", "/foo"] }
 
       it "raises an error" do
-        expect { expect { cli.prepare }.to raise_error MOSAIK::ExitError }.to log "invalid directory: /foo"
+        expect { expect { cli.validate }.to raise_error MOSAIK::ExitError }.to log "invalid directory: /foo"
       end
     end
 
@@ -58,19 +58,19 @@ describe MOSAIK::CLI do
       let(:args) { ["--directory", __FILE__] }
 
       it "raises an error" do
-        expect { expect { cli.prepare }.to raise_error MOSAIK::ExitError }.to log "not a directory: #{__FILE__}"
+        expect { expect { cli.validate }.to raise_error MOSAIK::ExitError }.to log "not a directory: #{__FILE__}"
       end
     end
   end
 
-  describe "#start" do
+  describe "#call" do
     let(:args) { ["version", "foo"] }
 
     context "when no command is given" do
       let(:args) { [] }
 
       it "prints usage and exits" do
-        expect { expect { cli.start }.to raise_error MOSAIK::ExitError }.to log "[global options]"
+        expect { expect { cli.call }.to raise_error MOSAIK::ExitError }.to log "[global options]"
       end
     end
 
@@ -80,14 +80,14 @@ describe MOSAIK::CLI do
         .with(any_args, "foo")
         .and_call_original
 
-      cli.start
+      cli.call
     end
 
     context "when an invalid command is given" do
       let(:args) { ["foo"] }
 
       it "prints usage and exits" do
-        expect { expect { cli.start }.to raise_error MOSAIK::ExitError }.to log "[global options]"
+        expect { expect { cli.call }.to raise_error MOSAIK::ExitError }.to log "[global options]"
       end
     end
   end

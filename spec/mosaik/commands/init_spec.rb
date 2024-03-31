@@ -6,7 +6,7 @@ RSpec.describe MOSAIK::Commands::Init do
   let(:options) { { directory: Dir.mktmpdir } }
 
   it "writes a configuration file" do
-    command.start
+    command.call
 
     expect(File).to exist File.join(options[:directory], "mosaik.yml")
   end
@@ -15,7 +15,7 @@ RSpec.describe MOSAIK::Commands::Init do
     before { FileUtils.touch File.join(options[:directory], "mosaik.yml") }
 
     it "raises an error" do
-      expect { command.start }.to raise_error(MOSAIK::ConfigurationError, /Configuration file already exists at/)
+      expect { command.call }.to raise_error(MOSAIK::ConfigurationError, /Configuration file already exists at/)
     end
   end
 end

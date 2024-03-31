@@ -7,8 +7,8 @@ module MOSAIK
   class Command
     include Arguments
 
-    def prepare; end
+    def validate; end
 
-    def start; end
+    def call; end
   end
 end

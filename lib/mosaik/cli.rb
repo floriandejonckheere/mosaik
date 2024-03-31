@@ -35,7 +35,7 @@ module MOSAIK
       retry
     end
 
-    def prepare
+    def validate
       raise OptionError, "invalid directory: #{options[:directory]}" unless File.exist?(options[:directory])
       raise OptionError, "not a directory: #{options[:directory]}" unless File.directory?(options[:directory])
 
@@ -50,7 +50,7 @@ module MOSAIK
       raise ExitError, 1
     end
 
-    def start
+    def call
       # Extract command name
       command_name = command_args.shift
 
@@ -71,10 +71,10 @@ module MOSAIK
         .new(options, *command_args)
 
       command
-        .prepare
+        .validate
 
       command
-        .start
+        .call
     rescue UsageError => e
       # Don't print tail if no message was passed
       return usage if e.message == e.class.name

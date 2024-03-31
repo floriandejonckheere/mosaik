@@ -10,10 +10,10 @@ begin
     .new(ARGV)
 
   cli
-    .prepare
+    .validate
 
   cli
-    .start
+    .call
 rescue MOSAIK::ExitError => e
   exit(e.message.to_i)
 end

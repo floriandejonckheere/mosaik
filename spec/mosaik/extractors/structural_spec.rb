@@ -23,8 +23,6 @@ RSpec.describe MOSAIK::Extractors::Structural do
   describe "structural coupling" do
     let(:options) { { structural: 1 } }
 
-    include_context "with a git repository"
-
     it "constructs a logical coupling graph" do
       extractor.call
 

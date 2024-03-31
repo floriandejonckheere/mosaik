@@ -29,9 +29,7 @@ RSpec.describe MOSAIK::Extractors::Evolution do
   end
 
   describe "logical coupling" do
-    let(:options) { { directory:, limit: 100, logical: 1, contributor: 0 } }
-
-    include_context "with a git repository"
+    let(:options) { { directory: "tmp/repository", limit: 100, logical: 1, contributor: 0 } }
 
     it "constructs a logical coupling graph" do
       extractor.call
@@ -48,9 +46,7 @@ RSpec.describe MOSAIK::Extractors::Evolution do
   end
 
   describe "contributor coupling" do
-    let(:options) { { directory:, limit: 100, logical: 0, contributor: 1 } }
-
-    include_context "with a git repository"
+    let(:options) { { directory: "tmp/repository", limit: 100, logical: 0, contributor: 1 } }
 
     it "constructs a contributor coupling graph" do
       extractor.call

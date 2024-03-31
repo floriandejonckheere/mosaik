@@ -8,7 +8,6 @@ module MOSAIK
       defaults type: "static"
 
       argument "-t", "--type TYPE", "Type of extraction (default: static, available: static, evolution)"
-      argument "-f", "--force", "Overwrite existing file"
 
       # History options
       argument "--since DATE", "Include only commits from a specific date"

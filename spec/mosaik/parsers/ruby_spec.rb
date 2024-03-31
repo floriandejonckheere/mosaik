@@ -4,7 +4,7 @@ RSpec.describe MOSAIK::Parsers::Ruby do
   subject(:parser) { described_class.new }
 
   let(:file) { "spec/fixtures/lib/app/user.rb" }
-  let(:registry) { MOSAIK::Registry.new }
+  let(:registry) { MOSAIK::Syntax::Registry.new }
 
   it "parses a Ruby file" do
     parser.parse(file, registry)

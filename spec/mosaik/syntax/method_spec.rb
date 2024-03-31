@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # typed: true
 
-RSpec.describe MOSAIK::Method do
+RSpec.describe MOSAIK::Syntax::Method do
   subject(:method) { build(:method, name: "test", file: "test.rb", line: 5) }
 
   it "has a name" do

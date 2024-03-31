@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe MOSAIK::Reference do
+RSpec.describe MOSAIK::Syntax::Reference do
   subject(:reference) { build(:reference, constant: build(:constant, name: "Constant"), method: "method") }
 
   it "has a constant" do

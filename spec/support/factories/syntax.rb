@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :constant, class: MOSAIK::Constant do
+  factory :constant, class: MOSAIK::Syntax::Constant do
     initialize_with { new(name) }
 
-    name { "MOSAIK::Constant" }
+    name { "MOSAIK::Syntax::Constant" }
   end
 
-  factory :method, class: MOSAIK::Method do
+  factory :method, class: MOSAIK::Syntax::Method do
     initialize_with { new(constant, name, file, line) }
 
     constant
@@ -16,7 +16,7 @@ FactoryBot.define do
     line { 6 }
   end
 
-  factory :reference, class: MOSAIK::Reference do
+  factory :reference, class: MOSAIK::Syntax::Reference do
     initialize_with { new(constant, method) }
 
     constant

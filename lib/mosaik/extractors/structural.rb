@@ -14,7 +14,7 @@ module MOSAIK
         return unless options[:structural].positive?
 
         # Instantiate a constant registry
-        registry = Registry.new
+        registry = Syntax::Registry.new
 
         # Parse file with an appropriate parser
         MOSAIK.configuration.files.each do |file|

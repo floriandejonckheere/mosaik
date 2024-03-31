@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # typed: true
 
-RSpec.describe MOSAIK::Constant do
+RSpec.describe MOSAIK::Syntax::Constant do
   subject(:constant) { build(:constant, name: "Name") }
 
   it "has a name" do

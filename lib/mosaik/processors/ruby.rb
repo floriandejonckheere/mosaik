@@ -99,7 +99,7 @@ module MOSAIK
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
-        registry[current_class].methods[current_method].references << Reference.new(registry[constant_name], callee)
+        registry[current_class].methods[current_method].references << Syntax::Reference.new(registry[constant_name], callee)
       end
 
       private

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-RSpec.describe MOSAIK::Registry do
+RSpec.describe MOSAIK::Syntax::Registry do
   subject(:registry) { described_class.new }
 
   describe "#[]" do
     it "returns a constant" do
       constant = registry["Foo"]
 
-      expect(constant).to be_a MOSAIK::Constant
+      expect(constant).to be_a MOSAIK::Syntax::Constant
       expect(constant.name).to eq "Foo"
     end
 

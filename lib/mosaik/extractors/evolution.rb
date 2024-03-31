@@ -4,7 +4,7 @@ module MOSAIK
   module Extractors
     ##
     # Evolutionary (logical and contributor) coupling extraction
-    # 
+    #
     class Evolution < Extractor
       def call
         return unless options[:logical].positive? || options[:contributor].positive?

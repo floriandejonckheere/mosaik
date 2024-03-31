@@ -6,6 +6,9 @@ require "logger"
 require "colorize"
 
 module MOSAIK
+  ##
+  # Logger class
+  #
   class Logger < SimpleDelegator
     def initialize
       super(::Logger.new($stdout, level:, formatter:))

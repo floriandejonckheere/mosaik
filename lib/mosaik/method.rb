@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Represents a method in the codebase
+  #
   class Method
     attr_reader :constant, :name, :file, :line, :references
 

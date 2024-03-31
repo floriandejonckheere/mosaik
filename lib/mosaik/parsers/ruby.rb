@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Parsers
+    ##
+    # Parser for Ruby code
+    #
     class Ruby
       def parse(file, registry)
         debug "Parsing file: #{file}"

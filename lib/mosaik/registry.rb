@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Represents a tree of constants in the codebase
+  #
   class Registry
     include Enumerable
 

@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Commands
+    ##
+    # Show the current application version
+    #
     class Version < Command
       self.description = "Show the current application version"
 

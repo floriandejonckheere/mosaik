@@ -4,6 +4,9 @@ require "tsort"
 
 module MOSAIK
   module Graph
+    ##
+    # Simple implementation of an (un-)directed graph
+    #
     class Graph
       include TSort
 

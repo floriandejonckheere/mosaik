@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Graph
+    ##
+    # Vertex in the graph
+    #
     class Vertex
       attr_reader :id, :edges, :attributes
 

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Base class for extractors
+  #
   class Extractor
     attr_reader :options, :graph
 

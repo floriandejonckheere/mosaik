@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Commands
+    ##
+    # Extract information from the application
+    #
     class Extract < Command
       self.description = "Extract information"
 

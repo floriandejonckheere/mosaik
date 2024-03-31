@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Graph
+    ##
+    # Edge in the graph
+    #
     class Edge
       attr_reader :attributes
 

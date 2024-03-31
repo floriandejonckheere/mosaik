@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Extractors
+    ##
+    # Structural coupling extractor
+    #
     class Structural < Extractor
       PARSERS = {
         ".rb" => Parsers::Ruby,

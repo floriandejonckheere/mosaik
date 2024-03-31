@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Represents a constant in the codebase
+  #
   class Constant
     attr_reader :name, :methods, :parent, :descendants
 

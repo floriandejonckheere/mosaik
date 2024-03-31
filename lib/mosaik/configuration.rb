@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Configuration parser (mosaik.yml)
+  #
   class Configuration
     attr_reader :directory, :load_paths, :includes, :excludes, :overrides
 

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Mixin for command line arguments parsing
+  #
   module Arguments
     extend ActiveSupport::Concern
 

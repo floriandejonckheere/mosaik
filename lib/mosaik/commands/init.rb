@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Commands
+    ##
+    # Initialize a new configuration file
+    #
     class Init < Command
       self.description = "Initialize configuration"
 

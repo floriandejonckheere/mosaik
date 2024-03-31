@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module MOSAIK
+  ##
+  # Global options
+  #
   class Options
     def directory=(path)
       @directory = File.expand_path(path)

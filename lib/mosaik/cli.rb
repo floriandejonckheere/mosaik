@@ -4,6 +4,9 @@ require "optparse"
 require "English"
 
 module MOSAIK
+  ##
+  # Command line interface
+  #
   class CLI
     attr_reader :args, :command_args
 

@@ -2,6 +2,9 @@
 
 module MOSAIK
   module Processors
+    ##
+    # Abstract Syntax Tree parser for Ruby code
+    #
     class Ruby < AST::Processor
       attr_reader :registry
       attr_accessor :current_class, :current_method

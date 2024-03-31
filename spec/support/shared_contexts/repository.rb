@@ -52,6 +52,12 @@ RSpec.shared_context "with a git repository" do
     git.add
     git.commit("Add App::Baz", author: "Author 1 <author1@example.com>")
 
+    # Add more classes
+    File.write(File.join(directory, "lib/app/bat.rb"), "class App::Bat; end")
+    File.write(File.join(directory, "lib/app/baz.rb"), "class App::Baz; def initialize; end; end")
+    git.add
+    git.commit("modify App::Bat and App::Baz", author: "Author 1 <author1@example.com>")
+
     # Mock the configuration
     allow(MOSAIK)
       .to receive(:configuration)

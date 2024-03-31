@@ -60,7 +60,7 @@ module MOSAIK
             debug "Edge from #{caller.value} to #{receiver.value}##{reference.method}"
 
             # Add an edge from the constant to the receiver
-            graph.add_edge(caller.value, receiver.value, label: reference.method)
+            graph.add_directed_edge(caller.value, receiver.value, method: reference.method)
           end
         end
       end

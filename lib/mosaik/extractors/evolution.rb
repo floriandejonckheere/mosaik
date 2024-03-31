@@ -83,12 +83,18 @@ module MOSAIK
         contributors.keys.permutation(2).each do |(a, b)|
           next if contributors[a].empty? || contributors[b].empty?
 
+          # Calculate coupling (cardinality of the intersection of sets of developers)
+          coupling = (contributors[a] & contributors[b]).count
+
+          # Skip if the coupling is one (no shared contributors)
+          next if coupling == 1
+
           graph.find_or_add_vertex(a)
           graph.find_or_add_vertex(b)
 
-          # Add a weighted edge to the graph (weight is the cardinality of the intersection of sets)
+          # Add a weighted edge to the graph
           # FIXME: aggregate with existing edges
-          graph.add_directed_edge(a, b, weight: (contributors[a] & contributors[b]).count * options[:contributor])
+          graph.add_directed_edge(a, b, weight: coupling * options[:contributor])
         end
       end
 

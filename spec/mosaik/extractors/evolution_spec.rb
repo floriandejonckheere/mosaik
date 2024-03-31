@@ -40,9 +40,26 @@ RSpec.describe MOSAIK::Extractors::Evolution do
       expect(graph.vertices.transform_values { |v| v.edges.transform_values { |es| es.map { |e| e.attributes[:weight] } } }).to eq(
         "App::Foo" => { "App::Bak" => [1], "App::Bat" => [1], "App::Bar" => [1] },
         "App::Bar" => { "App::Foo" => [1] },
-        "App::Bat" => { "App::Baz" => [2], "App::Foo" => [1] },
+        "App::Bat" => { "App::Baz" => [3], "App::Foo" => [1] },
         "App::Bak" => { "App::Foo" => [1] },
-        "App::Baz" => { "App::Bat" => [2] },
+        "App::Baz" => { "App::Bat" => [3] },
+      )
+    end
+  end
+
+  describe "contributor coupling" do
+    let(:options) { { directory:, limit: 100, logical: 0, contributor: 1 } }
+
+    include_context "with a git repository"
+
+    it "constructs a contributor coupling graph" do
+      extractor.call
+
+      # Extract all vertices with source and destination
+      expect(graph.vertices.transform_values { |v| v.edges.transform_values { |es| es.map { |e| e.attributes[:weight] } } }).to eq(
+        "App::Foo" => { "App::Baz" => [2], "App::Bat" => [2] },
+        "App::Bat" => { "App::Baz" => [3], "App::Foo" => [2] },
+        "App::Baz" => { "App::Bat" => [3], "App::Foo" => [2] },
       )
     end
   end

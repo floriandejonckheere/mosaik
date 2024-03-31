@@ -8,6 +8,7 @@ RSpec.shared_context "with a git repository" do
 
   let(:john) { "John Doe <john@example.com>" }
   let(:jane) { "Jane Doe <jane@example.com>" }
+  let(:joey) { "Joey Doe <joey@example.com>" }
 
   def commit(author, **files_with_content)
     # Write the files with content
@@ -58,6 +59,10 @@ RSpec.shared_context "with a git repository" do
     commit john,
            "lib/app/bat.rb" => "class App::Bat; end",
            "lib/app/baz.rb" => "class App::Baz; def initialize; end; end"
+
+    commit joey,
+           "lib/app/bat.rb" => "class App::Bat; def initialize; end; end",
+           "lib/app/baz.rb" => "class App::Baz; end"
 
     # Mock the configuration
     allow(MOSAIK)

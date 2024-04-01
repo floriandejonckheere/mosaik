@@ -10,30 +10,36 @@ module MOSAIK
     class Graph
       include TSort
 
-      attr_reader :vertices
+      attr_reader :directed, :vertices
 
-      def initialize
+      def initialize(directed: true)
+        @directed = directed
         @vertices = {}
       end
+
+      alias directed? directed
 
       def add_vertex(id, attributes = {})
         vertices[id] = Vertex.new(id, attributes)
       end
 
-      def add_directed_edge(from, to, attributes = {})
+      def add_edge(from, to, attributes = {})
+        # Add the edge in the given direction
         vertices[from].add_edge(to, **attributes)
-      end
-      alias add_edge add_directed_edge
 
-      def add_undirected_edge(from, to, attributes = {})
-        vertices[from].add_edge(to, **attributes)
-        vertices[to].add_edge(from, **attributes)
+        return if directed?
+
+        # Add the same edge in the other direction
+        vertices[to].edges[from] = vertices[from].edges[to]
       end
 
-      def remove_directed_edge(from, to)
+      def remove_edge(from, to)
         vertices[from].remove_edge(to)
+
+        return if directed?
+
+        vertices[to].remove_edge(from)
       end
-      alias remove_edge remove_directed_edge
 
       def remove_undirected_edge(from, to)
         vertices[from].remove_edge(to)

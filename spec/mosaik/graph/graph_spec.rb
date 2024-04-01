@@ -17,130 +17,142 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
   end
 
-  describe "#add_edge, #add_directed_edge" do
-    it "adds a directed edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_directed_edge("vertex1", "vertex2")
+  describe "#add_edge" do
+    context "when the graph is directed" do
+      subject(:graph) { build(:graph, directed: true) }
 
-      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex2").edges).to be_empty
-    end
-
-    it "sets the attributes" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_directed_edge("vertex1", "vertex2", key: "value")
-
-      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
-    end
-
-    context "when the edge already exists" do
-      it "does not add a directed edge multiple times" do
+      it "adds a directed edge" do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
-        graph.add_directed_edge("vertex1", "vertex2")
-        graph.add_directed_edge("vertex1", "vertex2")
-        graph.add_directed_edge("vertex1", "vertex2")
+        graph.add_edge("vertex1", "vertex2")
 
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex2").edges.keys).to be_empty
+        expect(graph.find_vertex("vertex2").edges).to be_empty
       end
 
-      it "merges the attributes" do
+      it "sets the attributes" do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
-        graph.add_directed_edge("vertex1", "vertex2", key: "value")
-        graph.add_directed_edge("vertex1", "vertex2", value: "key")
-        graph.add_directed_edge("vertex1", "vertex2", key: "key")
+        graph.add_edge("vertex1", "vertex2", key: "value")
 
-        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+      end
+
+      context "when the edge already exists" do
+        it "does not add a directed edge multiple times" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+          graph.add_edge("vertex1", "vertex2")
+          graph.add_edge("vertex1", "vertex2")
+          graph.add_edge("vertex1", "vertex2")
+
+          expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+          expect(graph.find_vertex("vertex2").edges.keys).to be_empty
+        end
+
+        it "merges the attributes" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+          graph.add_edge("vertex1", "vertex2", key: "value")
+          graph.add_edge("vertex1", "vertex2", value: "key")
+          graph.add_edge("vertex1", "vertex2", key: "key")
+
+          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+        end
       end
     end
-  end
 
-  describe "#add_undirected_edge" do
-    it "adds an undirected edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_undirected_edge("vertex1", "vertex2")
+    context "when the graph is undirected" do
+      subject(:graph) { build(:graph, directed: false) }
 
-      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
-    end
-
-    it "sets the attributes" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_undirected_edge("vertex1", "vertex2", key: "value")
-
-      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
-      expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "value"
-    end
-
-    context "when the edge already exists" do
-      it "adds an undirected edge multiple times" do
+      it "adds an undirected edge" do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
-        graph.add_undirected_edge("vertex1", "vertex2")
-        graph.add_undirected_edge("vertex1", "vertex2")
+        graph.add_edge("vertex1", "vertex2")
 
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
         expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
       end
 
-      it "merges the attributes" do
+      it "sets the attributes" do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
-        graph.add_undirected_edge("vertex1", "vertex2", key: "value")
-        graph.add_undirected_edge("vertex1", "vertex2", value: "key")
-        graph.add_undirected_edge("vertex1", "vertex2", key: "key")
+        graph.add_edge("vertex1", "vertex2", key: "value")
 
-        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
-        expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "key", value: "key"
+        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+        expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "value"
+      end
+
+      context "when the edge already exists" do
+        it "adds an undirected edge multiple times" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+          graph.add_edge("vertex1", "vertex2")
+          graph.add_edge("vertex1", "vertex2")
+
+          expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+          expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
+        end
+
+        it "merges the attributes" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+          graph.add_edge("vertex1", "vertex2", key: "value")
+          graph.add_edge("vertex1", "vertex2", value: "key")
+          graph.add_edge("vertex1", "vertex2", key: "key")
+
+          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+          expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "key", value: "key"
+        end
       end
     end
   end
 
-  describe "#remove_edge, #remove_directed_edge" do
-    it "removes a directed edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_directed_edge("vertex1", "vertex2")
+  describe "#remove_edge" do
+    context "when the graph is directed" do
+      subject(:graph) { build(:graph, directed: true) }
 
-      graph.remove_directed_edge("vertex1", "vertex2")
+      it "removes a directed edge" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_edge("vertex1", "vertex2")
 
-      expect(graph.find_vertex("vertex1").edges).to be_empty
+        graph.remove_edge("vertex1", "vertex2")
+
+        expect(graph.find_vertex("vertex1").edges).to be_empty
+      end
+
+      it "does not remove a non-existing directed edge" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        graph.remove_edge("vertex1", "vertex2")
+
+        expect(graph.find_vertex("vertex1").edges).to be_empty
+      end
     end
 
-    it "does not remove a non-existing directed edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
+    context "when the graph is undirected" do
+      subject(:graph) { build(:graph, directed: false) }
 
-      graph.remove_directed_edge("vertex1", "vertex2")
+      it "removes an undirected edge" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_edge("vertex1", "vertex2")
 
-      expect(graph.find_vertex("vertex1").edges).to be_empty
-    end
-  end
+        graph.remove_edge("vertex1", "vertex2")
 
-  describe "#remove_undirected_edge" do
-    it "removes an undirected edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_undirected_edge("vertex1", "vertex2")
+        expect(graph.find_vertex("vertex1").edges).to be_empty
+      end
 
-      graph.remove_undirected_edge("vertex1", "vertex2")
+      it "does not remove a non-existing directed edge" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
 
-      expect(graph.find_vertex("vertex1").edges).to be_empty
-    end
+        graph.remove_edge("vertex1", "vertex2")
 
-    it "does not remove a non-existing directed edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-
-      graph.remove_undirected_edge("vertex1", "vertex2")
-
-      expect(graph.find_vertex("vertex1").edges).to be_empty
+        expect(graph.find_vertex("vertex1").edges).to be_empty
+      end
     end
   end
 
@@ -197,8 +209,8 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(graph.tsort.map(&:id)).to eq ["vertex1", "vertex2", "vertex3"]
 
-      graph.add_directed_edge("vertex1", "vertex2")
-      graph.add_directed_edge("vertex2", "vertex3")
+      graph.add_edge("vertex1", "vertex2")
+      graph.add_edge("vertex2", "vertex3")
 
       expect(graph.tsort.map(&:id)).to eq ["vertex3", "vertex2", "vertex1"]
     end

@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :graph, class: "MOSAIK::Graph::Graph"
+  factory :graph, class: "MOSAIK::Graph::Graph" do
+    initialize_with { new(directed:) }
+
+    directed { true }
+  end
 
   factory :vertex, class: "MOSAIK::Graph::Vertex" do
     initialize_with { new(id, attrs) }

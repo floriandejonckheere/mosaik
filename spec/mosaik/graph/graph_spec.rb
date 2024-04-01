@@ -201,6 +201,27 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
   end
 
+  describe "#to_dot" do
+    context "when the graph is directed" do
+      subject(:graph) { build(:graph, directed: true) }
+
+      it "returns the graph in DOT format" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_vertex("vertex3")
+        graph.add_edge("vertex1", "vertex2")
+        graph.add_edge("vertex2", "vertex3", foo: "bar", baz: "bat")
+
+        expect(graph.to_dot).to eq <<~DOT
+          digraph {
+            "vertex1" -> "vertex2" []
+            "vertex2" -> "vertex3" [foo=bar,baz=bat]
+          }
+        DOT
+      end
+    end
+  end
+
   describe "#tsort" do
     it "topologically sorts the vertices" do
       graph.add_vertex("vertex1")

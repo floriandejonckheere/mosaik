@@ -22,14 +22,6 @@ module MOSAIK
         edges.delete(id)
       end
 
-      def to_dot
-        edges.map do |to, edges|
-          edges.map do |edge|
-            "\"#{id}\" -> \"#{to}\" [#{edge.to_dot}]"
-          end
-        end.flatten.join("\n  ")
-      end
-
       def inspect
         "#<#{self.class.name} id=#{id} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')} edges=#{edges.count}>"
       end

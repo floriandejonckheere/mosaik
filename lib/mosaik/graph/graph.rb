@@ -71,7 +71,16 @@ module MOSAIK
       def to_dot
         <<~DOT
           digraph {
-            #{vertices.values.map(&:to_dot).join("\n  ")}
+            #{
+              vertices
+                .values
+                .flat_map do |vertex|
+                vertex
+                  .edges
+                  .filter_map { |k, e| "\"#{vertex.id}\" -#{directed? ? '>' : '-'} \"#{k}\" [#{e.attributes.map { |ek, ev| "#{ek}=#{ev}" }.join(',')}]" }
+              end
+                .join("\n  ")
+            }
           }
         DOT
       end

@@ -72,6 +72,8 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
         expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
+
+        expect(graph.find_vertex("vertex1").edges["vertex2"].object_id).to eq graph.find_vertex("vertex2").edges["vertex1"].object_id
       end
 
       it "sets the attributes" do
@@ -92,6 +94,8 @@ RSpec.describe MOSAIK::Graph::Graph do
 
           expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
           expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
+
+          expect(graph.find_vertex("vertex1").edges["vertex2"].object_id).to eq graph.find_vertex("vertex2").edges["vertex1"].object_id
         end
 
         it "merges the attributes" do

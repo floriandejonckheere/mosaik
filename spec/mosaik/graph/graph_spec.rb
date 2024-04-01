@@ -24,25 +24,38 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_directed_edge("vertex1", "vertex2")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+      expect(graph.find_vertex("vertex2").edges).to be_empty
     end
 
-    it "adds a directed edge with attributes" do
+    it "sets the attributes" do
       graph.add_vertex("vertex1")
       graph.add_vertex("vertex2")
       graph.add_directed_edge("vertex1", "vertex2", key: "value")
 
-      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex1").edges["vertex2"].first.attributes).to eq key: "value"
+      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
     end
 
-    it "adds a directed edge twice" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_directed_edge("vertex1", "vertex2")
-      graph.add_directed_edge("vertex1", "vertex2")
+    context "when the edge already exists" do
+      it "does not add a directed edge multiple times" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_directed_edge("vertex1", "vertex2")
+        graph.add_directed_edge("vertex1", "vertex2")
+        graph.add_directed_edge("vertex1", "vertex2")
 
-      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex1").edges["vertex2"].size).to eq 2
+        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+        expect(graph.find_vertex("vertex2").edges.keys).to be_empty
+      end
+
+      it "merges the attributes" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_directed_edge("vertex1", "vertex2", key: "value")
+        graph.add_directed_edge("vertex1", "vertex2", value: "key")
+        graph.add_directed_edge("vertex1", "vertex2", key: "key")
+
+        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+      end
     end
   end
 
@@ -53,25 +66,39 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_undirected_edge("vertex1", "vertex2")
 
       expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+      expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
     end
 
-    it "adds an undirected edge with attributes" do
+    it "sets the attributes" do
       graph.add_vertex("vertex1")
       graph.add_vertex("vertex2")
       graph.add_undirected_edge("vertex1", "vertex2", key: "value")
 
-      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex1").edges["vertex2"].first.attributes).to eq key: "value"
+      expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+      expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "value"
     end
 
-    it "adds an undirected edge twice" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_undirected_edge("vertex1", "vertex2")
-      graph.add_undirected_edge("vertex1", "vertex2")
+    context "when the edge already exists" do
+      it "adds an undirected edge multiple times" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_undirected_edge("vertex1", "vertex2")
+        graph.add_undirected_edge("vertex1", "vertex2")
 
-      expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-      expect(graph.find_vertex("vertex1").edges["vertex2"].size).to eq 2
+        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+        expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
+      end
+
+      it "merges the attributes" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_undirected_edge("vertex1", "vertex2", key: "value")
+        graph.add_undirected_edge("vertex1", "vertex2", value: "key")
+        graph.add_undirected_edge("vertex1", "vertex2", key: "key")
+
+        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+        expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "key", value: "key"
+      end
     end
   end
 

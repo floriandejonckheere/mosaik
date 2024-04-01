@@ -16,19 +16,28 @@ RSpec.describe MOSAIK::Graph::Vertex do
       expect(vertex.edges.keys).to eq ["child"]
     end
 
-    it "adds an edge with attributes" do
+    it "sets the attributes" do
       vertex.add_edge("child", key: "value")
 
-      expect(vertex.edges.keys).to eq ["child"]
-      expect(vertex.edges["child"].first.attributes).to eq key: "value"
+      expect(vertex.edges["child"].attributes).to eq key: "value"
     end
 
-    it "adds an edge twice" do
-      vertex.add_edge("child")
-      vertex.add_edge("child")
+    context "when the edge already exists" do
+      it "does not add an edge multiple times" do
+        vertex.add_edge("child")
+        vertex.add_edge("child")
+        vertex.add_edge("child")
 
-      expect(vertex.edges.keys).to eq ["child"]
-      expect(vertex.edges["child"].size).to eq 2
+        expect(vertex.edges.keys).to eq ["child"]
+      end
+
+      it "merges the attributes" do
+        vertex.add_edge("child", key: "value")
+        vertex.add_edge("child", value: "key")
+        vertex.add_edge("child", key: "key")
+
+        expect(vertex.edges["child"].attributes).to eq key: "key", value: "key"
+      end
     end
   end
 end

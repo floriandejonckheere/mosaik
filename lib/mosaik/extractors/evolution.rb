@@ -70,7 +70,7 @@ module MOSAIK
 
               # Add a weighted edge to the graph
               # FIXME: aggregate with existing edges
-              graph.add_directed_edge(a, b, weight: value * options[:logical])
+              graph.add_edge(a, b, weight: value * options[:logical])
             end
           end
         end
@@ -94,7 +94,7 @@ module MOSAIK
 
           # Add a weighted edge to the graph
           # FIXME: aggregate with existing edges
-          graph.add_directed_edge(a, b, weight: coupling * options[:contributor])
+          graph.add_edge(a, b, weight: coupling * options[:contributor])
         end
       end
 

@@ -61,7 +61,7 @@ module MOSAIK
 
             # Add an edge from the constant to the receiver
             # FIXME: aggregate edges with the same method
-            graph.add_directed_edge(caller.id, receiver.id, method: reference.method, weight: options[:structural])
+            graph.add_edge(caller.id, receiver.id, method: reference.method, weight: options[:structural])
           end
         end
       end

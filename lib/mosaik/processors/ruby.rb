@@ -47,8 +47,11 @@ module MOSAIK
         # Traverse the AST
         node.children.each { |c| process(c) }
 
-        # Reset current class
-        self.current_class = current_class.sub(module_name, "")
+        # Remove current module from the namespace
+        self.current_class = current_class
+          .split("::")
+          .tap { |c| c.delete(module_name) }
+          .join("::")
       end
 
       # Instance methods

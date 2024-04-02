@@ -19,7 +19,7 @@ module MOSAIK
         class_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
-        self.current_class = current_class ? "#{current_class}::#{class_name}" : class_name
+        self.current_class = [current_class, class_name].compact.join("::")
 
         # Register class
         tree[current_class]
@@ -29,15 +29,19 @@ module MOSAIK
         # Traverse the AST
         node.children.each { |c| process(c) }
 
-        # Reset current class
-        self.current_class = current_class.sub("::#{class_name}", "") if current_class.include?("::")
+        # Remove current class from the namespace
+        self.current_class = current_class
+          .split("::")
+          .tap { |c| c.delete(class_name) }
+          .join("::")
+          .presence
       end
 
       def on_module(node)
         module_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
-        self.current_class = current_class ? "#{current_class}::#{module_name}" : module_name
+        self.current_class = [current_class, module_name].compact.join("::")
 
         # Register module
         tree[current_class]
@@ -52,6 +56,7 @@ module MOSAIK
           .split("::")
           .tap { |c| c.delete(module_name) }
           .join("::")
+          .presence
       end
 
       # Instance methods
@@ -60,6 +65,7 @@ module MOSAIK
         file = node.loc.expression.source_buffer.name
         line_num = node.loc.line
 
+        # Set current method
         self.current_method = method_name
 
         debug "Class instance method #{current_class}##{method_name} in #{file}:#{line_num}"
@@ -68,6 +74,9 @@ module MOSAIK
 
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
+
+        # Reset current method
+        self.current_method = nil
       end
 
       # Class methods
@@ -76,6 +85,7 @@ module MOSAIK
         file = node.loc.expression.source_buffer.name
         line_num = node.loc.line
 
+        # Set current method
         self.current_method = method_name
 
         debug "Class method #{current_class}.#{node.children[1]} in #{file}:#{line_num}"
@@ -84,6 +94,9 @@ module MOSAIK
 
         # Traverse the AST (first two children are method name and arguments)
         node.children[2..].each { |c| process(c) }
+
+        # Reset current method
+        self.current_method = nil
       end
 
       # Method bodies
@@ -98,7 +111,7 @@ module MOSAIK
         constant_name = constant_name_from(receiver)
 
         # TODO: handle method calls on variables
-        return if constant_name.empty?
+        return if constant_name.blank?
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 

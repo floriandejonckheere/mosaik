@@ -77,7 +77,7 @@ module MOSAIK
                 .flat_map do |vertex|
                 vertex
                   .edges
-                  .filter_map { |k, e| "\"#{vertex.id}\" -#{directed? ? '>' : '-'} \"#{k}\" [#{e.attributes.map { |ek, ev| "#{ek}=#{ev}" }.join(',')}]" }
+                  .filter_map { |k, e| "\"#{vertex.id}\" -#{directed? ? '>' : '-'} \"#{k}\" [#{e.attributes.map { |ek, ev| "\"#{ek}\"=\"#{ev}\"" }.join(',')}]" }
               end
                 .join("\n  ")
             }

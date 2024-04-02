@@ -9,7 +9,7 @@ jane = "Jane Doe <jane@example.com>"
 joey = "Joey Doe <joey@example.com>"
 
 # Cleanup the temporary repository directory
-FileUtils.remove_entry(DIRECTORY)
+FileUtils.rm_rf(DIRECTORY)
 
 # Initialize the repository
 GIT = Git.init(DIRECTORY)

@@ -130,6 +130,12 @@ module MOSAIK
         receiver = node.children[0]
         callee = node.children[1].to_s
 
+        if receiver.nil?
+          warn "No receiver for method call #{callee} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
+
+          return [receiver, callee]
+        end
+
         # If the receiver is a send, descend to the child node
         # We are only interested in the first callee
         return method_from(receiver) if receiver.type == :send

@@ -13,13 +13,14 @@ module MOSAIK
         super()
 
         @tree = tree
+        @current_class = "main"
       end
 
       def on_class(node)
         class_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
-        self.current_class = [current_class, class_name].compact.join("::")
+        self.current_class = current_class == "main" ? class_name : [current_class, class_name].join("::")
 
         # Register class
         tree[current_class]
@@ -34,14 +35,14 @@ module MOSAIK
           .split("::")
           .tap { |c| c.delete(class_name) }
           .join("::")
-          .presence
+          .presence || "main"
       end
 
       def on_module(node)
         module_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
-        self.current_class = [current_class, module_name].compact.join("::")
+        self.current_class = current_class == "main" ? module_name : [current_class, module_name].join("::")
 
         # Register module
         tree[current_class]
@@ -56,7 +57,7 @@ module MOSAIK
           .split("::")
           .tap { |c| c.delete(module_name) }
           .join("::")
-          .presence
+          .presence || "main"
       end
 
       # Instance methods
@@ -114,12 +115,6 @@ module MOSAIK
         return if constant_name.blank?
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
-
-        if current_class.blank?
-          warn "Constant not in load path: #{constant_name}"
-
-          return
-        end
 
         tree[current_class].methods[current_method].references << Syntax::Reference.new(tree[constant_name], callee)
       end

@@ -13,7 +13,6 @@ module MOSAIK
     def initialize(args)
       @options = {
         directory: Dir.pwd,
-        verbose: false,
         debug: false,
       }
 
@@ -40,7 +39,7 @@ module MOSAIK
       raise OptionError, "not a directory: #{options[:directory]}" unless File.directory?(options[:directory])
 
       # Set log level
-      MOSAIK.logger.level = "debug" if options[:debug]
+      MOSAIK.logger.level = options[:debug] ? "debug" : "info"
 
       # Set configuration
       MOSAIK.configuration = Configuration.from(File.join(options[:directory], "mosaik.yml"))
@@ -94,7 +93,6 @@ module MOSAIK
       @parser ||= OptionParser.new("#{File.basename($PROGRAM_NAME)} [global options] command [command options]") do |o|
         o.on("Global options:")
         o.on("-d", "--directory=DIRECTORY", "Set working directory") { |value| options[:directory] = File.expand_path(value) }
-        o.on("-v", "--verbose", "Turn on verbose logging")
         o.on("-D", "--debug", "Turn on debug logging")
         o.on("-h", "--help", "Display this message") { usage }
         o.separator("\n")

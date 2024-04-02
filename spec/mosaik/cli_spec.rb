@@ -14,16 +14,6 @@ describe MOSAIK::CLI do
       end
     end
 
-    describe "--verbose" do
-      let(:args) { ["--verbose"] }
-
-      it "turns on verbose output" do
-        cli
-
-        expect(cli.options[:verbose]).to be true
-      end
-    end
-
     describe "--debug" do
       let(:args) { ["--debug"] }
 

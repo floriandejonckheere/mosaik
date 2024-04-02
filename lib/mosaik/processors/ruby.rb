@@ -115,6 +115,12 @@ module MOSAIK
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
+        if current_class.blank?
+          warn "Constant not in load path: #{constant_name}"
+
+          return
+        end
+
         tree[current_class].methods[current_method].references << Syntax::Reference.new(tree[constant_name], callee)
       end
 

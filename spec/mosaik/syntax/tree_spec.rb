@@ -31,7 +31,7 @@ RSpec.describe MOSAIK::Syntax::Tree do
       foo = tree["Foo"]
 
       expect(foo.descendants.map(&:name)).to eq ["Foo::Bar", "Foo::Baz"]
-      expect(foo.parent.name).to be_nil
+      expect(foo.parent.name).to eq "main"
 
       foo_bar = tree["Foo::Bar"]
       expect(foo_bar.descendants.map(&:name)).to eq []

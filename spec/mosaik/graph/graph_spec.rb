@@ -218,8 +218,8 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.to_dot).to eq <<~DOT
           digraph {
-            "vertex1" -> "vertex2" []
-            "vertex2" -> "vertex3" ["foo"="bar","baz"="bat"]
+            "vertex1" -> "vertex2"
+            "vertex2" -> "vertex3" [label="foo: bar, baz: bat"]
           }
         DOT
       end

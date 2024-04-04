@@ -19,9 +19,9 @@ module MOSAIK
       argument "--visualize", "Visualize the extracted information graph"
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
 
-      argument "--structural N", Integer, "Weight of structural coupling extraction (default: #{defaults[:structural]})"
-      argument "--logical N", Integer, "Weight of logical coupling extraction (default: #{defaults[:logical]})"
-      argument "--contributor N", Integer, "Weight of coupling extraction (default: #{defaults[:contributor]})"
+      argument "--structural N", Float, "Weight of structural coupling extraction (default: #{defaults[:structural]})"
+      argument "--logical N", Float, "Weight of logical coupling extraction (default: #{defaults[:logical]})"
+      argument "--contributor N", Float, "Weight of coupling extraction (default: #{defaults[:contributor]})"
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"

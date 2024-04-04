@@ -64,7 +64,7 @@ module MOSAIK
 
             visited << edge
 
-            edge.attributes.fetch(:weight, 0)
+            edge.attributes.fetch(:weight, 0.0)
           end
         end
       end

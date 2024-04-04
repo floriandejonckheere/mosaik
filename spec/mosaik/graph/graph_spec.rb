@@ -212,7 +212,7 @@ RSpec.describe MOSAIK::Graph::Graph do
       graph.add_vertex("vertex3")
 
       graph.add_edge("vertex1", "vertex2")
-      graph.add_edge("vertex2", "vertex3", weight: 1)
+      graph.add_edge("vertex2", "vertex3", weight: 1.0)
       graph.add_edge("vertex3", "vertex1", weight: 2.5)
 
       expect(graph.total_weight).to eq 3.5
@@ -283,12 +283,12 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_vertex("vertex2")
         graph.add_vertex("vertex3")
         graph.add_edge("vertex1", "vertex2")
-        graph.add_edge("vertex2", "vertex3", method: "method", weight: 1)
+        graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
           from,to,method,weight
           vertex1,vertex2,,
-          vertex2,vertex3,method,1
+          vertex2,vertex3,method,1.0
         CSV
       end
     end
@@ -301,12 +301,12 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_vertex("vertex2")
         graph.add_vertex("vertex3")
         graph.add_edge("vertex1", "vertex2")
-        graph.add_edge("vertex2", "vertex3", method: "method", weight: 1)
+        graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
           from,to,method,weight
           vertex1,vertex2,,
-          vertex2,vertex3,method,1
+          vertex2,vertex3,method,1.0
         CSV
       end
     end
@@ -318,7 +318,7 @@ RSpec.describe MOSAIK::Graph::Graph do
         csv = <<~CSV
           from,to,method,weight
           vertex1,vertex2,,
-          vertex2,vertex3,method,1
+          vertex2,vertex3,method,1.0
         CSV
 
         graph = described_class.from_csv(csv, directed: false)
@@ -328,9 +328,9 @@ RSpec.describe MOSAIK::Graph::Graph do
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
         expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1", "vertex3"]
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1
+        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
         expect(graph.find_vertex("vertex3").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex3").edges["vertex2"].attributes).to eq method: "method", weight: 1
+        expect(graph.find_vertex("vertex3").edges["vertex2"].attributes).to eq method: "method", weight: 1.0
 
         expect(graph.find_vertex("vertex2").edges["vertex3"].object_id).to eq graph.find_vertex("vertex3").edges["vertex2"].object_id
       end
@@ -341,7 +341,7 @@ RSpec.describe MOSAIK::Graph::Graph do
         csv = <<~CSV
           from,to,method,weight
           vertex1,vertex2,
-          vertex2,vertex3,method,1
+          vertex2,vertex3,method,1.0
         CSV
 
         graph = described_class.from_csv(csv, directed: true)
@@ -350,7 +350,7 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1
+        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
         expect(graph.find_vertex("vertex3").edges).to be_empty
       end
     end

@@ -19,5 +19,13 @@ RSpec.describe MOSAIK::Commands::Identify do
         expect { command.validate }.to raise_error MOSAIK::OptionError, "file not found: doesnotexist.csv"
       end
     end
+
+    describe "--algorithm" do
+      let(:arguments) { ["--algorithm", "invalid"] }
+
+      it "raises an error" do
+        expect { command.validate }.to raise_error MOSAIK::OptionError, "unknown algorithm: invalid"
+      end
+    end
   end
 end

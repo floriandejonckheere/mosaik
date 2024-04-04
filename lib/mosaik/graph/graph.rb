@@ -118,8 +118,14 @@ module MOSAIK
         visited = Set.new
 
         CSV.generate do |csv|
+          # Collect all attributes
+          attributes = vertices
+            .values
+            .flat_map { |v| v.edges.flat_map { |_, e| e.attributes.keys } }
+            .uniq
+
           # Header
-          csv << ["from", "to", "attributes"]
+          csv << ["from", "to", *attributes]
 
           # Data
           vertices.each do |vertex_id, vertex|
@@ -128,7 +134,7 @@ module MOSAIK
 
               visited << edge
 
-              csv << [vertex_id, edge_id, edge.attributes.any? ? edge.attributes.map { |k, v| "#{k}=#{v}" }.join(";") : nil]
+              csv << [vertex_id, edge_id, *attributes.map { |attr| edge.attributes[attr] }]
             end
           end
         end
@@ -141,19 +147,13 @@ module MOSAIK
       def self.from_csv(csv, directed: true)
         graph = new(directed:)
 
-        CSV.new(csv, headers: true, header_converters: :symbol).each do |row|
-          row => { from:, to:, attributes: }
-
-          attributes = if attributes
-                         attributes.split(";").to_h { |attr| attr.split("=") }.symbolize_keys
-                       else
-                         {}
-                       end
+        CSV.new(csv, headers: true, header_converters: :symbol, converters: :numeric).each do |row|
+          row => { from:, to:, **attributes }
 
           graph.find_or_add_vertex(from)
           graph.find_or_add_vertex(to)
 
-          graph.add_edge(from, to, attributes)
+          graph.add_edge(from, to, attributes.symbolize_keys)
         end
 
         graph

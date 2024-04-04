@@ -283,12 +283,12 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_vertex("vertex2")
         graph.add_vertex("vertex3")
         graph.add_edge("vertex1", "vertex2")
-        graph.add_edge("vertex2", "vertex3", foo: "bar", baz: "bat")
+        graph.add_edge("vertex2", "vertex3", method: "method", weight: 1)
 
         expect(graph.to_csv).to eq <<~CSV
-          from,to,attributes
-          vertex1,vertex2,
-          vertex2,vertex3,foo=bar;baz=bat
+          from,to,method,weight
+          vertex1,vertex2,,
+          vertex2,vertex3,method,1
         CSV
       end
     end
@@ -301,12 +301,12 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_vertex("vertex2")
         graph.add_vertex("vertex3")
         graph.add_edge("vertex1", "vertex2")
-        graph.add_edge("vertex2", "vertex3", foo: "bar", baz: "bat")
+        graph.add_edge("vertex2", "vertex3", method: "method", weight: 1)
 
         expect(graph.to_csv).to eq <<~CSV
-          from,to,attributes
-          vertex1,vertex2,
-          vertex2,vertex3,foo=bar;baz=bat
+          from,to,method,weight
+          vertex1,vertex2,,
+          vertex2,vertex3,method,1
         CSV
       end
     end
@@ -316,9 +316,9 @@ RSpec.describe MOSAIK::Graph::Graph do
     context "when the graph is undirected" do
       it "creates a graph from an adjacency list" do
         csv = <<~CSV
-          from,to,attributes
-          vertex1,vertex2,
-          vertex2,vertex3,foo=bar;baz=bat
+          from,to,method,weight
+          vertex1,vertex2,,
+          vertex2,vertex3,method,1
         CSV
 
         graph = described_class.from_csv(csv, directed: false)
@@ -328,9 +328,9 @@ RSpec.describe MOSAIK::Graph::Graph do
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
         expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1", "vertex3"]
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq foo: "bar", baz: "bat"
+        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1
         expect(graph.find_vertex("vertex3").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex3").edges["vertex2"].attributes).to eq foo: "bar", baz: "bat"
+        expect(graph.find_vertex("vertex3").edges["vertex2"].attributes).to eq method: "method", weight: 1
 
         expect(graph.find_vertex("vertex2").edges["vertex3"].object_id).to eq graph.find_vertex("vertex3").edges["vertex2"].object_id
       end
@@ -339,9 +339,9 @@ RSpec.describe MOSAIK::Graph::Graph do
     context "when the graph is directed" do
       it "creates a graph from an adjacency list" do
         csv = <<~CSV
-          from,to,attributes
+          from,to,method,weight
           vertex1,vertex2,
-          vertex2,vertex3,foo=bar;baz=bat
+          vertex2,vertex3,method,1
         CSV
 
         graph = described_class.from_csv(csv, directed: true)
@@ -350,7 +350,7 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq foo: "bar", baz: "bat"
+        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1
         expect(graph.find_vertex("vertex3").edges).to be_empty
       end
     end

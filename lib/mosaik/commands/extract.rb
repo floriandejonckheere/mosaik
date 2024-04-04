@@ -8,11 +8,14 @@ module MOSAIK
     class Extract < Command
       self.description = "Extract information"
 
-      defaults structural: 1,
+      defaults visualize: false,
+               structural: 1,
                logical: 1,
                contributor: 1,
                since: nil,
                limit: 100
+
+      argument "--visualize", "Visualize the extracted information graph"
 
       argument "--structural N", Integer, "Weight of structural coupling extraction (default: 1)"
       argument "--logical N", Integer, "Weight of logical coupling extraction (default: 1)"
@@ -49,6 +52,10 @@ module MOSAIK
           .new(options, graph)
           .tap(&:validate)
           .call
+
+        info "Information extraction done"
+
+        return unless options[:visualize]
 
         # Write graph to file
         debug graph.to_dot

@@ -30,7 +30,7 @@ module MOSAIK
           .call
 
         # Print the identified microservice candidates
-        dot = <<~DOT
+        graph = <<~DOT
           graph {
             #{candidates.values.uniq.map do |cluster|
               <<~DOTT
@@ -50,14 +50,19 @@ module MOSAIK
           }
         DOT
 
+        debug graph
+
+        return unless options[:visualize]
+
+        # Write visualization to file
+
         dotfile = "#{File.basename(options[:file], '.*')}-candidates.dot"
         pngfile = "#{File.basename(options[:file], '.*')}-candidates.png"
 
-        debug dot
-        File.write(dotfile, dot)
+        File.write(dotfile, graph)
         system("dot -Tpng #{dotfile} -o #{pngfile}")
 
-        info "Microservice candidates identified and written to #{pngfile}"
+        info "Microservice candidate graph written to #{dotfile} and rendered to #{pngfile}"
       end
 
       private

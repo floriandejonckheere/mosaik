@@ -14,6 +14,7 @@ module MOSAIK
       @options = {
         directory: Dir.pwd,
         debug: false,
+        visualize: false,
       }
 
       @args = args
@@ -94,6 +95,7 @@ module MOSAIK
         o.on("Global options:")
         o.on("-d", "--directory=DIRECTORY", "Set working directory") { |value| options[:directory] = File.expand_path(value) }
         o.on("-D", "--debug", "Turn on debug logging")
+        o.on("--visualize", "Enable graph visualization")
         o.on("-h", "--help", "Display this message") { usage }
         o.separator("\n")
         o.on("Commands:")

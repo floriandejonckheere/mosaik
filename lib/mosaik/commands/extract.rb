@@ -8,15 +8,13 @@ module MOSAIK
     class Extract < Command
       self.description = "Extract information"
 
-      defaults visualize: false,
-               file: "mosaik.csv",
+      defaults file: "mosaik.csv",
                structural: 1,
                logical: 1,
                contributor: 1,
                since: nil,
                limit: 100
 
-      argument "--visualize", "Visualize the extracted information graph"
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
 
       argument "--structural N", Float, "Weight of structural coupling extraction (default: #{defaults[:structural]})"
@@ -58,15 +56,15 @@ module MOSAIK
         # Write graph to file
         File.write(options[:file], graph.to_csv)
 
-        info "Graph written to #{options[:file]}"
+        info "Dependency graph written to #{options[:file]}"
 
         return unless options[:visualize]
 
-        # Write graph to file
+        # Write visualization to file
         debug graph.to_dot
         graph.to_png("mosaik")
 
-        info "Graph written to mosaik.dot and rendered to mosaik.png"
+        info "Dependency graph written to mosaik.dot and rendered to mosaik.png"
       end
 
       private

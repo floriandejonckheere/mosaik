@@ -23,8 +23,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "activesupport", "~> 7.1"
-  spec.add_runtime_dependency "csv", "~> 3.3"
   spec.add_runtime_dependency "colorize", "~> 1.1"
+  spec.add_runtime_dependency "csv", "~> 3.3"
   spec.add_runtime_dependency "git", "~> 1.19.1"
   spec.add_runtime_dependency "packwerk", "~> 3.2.0"
   spec.add_runtime_dependency "parser", "~> 3.3.0.5"

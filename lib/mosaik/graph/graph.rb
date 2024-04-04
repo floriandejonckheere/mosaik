@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "csv"
 require "tsort"
 
 module MOSAIK
@@ -97,8 +98,50 @@ module MOSAIK
         system("dot -Tpng #{file}.dot -o #{file}.png")
       end
 
+      def to_csv
+        # Set of visited edges (to avoid duplicates in undirected graphs)
+        visited = Set.new
+
+        CSV.generate do |csv|
+          # Header
+          csv << ["from", "to", "attributes"]
+
+          # Data
+          vertices.each do |vertex_id, vertex|
+            vertex.edges.each do |edge_id, edge|
+              next if edge.in? visited
+
+              visited << edge
+
+              csv << [vertex_id, edge_id, edge.attributes.any? ? edge.attributes.map { |k, v| "#{k}=#{v}" }.join(";") : nil]
+            end
+          end
+        end
+      end
+
       def inspect
         "#<#{self.class.name} vertices=#{vertices.values.map(&:inspect)}>"
+      end
+
+      def self.from_csv(csv, directed: true)
+        graph = new(directed:)
+
+        CSV.new(csv, headers: true, header_converters: :symbol).each do |row|
+          row => { from:, to:, attributes: }
+
+          attributes = if attributes
+                         attributes.split(";").to_h { |attr| attr.split("=") }.symbolize_keys
+                       else
+                         {}
+                       end
+
+          graph.find_or_add_vertex(from)
+          graph.find_or_add_vertex(to)
+
+          graph.add_edge(from, to, attributes)
+        end
+
+        graph
       end
     end
   end

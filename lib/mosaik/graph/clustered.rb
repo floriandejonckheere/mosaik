@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "csv"
+
 module MOSAIK
   module Graph
     ##
@@ -31,6 +33,18 @@ module MOSAIK
       def to_png(file)
         File.write("#{file}.dot", to_dot)
         system("dot -Tpng #{file}.dot -o #{file}.png")
+      end
+
+      def to_csv
+        CSV.generate do |csv|
+          csv << ["cluster", "component"]
+
+          clusters.each do |cluster_id, component_ids|
+            component_ids.each do |component_id|
+              csv << [cluster_id, component_id]
+            end
+          end
+        end
       end
 
       private

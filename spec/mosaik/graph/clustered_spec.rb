@@ -41,4 +41,26 @@ RSpec.describe MOSAIK::Graph::Clustered do
       DOT
     end
   end
+
+  describe "#to_csv" do
+    it "returns a cluster membership list" do
+      graph.add_cluster("1")
+      graph.add_component("1", "A")
+      graph.add_component("1", "B")
+
+      graph.add_cluster("2")
+      graph.add_component("2", "C")
+      graph.add_component("2", "D")
+      graph.add_component("2", "E")
+
+      expect(graph.to_csv).to eq <<~CSV
+        cluster,component
+        1,A
+        1,B
+        2,C
+        2,D
+        2,E
+      CSV
+    end
+  end
 end

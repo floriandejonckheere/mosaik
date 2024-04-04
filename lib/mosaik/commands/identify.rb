@@ -33,16 +33,21 @@ module MOSAIK
 
         # Add vertices to the clustered graph
         candidates.each do |vertex, cluster_id|
-          clustered_graph.add_vertex(cluster_id, vertex)
+          clustered_graph.add_component(cluster_id, vertex.id)
         end
-
-        return unless options[:visualize]
 
         file = "#{File.basename(options[:file], '.*')}-candidates"
 
+        # Write graph to file
+        File.write("#{file}.csv", clustered_graph.to_csv)
+
+        info "Dependency graph written to #{options[:file]}"
+
+        return unless options[:visualize]
+
         # Write visualization to file
-        debug graph.to_dot
-        graph.to_png(file)
+        debug clustered_graph.to_dot
+        clustered_graph.to_png(file)
 
         info "Microservice candidate graph written to #{file}.dot and rendered to #{file}.png"
       end

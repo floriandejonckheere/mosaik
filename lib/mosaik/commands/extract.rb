@@ -60,11 +60,13 @@ module MOSAIK
 
         return unless options[:visualize]
 
+        file = File.basename(options[:file], ".*")
+
         # Write visualization to file
         debug graph.to_dot
-        graph.to_png("mosaik")
+        graph.to_png(file)
 
-        info "Dependency graph written to mosaik.dot and rendered to mosaik.png"
+        info "Dependency graph written to #{file}.dot and rendered to #{file}.png"
       end
 
       private

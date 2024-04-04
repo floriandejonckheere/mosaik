@@ -28,6 +28,11 @@ module MOSAIK
         DOT
       end
 
+      def to_png(file)
+        File.write("#{file}.dot", to_dot)
+        system("dot -Tpng #{file}.dot -o #{file}.png")
+      end
+
       private
 
       def subgraph(cluster_id)

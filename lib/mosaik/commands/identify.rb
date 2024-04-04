@@ -36,19 +36,15 @@ module MOSAIK
           clustered_graph.add_vertex(cluster_id, vertex)
         end
 
-        # Print the identified microservice candidates
-        debug graph
-
         return unless options[:visualize]
 
-        dotfile = "#{File.basename(options[:file], '.*')}-candidates.dot"
-        pngfile = "#{File.basename(options[:file], '.*')}-candidates.png"
+        file = "#{File.basename(options[:file], '.*')}-candidates"
 
         # Write visualization to file
-        File.write(dotfile, graph)
-        system("dot -Tpng #{dotfile} -o #{pngfile}")
+        debug graph.to_dot
+        graph.to_png(file)
 
-        info "Microservice candidate graph written to #{dotfile} and rendered to #{pngfile}"
+        info "Microservice candidate graph written to #{file}.dot and rendered to #{file}.png"
       end
 
       private

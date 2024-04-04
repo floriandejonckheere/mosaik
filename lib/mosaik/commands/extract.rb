@@ -9,6 +9,7 @@ module MOSAIK
       self.description = "Extract information"
 
       defaults visualize: false,
+               file: "mosaik.csv",
                structural: 1,
                logical: 1,
                contributor: 1,
@@ -16,10 +17,11 @@ module MOSAIK
                limit: 100
 
       argument "--visualize", "Visualize the extracted information graph"
+      argument "--file FILE", "File to store the extracted information (default: #{defaults[:file]})"
 
-      argument "--structural N", Integer, "Weight of structural coupling extraction (default: 1)"
-      argument "--logical N", Integer, "Weight of logical coupling extraction (default: 1)"
-      argument "--contributor N", Integer, "Weight of coupling extraction (default: 1)"
+      argument "--structural N", Integer, "Weight of structural coupling extraction (default: #{defaults[:structural]})"
+      argument "--logical N", Integer, "Weight of logical coupling extraction (default: #{defaults[:logical]})"
+      argument "--contributor N", Integer, "Weight of coupling extraction (default: #{defaults[:contributor]})"
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"
@@ -53,7 +55,10 @@ module MOSAIK
           .tap(&:validate)
           .call
 
-        info "Information extraction done"
+        # Write graph to file
+        File.write(options[:file], graph.to_csv)
+
+        info "Graph written to #{options[:file]}"
 
         return unless options[:visualize]
 

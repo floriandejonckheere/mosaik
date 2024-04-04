@@ -61,5 +61,7 @@ Gemfile.lock
 html/
 
 # Graph files
-*.dot
-*.png
+/mosaik.csv
+/mosaik.dot
+/mosaik.png
+/mosaik.yml

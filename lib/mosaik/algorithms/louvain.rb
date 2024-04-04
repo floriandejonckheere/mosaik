@@ -22,7 +22,7 @@ module MOSAIK
 
         # Iterate until no further improvement in modularity
         loop do
-          info "Iteration #{i += 1}: modularity=#{modularity}"
+          debug "Iteration #{i += 1}: modularity=#{modularity}"
 
           initial_modularity = modularity
 
@@ -36,8 +36,13 @@ module MOSAIK
 
         # Print the community assignments
         communities.each do |vertex_id, community|
-          puts "#{vertex_id} -> #{community.inspect}"
+          debug "#{vertex_id} -> #{community.id}"
         end
+
+        # Return the community assignments
+        communities
+          .transform_keys { |vertex_id| graph.find_vertex(vertex_id) }
+          .transform_values(&:id)
       end
 
       private
@@ -77,8 +82,6 @@ module MOSAIK
 
         # Iterate over each community
         communities.values.to_set.each do |community|
-          debug "Calculating modularity for community #{community.inspect}"
-
           # Find all vertices in the community
           vertices_in_community = communities.filter_map { |_, v| v if v == community }
 
@@ -87,8 +90,6 @@ module MOSAIK
             .flat_map { |v| v.edges.values }
             .uniq
             .sum { |e| e.attributes.fetch(:weight, 0.0) }
-
-          debug "Total weight of edges in the community: #{c_weight_total}"
 
           # Total weight of edges internal to the community
           c_weight_internal = 0.0
@@ -104,8 +105,6 @@ module MOSAIK
 
             c_weight_internal += weight
           end
-
-          debug "Total weight of internal edges in the community: #{c_weight_internal}"
 
           # Calculate modularity contribution from this community
           q += (c_weight_internal / m) - ((c_weight_total / (2 * m))**2)

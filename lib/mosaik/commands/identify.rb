@@ -23,11 +23,41 @@ module MOSAIK
         info "Identifying microservice candidates (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
         # Identify microservice candidates
-        Algorithms
+        candidates = Algorithms
           .const_get(options[:algorithm].camelize)
           .new(options, graph)
           .tap(&:validate)
           .call
+
+        # Print the identified microservice candidates
+        dot = <<~DOT
+          graph {
+            #{candidates.values.uniq.map do |cluster|
+              <<~DOTT
+                subgraph "cluster_#{cluster}" {
+                  label = "Cluster #{cluster}"
+                  color = "lightblue"
+
+                  node [shape=circle, style=filled, fillcolor=lightblue]
+                  #{candidates
+                    .select { |_, c| c == cluster }
+                    .keys
+                    .map { |vertex| "\"#{vertex.id}\" -- \"#{cluster}\"" }
+                    .join("\n  ")}
+                  }
+              DOTT
+            end.join("\n  ")}
+          }
+        DOT
+
+        dotfile = "#{File.basename(options[:file], '.*')}-candidates.dot"
+        pngfile = "#{File.basename(options[:file], '.*')}-candidates.png"
+
+        debug dot
+        File.write(dotfile, dot)
+        system("dot -Tpng #{dotfile} -o #{pngfile}")
+
+        info "Microservice candidates identified and written to #{pngfile}"
       end
 
       private

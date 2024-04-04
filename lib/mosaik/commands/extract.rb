@@ -17,7 +17,7 @@ module MOSAIK
                limit: 100
 
       argument "--visualize", "Visualize the extracted information graph"
-      argument "--file FILE", "File to store the extracted information (default: #{defaults[:file]})"
+      argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
 
       argument "--structural N", Integer, "Weight of structural coupling extraction (default: #{defaults[:structural]})"
       argument "--logical N", Integer, "Weight of logical coupling extraction (default: #{defaults[:logical]})"

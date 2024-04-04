@@ -29,36 +29,22 @@ module MOSAIK
           .tap(&:validate)
           .call
 
+        clustered_graph = Graph::Clustered.new
+
+        # Add vertices to the clustered graph
+        candidates.each do |vertex, cluster_id|
+          clustered_graph.add_vertex(cluster_id, vertex)
+        end
+
         # Print the identified microservice candidates
-        graph = <<~DOT
-          graph {
-            #{candidates.values.uniq.map do |cluster|
-              <<~DOTT
-                subgraph "cluster_#{cluster}" {
-                  label = "Cluster #{cluster}"
-                  color = "lightblue"
-
-                  node [shape=circle, style=filled, fillcolor=lightblue]
-                  #{candidates
-                    .select { |_, c| c == cluster }
-                    .keys
-                    .map { |vertex| "\"#{vertex.id}\" -- \"#{cluster}\"" }
-                    .join("\n  ")}
-                  }
-              DOTT
-            end.join("\n  ")}
-          }
-        DOT
-
         debug graph
 
         return unless options[:visualize]
 
-        # Write visualization to file
-
         dotfile = "#{File.basename(options[:file], '.*')}-candidates.dot"
         pngfile = "#{File.basename(options[:file], '.*')}-candidates.png"
 
+        # Write visualization to file
         File.write(dotfile, graph)
         system("dot -Tpng #{dotfile} -o #{pngfile}")
 

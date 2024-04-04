@@ -41,11 +41,6 @@ module MOSAIK
         vertices[to].remove_edge(from)
       end
 
-      def remove_undirected_edge(from, to)
-        vertices[from].remove_edge(to)
-        vertices[to].remove_edge(from)
-      end
-
       def find_vertex(id)
         vertices[id]
       end

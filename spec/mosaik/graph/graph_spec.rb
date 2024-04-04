@@ -224,6 +224,25 @@ RSpec.describe MOSAIK::Graph::Graph do
         DOT
       end
     end
+
+    context "when the graph is undirected" do
+      subject(:graph) { build(:graph, directed: false) }
+
+      it "returns the graph in DOT format" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_vertex("vertex3")
+        graph.add_edge("vertex1", "vertex2")
+        graph.add_edge("vertex2", "vertex3", foo: "bar", baz: "bat")
+
+        expect(graph.to_dot).to eq <<~DOT
+          graph {
+            "vertex1" -- "vertex2"
+            "vertex2" -- "vertex3" [label="foo: bar, baz: bat"]
+          }
+        DOT
+      end
+    end
   end
 
   describe "#tsort" do

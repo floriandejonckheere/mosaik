@@ -69,15 +69,22 @@ module MOSAIK
       end
 
       def to_dot
+        # Set of visited edges (to avoid duplicates in undirected graphs)
+        visited = Set.new
+
         <<~DOT
-          digraph {
+          #{directed ? 'digraph' : 'graph'} {
             #{
               vertices
                 .values
                 .flat_map do |vertex|
                 vertex
                   .edges
-                  .filter_map do |key, edge| # {' '}
+                  .filter_map do |key, edge|
+                  next if edge.in? visited
+
+                  visited << edge
+
                   dot = "\"#{vertex.id}\" -#{directed? ? '>' : '-'} \"#{key}\""
                   dot = "#{dot} [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" if edge.attributes.any?
 

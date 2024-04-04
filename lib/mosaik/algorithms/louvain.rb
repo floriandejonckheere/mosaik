@@ -17,9 +17,56 @@ module MOSAIK
 
       def call
         info "Total modularity: #{modularity}"
+
+        i = 0
+
+        # Iterate until no further improvement in modularity
+        loop do
+          info "Iteration #{i += 1}: modularity=#{modularity}"
+
+          initial_modularity = modularity
+
+          # Try to reassign each vertex to optimize modularity
+          graph.vertices.each_value do |vertex|
+            reassign_vertex(vertex)
+          end
+
+          break if modularity <= initial_modularity
+        end
+
+        # Print the community assignments
+        communities.each do |vertex_id, community|
+          puts "#{vertex_id} -> #{community.inspect}"
+        end
       end
 
       private
+
+      def reassign_vertex(vertex)
+        # Initialize best community as current community
+        best_community = communities[vertex.id]
+
+        # Initialize best gain
+        best_gain = 0.0
+
+        # Iterate over all neighbours of the vertex
+        vertex.edges.each do |neighbour, edge|
+          # Skip if the neighbour is in the same community
+          next if communities[vertex.id] == communities[neighbour]
+
+          # Calculate the gain
+          current_gain = edge.attributes.fetch(:weight, 0.0)
+
+          # Update best gain and best community if the gain is better
+          if current_gain > best_gain
+            best_gain = current_gain
+            best_community = communities[neighbour]
+          end
+        end
+
+        # Move the vertex to the best community if there's a gain
+        communities[vertex.id] = best_community if best_gain > 0.0
+      end
 
       def modularity
         # Total weight of edges in the graph
@@ -50,7 +97,7 @@ module MOSAIK
           vertices_in_community.combination(2) do |v, w|
             # Get weight of the edge between v and w
             weight = graph
-              .find_vertex(v)
+              .find_vertex(v.id)
               .edges[w]
               &.attributes
               &.fetch(:weight, 0.0)

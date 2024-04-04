@@ -205,6 +205,20 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
   end
 
+  describe "#total_weight" do
+    it "returns the total weight of the graph" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+      graph.add_vertex("vertex3")
+
+      graph.add_edge("vertex1", "vertex2")
+      graph.add_edge("vertex2", "vertex3", weight: 1)
+      graph.add_edge("vertex3", "vertex1", weight: 2.5)
+
+      expect(graph.total_weight).to eq 3.5
+    end
+  end
+
   describe "#tsort" do
     it "topologically sorts the vertices" do
       graph.add_vertex("vertex1")

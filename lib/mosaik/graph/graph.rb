@@ -54,6 +54,21 @@ module MOSAIK
         vertices.delete(id)
       end
 
+      def total_weight
+        # Set of visited edges (to avoid duplicates in undirected graphs)
+        visited = Set.new
+
+        vertices.values.sum do |vertex|
+          vertex.edges.values.sum do |edge|
+            next if edge.in? visited
+
+            visited << edge
+
+            edge.attributes.fetch(:weight, 0)
+          end
+        end
+      end
+
       def tsort_each_node(&)
         vertices.values.each(&)
       end

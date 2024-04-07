@@ -24,6 +24,18 @@ module MOSAIK
         vertices[id] = Vertex.new(id, attributes)
       end
 
+      def find_vertex(id)
+        vertices[id]
+      end
+
+      def find_or_add_vertex(id, attributes = {})
+        find_vertex(id) || add_vertex(id, attributes)
+      end
+
+      def remove_vertex(id)
+        vertices.delete(id)
+      end
+
       def add_edge(from, to, attributes = {})
         # Add the edge in the given direction
         vertices[from].add_edge(to, **attributes)
@@ -40,18 +52,6 @@ module MOSAIK
         return if directed?
 
         vertices[to].remove_edge(from)
-      end
-
-      def find_vertex(id)
-        vertices[id]
-      end
-
-      def find_or_add_vertex(id, attributes = {})
-        find_vertex(id) || add_vertex(id, attributes)
-      end
-
-      def remove_vertex(id)
-        vertices.delete(id)
       end
 
       def total_weight

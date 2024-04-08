@@ -53,8 +53,7 @@ RSpec.describe MOSAIK::Syntax::Tree do
       tree["Foo::Bar"]
       tree["Foo::Baz::Bat"]
 
-      constants = []
-      tree.each { |constant| constants << constant.name }
+      constants = tree.map(&:name)
 
       expect(constants).to eq ["Foo", "Foo::Bar", "Foo::Baz", "Foo::Baz::Bat"]
     end

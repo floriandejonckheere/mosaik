@@ -2,8 +2,11 @@
 
 module MOSAIK
   module Algorithms
+    ##
+    # Louvain method for community detection (Blondel et al., 2008)
+    #
     class Louvain < Algorithm
-      attr_reader :communities
+      attr_reader :communities, :threshold
 
       def initialize(...)
         super
@@ -13,6 +16,9 @@ module MOSAIK
           .vertices
           .values
           .to_h { |vertex| [vertex.id, vertex] }
+
+        # Threshold of modularity improvement
+        @threshold = 1e-6
       end
 
       def call
@@ -26,12 +32,15 @@ module MOSAIK
 
           initial_modularity = modularity
 
-          # Try to reassign each vertex to optimize modularity
+          # Phase 1: reassign vertices to optimize modularity
           graph.vertices.each_value do |vertex|
             reassign_vertex(vertex)
           end
 
-          break if modularity <= initial_modularity
+          # Phase 2: reduce communities to a single node
+          # TODO: Implement this phase
+
+          break if modularity - initial_modularity <= threshold
         end
 
         # Print the community assignments
@@ -51,26 +60,41 @@ module MOSAIK
         # Initialize best community as current community
         best_community = communities[vertex.id]
 
-        # Initialize best gain
+        # Initialize best modularity gain
         best_gain = 0.0
 
+        # Initialize best modularity
+        best_modularity = modularity
+
+        # Store the original community of the vertex
+        community = communities[vertex.id]
+
         # Iterate over all neighbours of the vertex
-        vertex.edges.each do |neighbour, edge|
+        vertex.edges.each_key do |neighbour|
           # Skip if the neighbour is in the same community
           next if communities[vertex.id] == communities[neighbour]
 
-          # Calculate the gain
-          current_gain = edge.attributes.fetch(:weight, 0.0)
+          # Move the vertex to the neighbour's community
+          communities[vertex.id] = communities[neighbour]
 
-          # Update best gain and best community if the gain is better
-          if current_gain > best_gain
-            best_gain = current_gain
+          # Calculate the new modularity
+          new_modularity = modularity
+
+          # Calculate the modularity gain
+          gain = new_modularity - best_modularity
+
+          # Update the best modularity gain and community
+          if gain > best_gain
+            best_gain = gain
             best_community = communities[neighbour]
           end
+
+          # Move the vertex back to its original community
+          communities[vertex.id] = community
         end
 
-        # Move the vertex to the best community if there's a gain
-        communities[vertex.id] = best_community if best_gain > 0.0
+        # Move the vertex to the best community
+        communities[vertex.id] = best_community
       end
 
       def modularity

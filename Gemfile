@@ -16,7 +16,7 @@ group :development, :test do
   gem "ffaker", "2.23.0", require: false
 
   # Task runner
-  gem "rake", "13.1.0", require: false
+  gem "rake", "13.2.1", require: false
 
   # Behavior-driven test framework
   gem "rspec", "3.13.0", require: false

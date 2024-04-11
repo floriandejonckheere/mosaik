@@ -64,10 +64,6 @@ module MOSAIK
             # Set or increment weight on edge
             edge.attributes[:weight] ||= 0
             edge.attributes[:weight] += options[:structural]
-
-            # Add method metadata to edge
-            edge.attributes[:methods] ||= []
-            edge.attributes[:methods] << reference.method
           end
         end
       end

@@ -135,7 +135,7 @@ module MOSAIK
                 "\"#{vertex.id}\" ",
                 directed? ? "->" : "--",
                 " \"#{key}\"",
-                edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev.respond_to?(:each) ? ev.join(',') : ev}" }.join(', ')}\"]" : nil,
+                edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
               ].compact.join
             end.compact_blank.join("\n  ")
           end.compact_blank.join("\n  ").prepend("  "),

@@ -116,6 +116,8 @@ module MOSAIK
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
+        warn "No sender for method call #{constant_name}##{callee} from (main)" and return if current_class == "main"
+
         tree[current_class].methods[current_method].references << Syntax::Reference.new(tree[constant_name], callee)
       end
 

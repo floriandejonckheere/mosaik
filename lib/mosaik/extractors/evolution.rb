@@ -68,9 +68,12 @@ module MOSAIK
               graph.find_or_add_vertex(a)
               graph.find_or_add_vertex(b)
 
-              # Add a weighted edge to the graph
-              # FIXME: aggregate with existing edges
-              graph.add_edge(a, b, weight: value * options[:logical])
+              # Add an edge from the constant to the receiver
+              edge = graph.find_or_add_edge(a, b)
+
+              # Set or increment weight on edge
+              edge.attributes[:weight] ||= 0
+              edge.attributes[:weight] += value * options[:logical]
             end
           end
         end
@@ -92,9 +95,12 @@ module MOSAIK
           graph.find_or_add_vertex(a)
           graph.find_or_add_vertex(b)
 
-          # Add a weighted edge to the graph
-          # FIXME: aggregate with existing edges
-          graph.add_edge(a, b, weight: coupling * options[:contributor])
+          # Add an edge from the constant to the receiver
+          edge = graph.find_or_add_edge(a, b)
+
+          # Set or increment weight on edge
+          edge.attributes[:weight] ||= 0
+          edge.attributes[:weight] += coupling * options[:contributor]
         end
       end
 

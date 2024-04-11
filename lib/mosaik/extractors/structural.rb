@@ -51,7 +51,6 @@ module MOSAIK
         # Find or create the node for the constant
         caller = graph.find_or_add_vertex(constant.name)
 
-        # TODO: method-level granularity
         constant.methods.each_value do |method|
           method.references.each do |reference|
             # Find or create the the receiver node
@@ -60,8 +59,15 @@ module MOSAIK
             debug "Edge from #{caller.id} to #{receiver.id}##{reference.method}"
 
             # Add an edge from the constant to the receiver
-            # FIXME: aggregate edges with the same method
-            graph.add_edge(caller.id, receiver.id, method: reference.method, weight: options[:structural])
+            edge = graph.find_or_add_edge(caller.id, receiver.id)
+
+            # Set or increment weight on edge
+            edge.attributes[:weight] ||= 0
+            edge.attributes[:weight] += options[:structural]
+
+            # Add method metadata to edge
+            edge.attributes[:methods] ||= []
+            edge.attributes[:methods] << reference.method
           end
         end
       end

@@ -47,6 +47,10 @@ module MOSAIK
         vertices[to].edges[from] = vertices[from].edges[to]
       end
 
+      def find_edge(from, to)
+        vertices[from].edges[to] if vertices[from].edges.key?(to)
+      end
+
       def remove_edge(from, to)
         vertices[from].remove_edge(to)
 

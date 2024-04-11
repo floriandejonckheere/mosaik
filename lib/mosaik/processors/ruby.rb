@@ -6,6 +6,9 @@ module MOSAIK
     # Abstract Syntax Tree parser for Ruby code
     #
     class Ruby < AST::Processor
+      # Magic value for root namespace
+      MAIN = "(main)"
+
       attr_reader :tree
       attr_accessor :current_class, :current_method
 
@@ -13,14 +16,14 @@ module MOSAIK
         super()
 
         @tree = tree
-        @current_class = "main"
+        @current_class = MAIN
       end
 
       def on_class(node)
         class_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
-        self.current_class = current_class == "main" ? class_name : [current_class, class_name].join("::")
+        self.current_class = current_class == MAIN ? class_name : [current_class, class_name].join("::")
 
         # Register class
         tree[current_class]
@@ -35,14 +38,14 @@ module MOSAIK
           .split("::")
           .tap { |c| c.delete(class_name) }
           .join("::")
-          .presence || "main"
+          .presence || MAIN
       end
 
       def on_module(node)
         module_name = constant_name_from(node.children[0])
 
         # Build fully qualified class name
-        self.current_class = current_class == "main" ? module_name : [current_class, module_name].join("::")
+        self.current_class = current_class == MAIN ? module_name : [current_class, module_name].join("::")
 
         # Register module
         tree[current_class]
@@ -57,7 +60,7 @@ module MOSAIK
           .split("::")
           .tap { |c| c.delete(module_name) }
           .join("::")
-          .presence || "main"
+          .presence || MAIN
       end
 
       # Instance methods
@@ -116,7 +119,7 @@ module MOSAIK
 
         debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
-        warn "No sender for method call #{constant_name}##{callee} from (main)" and return if current_class == "main"
+        warn "No sender for method call #{constant_name}##{callee}" and return if current_class == MAIN
 
         tree[current_class].methods[current_method].references << Syntax::Reference.new(tree[constant_name], callee)
       end

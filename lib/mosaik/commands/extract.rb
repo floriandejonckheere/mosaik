@@ -72,7 +72,7 @@ module MOSAIK
       private
 
       def graph
-        @graph ||= Graph::Graph.new
+        @graph ||= Graph::Graph.new(directed: false)
       end
 
       def resolver

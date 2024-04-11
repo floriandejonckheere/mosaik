@@ -9,6 +9,9 @@ module MOSAIK
       # Magic value for root namespace
       MAIN = "(main)"
 
+      # Ignorelist for methods
+      IGNORE = ["require", "new", "include", "extend", "delegate", "public", "private", "protected", "raise", "attr_reader", "attr_writer", "attr_accessor"].freeze
+
       attr_reader :tree
       attr_accessor :current_class, :current_method
 
@@ -129,6 +132,8 @@ module MOSAIK
       def method_from(node)
         receiver = node.children[0]
         callee = node.children[1].to_s
+
+        debug "Ignoring method call #{callee} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}" and return if callee.in? IGNORE
 
         warn "No receiver for method call #{callee} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}" if receiver.nil?
 

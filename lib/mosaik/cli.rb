@@ -108,6 +108,17 @@ module MOSAIK
     # rubocop:enable Metrics/AbcSize
 
     def usage(code: 1, tail: nil)
+      # Extract command class usage message (if present)
+      if command_args.any?
+        klass = "MOSAIK::Commands::#{command_args.first.camelize}".safe_constantize
+
+        # Add command arguments to global argument parser (for the usage message)
+        klass.arguments.each do |args, kwargs, block|
+          parser.on(*args, **kwargs, &block)
+        end
+        parser.separator("\n")
+      end
+
       info parser.to_s
       fatal tail if tail
 

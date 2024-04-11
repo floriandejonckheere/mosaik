@@ -175,6 +175,24 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
   end
 
+  describe "#find_or_add_edge" do
+    it "returns a new edge when the edge does not exist" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+
+      expect(graph.find_or_add_edge("vertex1", "vertex2").attributes).to be_empty
+    end
+
+    it "finds an edge" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+
+      graph.add_edge("vertex1", "vertex2", weight: 3)
+
+      expect(graph.find_or_add_edge("vertex1", "vertex2").attributes[:weight]).to eq 3
+    end
+  end
+
   describe "#remove_edge" do
     context "when the graph is directed" do
       subject(:graph) { build(:graph, directed: true) }

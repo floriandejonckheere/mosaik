@@ -26,6 +26,10 @@ module MOSAIK
           raise UnknownFileType, "No parser for file type: #{File.extname(file)}"
         end
 
+        # Count total constants and methods
+        total = tree.to_h { |c| [c.name, c.methods.count] }
+        info "Parsed #{total.count} classes and #{total.values.sum} methods"
+
         # Print the constant tree
         tree.each do |constant|
           debug constant

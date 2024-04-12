@@ -6,7 +6,10 @@ module MOSAIK
     # Louvain method for community detection (Blondel et al., 2008)
     #
     class Louvain < Algorithm
-      attr_reader :communities, :threshold
+      # Threshold of modularity improvement
+      THRESHOLD = 1e-6
+
+      attr_reader :communities
 
       def initialize(...)
         super
@@ -16,9 +19,6 @@ module MOSAIK
           .vertices
           .values
           .to_h { |vertex| [vertex.id, vertex] }
-
-        # Threshold of modularity improvement
-        @threshold = 1e-6
       end
 
       def call
@@ -40,7 +40,7 @@ module MOSAIK
           # Phase 2: reduce communities to a single node
           # TODO: Implement this phase
 
-          break if modularity - initial_modularity <= threshold
+          break if modularity - initial_modularity <= THRESHOLD
         end
 
         # Print the community assignments

@@ -125,7 +125,7 @@ module MOSAIK
               .find_vertex(v.id)
               .edges[w]
               &.attributes
-              &.fetch(:weight, 0.0)
+              &.[](:weight) || 0.0
 
             c_weight_internal += weight
           end

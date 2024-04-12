@@ -43,11 +43,6 @@ module MOSAIK
           break if modularity - initial_modularity <= THRESHOLD
         end
 
-        # Print the community assignments
-        communities.each do |vertex_id, community|
-          debug "#{vertex_id} -> #{community.id}"
-        end
-
         # Return the community assignments
         communities
           .transform_keys { |vertex_id| graph.find_vertex(vertex_id) }

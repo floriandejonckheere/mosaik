@@ -36,6 +36,14 @@ module MOSAIK
             .add_vertex(vertex)
         end
 
+        # Print the clusters
+        graph.clusters.each_value do |cluster|
+          debug "Cluster #{cluster.id}"
+          cluster.vertices.each do |vertex|
+            debug "  #{vertex.id}"
+          end
+        end
+
         file = "#{File.basename(options[:file], '.*')}-candidates"
 
         # Write graph to file

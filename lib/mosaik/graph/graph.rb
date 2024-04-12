@@ -39,9 +39,9 @@ module MOSAIK
 
       def add_edge(from, to, attributes = {})
         # Add the edge in the given direction
-        vertices[from].add_edge(to, **attributes)
+        edge = vertices[from].add_edge(to, **attributes)
 
-        return if directed?
+        return edge if directed?
 
         # Add the same edge in the other direction
         vertices[to].edges[from] = vertices[from].edges[to]
@@ -52,7 +52,7 @@ module MOSAIK
       end
 
       def find_or_add_edge(from, to)
-        vertices[from].edges[to]
+        find_edge(from, to) || add_edge(from, to)
       end
 
       def remove_edge(from, to)

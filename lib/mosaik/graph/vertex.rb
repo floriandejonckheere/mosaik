@@ -10,12 +10,14 @@ module MOSAIK
 
       def initialize(id, attributes = {})
         @id = id
-        @edges = Hash.new { |h, k| h[k] = Edge.new }
+        @edges = {}
         @attributes = attributes
       end
 
       def add_edge(to, **attributes)
+        edges[to] ||= Edge.new
         edges[to].attributes.merge!(attributes)
+        edges[to]
       end
 
       def remove_edge(id)

@@ -39,7 +39,7 @@ module MOSAIK
           end
 
           # Calculate modularity contribution from this community
-          q += (c_weight_internal / m) - ((c_weight_total / (2 * m))**2)
+          q += (c_weight_internal / (2 * m)) - ((c_weight_total / (2 * m))**2)
         end
 
         # Return the total modularity

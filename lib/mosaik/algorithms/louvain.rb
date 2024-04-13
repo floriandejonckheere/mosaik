@@ -44,11 +44,11 @@ module MOSAIK
         end
 
         # Add clusters to the graph
-        communities.each do |vertex_id, cluster_id|
+        communities.each do |vertex_id, vertex_cluster|
           vertex = graph.find_vertex(vertex_id)
 
           graph
-            .find_or_add_cluster(cluster_id)
+            .find_or_add_cluster(vertex_cluster.id)
             .add_vertex(vertex)
         end
       end

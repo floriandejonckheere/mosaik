@@ -3,6 +3,12 @@
 RSpec.describe MOSAIK::Graph::Graph do
   subject(:graph) { build(:graph) }
 
+  describe "#attributes" do
+    it "returns the attributes" do
+      expect(graph.attributes).to eq key: "value"
+    end
+  end
+
   describe "#add_vertex" do
     it "adds a vertex" do
       graph.add_vertex("vertex")

@@ -2,8 +2,9 @@
 
 FactoryBot.define do
   factory :graph, class: "MOSAIK::Graph::Graph" do
-    initialize_with { new(directed:) }
+    initialize_with { new(attrs, directed:) }
 
+    attrs { { key: "value" } }
     directed { true }
   end
 

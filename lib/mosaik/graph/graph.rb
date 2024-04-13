@@ -21,9 +21,14 @@ module MOSAIK
       sig { returns(T::Hash[String, Cluster]) }
       attr_reader :clusters
 
-      sig { params(directed: T::Boolean).void }
-      def initialize(directed: true)
+      sig { returns(Attributes) }
+      attr_reader :attributes
+
+      sig { params(attributes: Attributes, directed: T::Boolean).void }
+      def initialize(attributes = T.let({}, Attributes), directed: true)
+        @attributes = attributes
         @directed = directed
+
         @vertices = T.let({}, T::Hash[String, Vertex])
         @clusters = T.let({}, T::Hash[String, Cluster])
       end

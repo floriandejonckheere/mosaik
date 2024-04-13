@@ -48,9 +48,9 @@ module MOSAIK
 
         # Write visualization to file
         debug graph.to_dot
-        graph.to_png(file)
+        graph.to_svg(file)
 
-        info "Microservice candidate graph written to #{file}.dot and rendered to #{file}.png"
+        info "Microservice candidate graph written to #{file}.dot and rendered to #{file}.svg"
       end
 
       private

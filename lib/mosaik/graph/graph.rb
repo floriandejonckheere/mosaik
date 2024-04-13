@@ -162,6 +162,12 @@ module MOSAIK
         system("dot -Tpng #{file}.dot -o #{file}.png")
       end
 
+      sig { params(file: String).void }
+      def to_svg(file)
+        File.write("#{file}.dot", to_dot)
+        system("dot -Tsvg #{file}.dot -o #{file}.svg")
+      end
+
       sig { returns(String) }
       def to_csv
         # Set of visited edges (to avoid duplicates in undirected graphs)

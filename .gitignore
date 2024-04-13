@@ -64,4 +64,5 @@ html/
 /*.csv
 /*.dot
 /*.png
+/*.svg
 /mosaik.yml

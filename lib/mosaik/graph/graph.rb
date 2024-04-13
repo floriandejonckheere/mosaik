@@ -165,6 +165,7 @@ module MOSAIK
         # Set of visited edges (to avoid duplicates in undirected graphs)
         visited = Set.new
 
+        # rubocop:disable Metrics/BlockLength
         CSV.generate do |csv|
           # VERTICES
           # Collect all vertex attributes
@@ -208,19 +209,29 @@ module MOSAIK
 
           next unless clusters.any?
 
+          # CLUSTERS
           # Separator
           csv << ["--"]
 
+          # VERTICES
+          # Collect all vertex attributes
+          attributes = clusters
+            .values
+            .flat_map(&:attributes)
+            .flat_map(&:keys)
+            .uniq
+
           # Header
-          csv << ["vertex", "cluster"]
+          csv << ["vertex", "cluster", *attributes]
 
           # Add clusters using a cluster mapping
           clusters.each do |cluster_id, cluster|
             cluster.vertices.each do |vertex|
-              csv << [vertex.id, cluster_id]
+              csv << [vertex.id, cluster_id, *attributes.map { |attr| cluster.attributes[attr] }]
             end
           end
         end
+        # rubocop:enable Metrics/BlockLength
       end
 
       sig { returns(String) }
@@ -255,10 +266,10 @@ module MOSAIK
 
         # Add clusters from the cluster mapping
         CSV.new(clusters, headers: true, header_converters: :symbol, converters: :numeric).each do |row|
-          row => { vertex:, cluster: }
+          row => { vertex:, cluster:, **attributes }
 
           graph
-            .find_or_add_cluster(cluster)
+            .find_or_add_cluster(cluster, attributes.symbolize_keys)
             .add_vertex(graph.find_or_add_vertex(vertex))
         end
 

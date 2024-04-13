@@ -478,11 +478,11 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_edge("vertex1", "vertex2")
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
-        c1 = graph.add_cluster("cluster1")
+        c1 = graph.add_cluster("cluster1", type: "database")
         c1.add_vertex(v1)
         c1.add_vertex(v2)
 
-        c2 = graph.add_cluster("cluster2")
+        c2 = graph.add_cluster("cluster2", type: "microservice")
         c2.add_vertex(v3)
 
         graph.add_cluster("cluster3")
@@ -497,10 +497,10 @@ RSpec.describe MOSAIK::Graph::Graph do
           vertex1,vertex2,,
           vertex2,vertex3,method,1.0
           --
-          vertex,cluster
-          vertex1,cluster1
-          vertex2,cluster1
-          vertex3,cluster2
+          vertex,cluster,type
+          vertex1,cluster1,database
+          vertex2,cluster1,database
+          vertex3,cluster2,microservice
         CSV
       end
     end
@@ -582,10 +582,10 @@ RSpec.describe MOSAIK::Graph::Graph do
           vertex1,vertex2,,
           vertex2,vertex3,method,1.0
           --
-          vertex,cluster
-          vertex1,cluster1
-          vertex2,cluster1
-          vertex3,cluster2
+          vertex,cluster,type
+          vertex1,cluster1,database
+          vertex2,cluster1,database
+          vertex3,cluster2,microservice
         CSV
 
         graph = described_class.from_csv(csv, directed: true)
@@ -605,7 +605,10 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.clusters.keys).to eq ["cluster1", "cluster2"]
         expect(graph.find_cluster("cluster1").vertices.map(&:id)).to eq ["vertex1", "vertex2"]
+        expect(graph.find_cluster("cluster1").attributes).to eq type: "database"
+
         expect(graph.find_cluster("cluster2").vertices.map(&:id)).to eq ["vertex3"]
+        expect(graph.find_cluster("cluster2").attributes).to eq type: "microservice"
       end
     end
   end

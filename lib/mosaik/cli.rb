@@ -85,11 +85,9 @@ module MOSAIK
 
       raise ExitError, 1
     end
-    # rubocop:enable Metrics/AbcSize
 
     private
 
-    # rubocop:disable Metrics/AbcSize
     def parser
       @parser ||= OptionParser.new("#{File.basename($PROGRAM_NAME)} [global options] command [command options]") do |o|
         o.on("Global options:")
@@ -105,7 +103,6 @@ module MOSAIK
         o.separator("\n")
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
     def usage(code: 1, tail: nil)
       # Extract command class usage message (if present)

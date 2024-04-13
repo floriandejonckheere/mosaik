@@ -23,18 +23,11 @@ module MOSAIK
         info "Identifying microservice candidates (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
         # Identify microservice candidates
-        candidates = Algorithms
+        Algorithms
           .const_get(options[:algorithm].camelize)
           .new(options, graph)
           .tap(&:validate)
           .call
-
-        # Add clusters to the graph
-        candidates.each do |vertex, cluster_id|
-          graph
-            .find_or_add_cluster(cluster_id)
-            .add_vertex(vertex)
-        end
 
         # Print the clusters
         graph.clusters.each_value do |cluster|

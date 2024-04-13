@@ -3,8 +3,6 @@
 RSpec.describe MOSAIK::Metrics::Modularity do
   subject(:metric) { build(:modularity_metric, graph:) }
 
-  include_context "with a simple undirected graph"
-
   # Modularity value calculated by hand:
   #
   # m = 3 + 1 + 5 + 1 + 4 + 1 + 5 + 2 = 22 (total weight)
@@ -29,7 +27,19 @@ RSpec.describe MOSAIK::Metrics::Modularity do
   #
   # Q_tot = 0.20196280991735538
   #
-  it "returns the modularity of the graph" do
-    expect(metric.evaluate).to be_within(1e-6).of 0.20196280991735538
+  context "when the graph is undirected" do
+    include_context "with a simple undirected graph"
+
+    it "returns the modularity of the graph" do
+      expect(metric.evaluate).to be_within(1e-6).of 0.20196280991735538
+    end
+  end
+
+  context "when the graph is directed" do
+    include_context "with a simple directed graph"
+
+    it "returns the modularity of the graph" do
+      expect(metric.evaluate).to be_within(1e-6).of 0.20196280991735538
+    end
   end
 end

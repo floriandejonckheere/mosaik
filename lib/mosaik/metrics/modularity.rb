@@ -17,11 +17,22 @@ module MOSAIK
         graph.clusters.each_value do |cluster|
           # Find all vertices in the community
           vertices_in_community = cluster.vertices
+          vertices_in_community_id = vertices_in_community.map(&:id)
+
+          # Edges outgoing from the community
+          e_outgoing = vertices_in_community
+            .flat_map { |v| v.edges.values }
+
+          # Edges incoming to the community
+          e_incoming = graph
+            .vertices
+            .each_value
+            .flat_map { |v| v.edges.to_a }
+            .filter_map { |i, e| e if i.in? vertices_in_community_id }
 
           # Total weight of edges in the community
-          c_weight_total = vertices_in_community
-            .flat_map { |v| v.edges.values }
-            .uniq
+          c_weight_total = (e_outgoing + e_incoming)
+            .to_set
             .sum { |e| e.attributes.fetch(:weight, 0.0) }
 
           # Total weight of edges internal to the community
@@ -38,8 +49,10 @@ module MOSAIK
             c_weight_internal += weight
           end
 
+          q_c = (c_weight_internal / (2 * m)) - ((c_weight_total / (2 * m))**2)
+
           # Calculate modularity contribution from this community
-          q += (c_weight_internal / (2 * m)) - ((c_weight_total / (2 * m))**2)
+          q += q_c
         end
 
         # Return the total modularity

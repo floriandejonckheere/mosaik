@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# typed: true
+
 require "csv"
 
 module MOSAIK
@@ -8,70 +10,92 @@ module MOSAIK
     # Simple implementation of an (un-)directed graph
     #
     class Graph
-      attr_reader :directed, :vertices, :clusters
+      extend T::Sig
 
+      sig { returns(T::Boolean) }
+      attr_reader :directed
+
+      sig { returns(T::Hash[String, Vertex]) }
+      attr_reader :vertices
+
+      sig { returns(T::Hash[String, Cluster]) }
+      attr_reader :clusters
+
+      sig { params(directed: T::Boolean).void }
       def initialize(directed: true)
         @directed = directed
-        @vertices = {}
-        @clusters = {}
+        @vertices = T.let({}, T::Hash[String, Vertex])
+        @clusters = T.let({}, T::Hash[String, Cluster])
       end
 
       alias directed? directed
 
+      sig { params(id: String, attributes: Attributes).returns(Vertex) }
       def add_vertex(id, attributes = {})
         vertices[id] = Vertex.new(id, attributes)
       end
 
+      sig { params(id: String).returns(T.nilable(Vertex)) }
       def find_vertex(id)
         vertices[id]
       end
 
+      sig { params(id: String, attributes: Attributes).returns(Vertex) }
       def find_or_add_vertex(id, attributes = {})
         find_vertex(id) || add_vertex(id, attributes)
       end
 
+      sig { params(id: String).void }
       def remove_vertex(id)
         vertices.delete(id)
       end
 
+      sig { params(from: String, to: String, attributes: Attributes).returns(Edge) }
       def add_edge(from, to, attributes = {})
         # Add the edge in the given direction
-        edge = vertices[from].add_edge(to, **attributes)
+        edge = T.must(vertices[from]).add_edge(to, **attributes)
 
         return edge if directed?
 
         # Add the same edge in the other direction
-        vertices[to].edges[from] = vertices[from].edges[to]
+        T.must(vertices[to]).edges[from] = T.must(vertices[from]).edges.fetch(to)
       end
 
+      sig { params(from: String, to: String).returns(T.nilable(Edge)) }
       def find_edge(from, to)
-        vertices[from].edges[to] if vertices[from].edges.key?(to)
+        T.must(vertices[from]).edges[to] if T.must(vertices[from]).edges.key?(to)
       end
 
+      sig { params(from: String, to: String).returns(Edge) }
       def find_or_add_edge(from, to)
         find_edge(from, to) || add_edge(from, to)
       end
 
+      sig { params(from: String, to: String).void }
       def remove_edge(from, to)
-        vertices[from].remove_edge(to)
+        T.must(vertices[from]).remove_edge(to)
 
         return if directed?
 
-        vertices[to].remove_edge(from)
+        T.must(vertices[to]).remove_edge(from)
       end
 
+      sig { params(id: String).returns(Cluster) }
       def add_cluster(id)
         clusters[id] = Cluster.new(id)
       end
 
+      sig { params(id: String).returns(T.nilable(Cluster)) }
       def find_cluster(id)
         clusters[id]
       end
 
+      sig { params(id: String).returns(Cluster) }
       def find_or_add_cluster(id)
         clusters[id] || add_cluster(id)
       end
 
+      sig { returns(Numeric) }
       def total_weight
         # Set of visited edges (to avoid duplicates in undirected graphs)
         visited = Set.new
@@ -87,6 +111,7 @@ module MOSAIK
         end
       end
 
+      sig { returns(String) }
       def to_dot
         # Set of visited edges (to avoid duplicates in undirected graphs)
         visited = Set.new
@@ -130,11 +155,13 @@ module MOSAIK
         ].compact.join("\n")
       end
 
+      sig { params(file: String).void }
       def to_png(file)
         File.write("#{file}.dot", to_dot)
         system("dot -Tpng #{file}.dot -o #{file}.png")
       end
 
+      sig { returns(String) }
       def to_csv
         # Set of visited edges (to avoid duplicates in undirected graphs)
         visited = Set.new
@@ -177,10 +204,12 @@ module MOSAIK
         end
       end
 
+      sig { returns(String) }
       def inspect
         "#<#{self.class.name} vertices=#{vertices.values.map(&:inspect)}>"
       end
 
+      sig { params(csv: String, directed: T::Boolean).returns(Graph) }
       def self.from_csv(csv, directed: true)
         graph = new(directed:)
 

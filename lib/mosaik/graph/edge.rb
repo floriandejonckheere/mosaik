@@ -1,17 +1,24 @@
 # frozen_string_literal: true
 
+# typed: true
+
 module MOSAIK
   module Graph
     ##
     # Edge in the graph
     #
     class Edge
+      extend T::Sig
+
+      sig { returns(Attributes) }
       attr_reader :attributes
 
+      sig { params(attributes: Attributes).void }
       def initialize(attributes = {})
         @attributes = attributes
       end
 
+      sig { returns(String) }
       def inspect
         "#<#{self.class.name} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')}>"
       end

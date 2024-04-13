@@ -5,6 +5,7 @@ require "yaml"
 
 require "active_support/all"
 require "git"
+require "sorbet-runtime"
 require "zeitwerk"
 
 module MOSAIK

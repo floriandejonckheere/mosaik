@@ -435,8 +435,8 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
-          directed,name
-          true,My graph
+          directed,version,name
+          true,1,My graph
           --
           id,type
           vertex1,class
@@ -461,8 +461,8 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
-          directed,name
-          false,My graph
+          directed,version,name
+          false,1,My graph
           --
           id,type
           vertex1,class
@@ -494,8 +494,8 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_cluster("cluster3")
 
         expect(graph.to_csv).to eq <<~CSV
-          directed,key
-          true,value
+          directed,version,key
+          true,1,value
           --
           id,type
           vertex1,class
@@ -516,11 +516,20 @@ RSpec.describe MOSAIK::Graph::Graph do
   end
 
   describe ".from_csv" do
+    it "raises an error when the graph version is unsupported" do
+      csv = <<~CSV
+        directed,version,name
+        true,0,My graph
+      CSV
+
+      expect { described_class.from_csv(csv) }.to raise_error MOSAIK::Error, "Unsupported graph version: 0"
+    end
+
     context "when the graph is directed" do
       it "creates a graph from a CSV" do
         csv = <<~CSV
-          directed,name
-          true,My graph
+          directed,version,name
+          true,1,My graph
           --
           id,type
           vertex1,class
@@ -553,8 +562,8 @@ RSpec.describe MOSAIK::Graph::Graph do
     context "when the graph is undirected" do
       it "creates a graph from a CSV" do
         csv = <<~CSV
-          directed,name
-          false,My graph
+          directed,version,name
+          false,1,My graph
           --
           id,type
           vertex1,class
@@ -590,8 +599,8 @@ RSpec.describe MOSAIK::Graph::Graph do
     context "when the graph has clusters" do
       it "creates a graph from a CSV" do
         csv = <<~CSV
-          directed,name
-          true,My graph
+          directed,version,name
+          true,1,My graph
           --
           id,type
           vertex1,class

@@ -12,6 +12,8 @@ module MOSAIK
     class Graph
       extend T::Sig
 
+      VERSION = 1
+
       sig { returns(T::Boolean) }
       attr_reader :directed
 
@@ -172,10 +174,10 @@ module MOSAIK
           attrs = attributes
             .keys
 
-          csv << ["directed", *attrs]
+          csv << ["directed", "version", *attrs]
 
           # Add graph attributes
-          csv << [directed, *attrs.map { |attr| attributes[attr] }]
+          csv << [directed, VERSION, *attrs.map { |attr| attributes[attr] }]
 
           # Separator
           csv << ["--"]
@@ -257,7 +259,9 @@ module MOSAIK
         preamble, vertices, edges, clusters = csv.split("\n--\n")
 
         # Parse preamble
-        CSV.parse_line(preamble, headers: true, header_converters: :symbol, converters: :numeric) => { directed:, **attributes }
+        CSV.parse_line(preamble, headers: true, header_converters: :symbol, converters: :numeric) => { directed:, version:, **attributes }
+
+        raise Error, "Unsupported graph version: #{version}" unless version == VERSION
 
         # Create a new graph
         graph = new(attributes, directed: (directed == "true"))

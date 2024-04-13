@@ -290,6 +290,22 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(graph.total_weight).to eq 3.5
     end
+
+    context "when the graph is undirected" do
+      subject(:graph) { build(:graph, directed: false) }
+
+      it "returns the total weight of the graph" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+        graph.add_vertex("vertex3")
+
+        graph.add_edge("vertex1", "vertex2")
+        graph.add_edge("vertex2", "vertex3", weight: 1.0)
+        graph.add_edge("vertex3", "vertex1", weight: 2.5)
+
+        expect(graph.total_weight).to eq 3.5
+      end
+    end
   end
 
   describe "#to_dot" do

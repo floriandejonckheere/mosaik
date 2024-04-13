@@ -97,18 +97,12 @@ module MOSAIK
 
       sig { returns(Numeric) }
       def total_weight
-        # Set of visited edges (to avoid duplicates in undirected graphs)
-        visited = Set.new
-
-        vertices.values.sum do |vertex|
-          vertex.edges.values.sum do |edge|
-            next if edge.in? visited
-
-            visited << edge
-
-            edge.attributes.fetch(:weight, 0.0)
-          end
-        end
+        vertices
+          .values
+          .flat_map { |v| v.edges.values }
+          .compact
+          .to_set
+          .sum { |e| e.attributes.fetch(:weight, 0.0) }
       end
 
       sig { returns(String) }

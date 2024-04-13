@@ -13,33 +13,33 @@ module MOSAIK
         # Modularity value
         q = 0.0
 
-        # Iterate over each community
+        # Iterate over each cluster
         graph.clusters.each_value do |cluster|
-          # Find all vertices in the community
-          vertices_in_community = cluster.vertices
-          vertices_in_community_id = vertices_in_community.map(&:id)
+          # Find all vertices in the cluster
+          vertices_in_cluster = cluster.vertices
+          vertices_in_cluster_id = vertices_in_cluster.map(&:id)
 
-          # Edges outgoing from the community
-          e_outgoing = vertices_in_community
+          # Edges outgoing from the cluster
+          e_outgoing = vertices_in_cluster
             .flat_map { |v| v.edges.values }
 
-          # Edges incoming to the community
+          # Edges incoming to the cluster
           e_incoming = graph
             .vertices
             .each_value
             .flat_map { |v| v.edges.to_a }
-            .filter_map { |i, e| e if i.in? vertices_in_community_id }
+            .filter_map { |i, e| e if i.in? vertices_in_cluster_id }
 
-          # Total weight of edges in the community
+          # Total weight of edges in the cluster
           c_weight_total = (e_outgoing + e_incoming)
             .to_set
             .sum { |e| e.attributes.fetch(:weight, 0.0) }
 
-          # Total weight of edges internal to the community
+          # Total weight of edges internal to the cluster
           c_weight_internal = 0.0
 
-          # Iterate over all pairs of vertices in the community (calculate internal weight)
-          vertices_in_community.to_a.combination(2) do |v, w|
+          # Iterate over all pairs of vertices in the cluster (calculate internal weight)
+          vertices_in_cluster.to_a.combination(2) do |v, w|
             # Get weight of the edge between v and w
             weight = graph
               .find_edge(v.id, w.id)
@@ -51,7 +51,7 @@ module MOSAIK
 
           q_c = (c_weight_internal / (2 * m)) - ((c_weight_total / (2 * m))**2)
 
-          # Calculate modularity contribution from this community
+          # Calculate modularity contribution from this cluster
           q += q_c
         end
 

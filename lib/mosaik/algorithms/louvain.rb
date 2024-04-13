@@ -9,19 +9,14 @@ module MOSAIK
       # Threshold of modularity improvement
       THRESHOLD = 1e-6
 
-      attr_reader :communities
-
-      def initialize(...)
-        super
-
-        # Initial set of communities
-        @communities = graph
-          .vertices
-          .values
-          .to_h { |vertex| [vertex.id, vertex] }
-      end
-
       def call
+        # Assign initial set of communities (each vertex in its own community)
+        graph.vertices.each_value do |vertex|
+          graph
+            .add_cluster(vertex.id)
+            .add_vertex(vertex)
+        end
+
         info "Total modularity: #{modularity}"
 
         i = 0
@@ -42,22 +37,13 @@ module MOSAIK
 
           break if modularity - initial_modularity <= THRESHOLD
         end
-
-        # Add clusters to the graph
-        communities.each do |vertex_id, vertex_cluster|
-          vertex = graph.find_vertex(vertex_id)
-
-          graph
-            .find_or_add_cluster(vertex_cluster.id)
-            .add_vertex(vertex)
-        end
       end
 
       private
 
       def reassign_vertex(vertex)
         # Initialize best community as current community
-        best_community = communities[vertex.id]
+        best_community = graph.clusters.values.find { |cluster| cluster.vertices.include? vertex }
 
         # Initialize best modularity gain
         best_gain = 0.0
@@ -66,15 +52,19 @@ module MOSAIK
         best_modularity = modularity
 
         # Store the original community of the vertex
-        community = communities[vertex.id]
+        community = graph.clusters.values.find { |cluster| cluster.vertices.include? vertex }
 
         # Iterate over all neighbours of the vertex
-        vertex.edges.each_key do |neighbour|
+        vertex.edges.each_key do |neighbour_id|
+          neighbour = graph.find_vertex(neighbour_id)
+          neighbour_community = graph.clusters.values.find { |cluster| cluster.vertices.include? neighbour }
+
           # Skip if the neighbour is in the same community
-          next if communities[vertex.id] == communities[neighbour]
+          next if neighbour_community == community
 
           # Move the vertex to the neighbour's community
-          communities[vertex.id] = communities[neighbour]
+          community.remove_vertex(vertex)
+          neighbour_community.add_vertex(vertex)
 
           # Calculate the new modularity
           new_modularity = modularity
@@ -85,56 +75,23 @@ module MOSAIK
           # Update the best modularity gain and community
           if gain > best_gain
             best_gain = gain
-            best_community = communities[neighbour]
+            best_community = neighbour_community
           end
 
           # Move the vertex back to its original community
-          communities[vertex.id] = community
+          neighbour_community.remove_vertex(vertex)
+          community.add_vertex(vertex)
         end
 
         # Move the vertex to the best community
-        communities[vertex.id] = best_community
+        community.remove_vertex(vertex)
+        best_community.add_vertex(vertex)
       end
 
       def modularity
-        # Total weight of edges in the graph
-        m = graph.total_weight
-
-        # Modularity value
-        q = 0.0
-
-        # Iterate over each community
-        communities.values.to_set.each do |community|
-          # Find all vertices in the community
-          vertices_in_community = communities.filter_map { |_, v| v if v == community }
-
-          # Total weight of edges in the community
-          c_weight_total = vertices_in_community
-            .flat_map { |v| v.edges.values }
-            .uniq
-            .sum { |e| e.attributes.fetch(:weight, 0.0) }
-
-          # Total weight of edges internal to the community
-          c_weight_internal = 0.0
-
-          # Iterate over all pairs of vertices in the community (calculate internal weight)
-          vertices_in_community.combination(2) do |v, w|
-            # Get weight of the edge between v and w
-            weight = graph
-              .find_vertex(v.id)
-              .edges[w]
-              &.attributes
-              &.[](:weight) || 0.0
-
-            c_weight_internal += weight
-          end
-
-          # Calculate modularity contribution from this community
-          q += (c_weight_internal / m) - ((c_weight_total / (2 * m))**2)
-        end
-
-        # Return the total modularity
-        q
+        Metrics::Modularity
+          .new(options, graph)
+          .evaluate
       end
     end
   end

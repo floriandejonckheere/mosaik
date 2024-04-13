@@ -85,9 +85,9 @@ module MOSAIK
         T.must(vertices[to]).remove_edge(from)
       end
 
-      sig { params(id: String).returns(Cluster) }
-      def add_cluster(id)
-        clusters[id] = Cluster.new(id)
+      sig { params(id: String, attributes: Attributes).returns(Cluster) }
+      def add_cluster(id, attributes = {})
+        clusters[id] = Cluster.new(id, attributes)
       end
 
       sig { params(id: String).returns(T.nilable(Cluster)) }
@@ -95,9 +95,9 @@ module MOSAIK
         clusters[id]
       end
 
-      sig { params(id: String).returns(Cluster) }
-      def find_or_add_cluster(id)
-        clusters[id] || add_cluster(id)
+      sig { params(id: String, attributes: Attributes).returns(Cluster) }
+      def find_or_add_cluster(id, attributes = {})
+        clusters[id] || add_cluster(id, attributes)
       end
 
       sig { returns(Numeric) }

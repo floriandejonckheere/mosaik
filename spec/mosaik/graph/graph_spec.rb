@@ -253,6 +253,12 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(graph.clusters).not_to be_empty
     end
+
+    it "sets the attributes" do
+      graph.add_cluster("cluster", key: "value")
+
+      expect(graph.find_cluster("cluster").attributes).to eq key: "value"
+    end
   end
 
   describe "#find_cluster" do
@@ -281,6 +287,12 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(cluster).to be_a MOSAIK::Graph::Cluster
       expect(cluster.id).to eq "cluster"
+    end
+
+    it "sets the attributes" do
+      graph.find_or_add_cluster("cluster", key: "value")
+
+      expect(graph.find_cluster("cluster").attributes).to eq key: "value"
     end
   end
 

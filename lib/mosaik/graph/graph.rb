@@ -166,7 +166,27 @@ module MOSAIK
         visited = Set.new
 
         CSV.generate do |csv|
-          # Collect all attributes
+          # VERTICES
+          # Collect all vertex attributes
+          attributes = vertices
+            .values
+            .flat_map(&:attributes)
+            .flat_map(&:keys)
+            .uniq
+
+          # Header
+          csv << ["id", *attributes]
+
+          # Add vertices using a vertex list
+          vertices.each do |vertex_id, vertex|
+            csv << [vertex_id, *attributes.map { |attr| vertex.attributes[attr] }]
+          end
+
+          # Separator
+          csv << ["--"]
+
+          # EDGES
+          # Collect all edge attributes
           attributes = vertices
             .values
             .flat_map { |v| v.edges.flat_map { |_, e| e.attributes.keys } }
@@ -212,10 +232,17 @@ module MOSAIK
       def self.from_csv(csv, directed: true)
         graph = new(directed:)
 
-        vertices, clusters = csv.split("\n--\n")
+        vertices, edges, clusters = csv.split("\n--\n")
 
-        # Add vertices and edges from the adjacency list
+        # Add vertices from the vertex list
         CSV.new(vertices, headers: true, header_converters: :symbol, converters: :numeric).each do |row|
+          row => { id:, **attributes }
+
+          graph.find_or_add_vertex(id, attributes.symbolize_keys)
+        end
+
+        # Add edges from the adjacency list
+        CSV.new(edges, headers: true, header_converters: :symbol, converters: :numeric).each do |row|
           row => { from:, to:, **attributes }
 
           graph.find_or_add_vertex(from)

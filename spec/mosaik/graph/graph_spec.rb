@@ -415,14 +415,19 @@ RSpec.describe MOSAIK::Graph::Graph do
     context "when the graph is directed" do
       subject(:graph) { build(:graph, directed: true) }
 
-      it "returns an adjacency list" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_vertex("vertex3")
+      it "returns a CSV" do
+        graph.add_vertex("vertex1", type: "class")
+        graph.add_vertex("vertex2", type: "interface")
+        graph.add_vertex("vertex3", type: "module")
         graph.add_edge("vertex1", "vertex2")
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
+          id,type
+          vertex1,class
+          vertex2,interface
+          vertex3,module
+          --
           from,to,method,weight
           vertex1,vertex2,,
           vertex2,vertex3,method,1.0
@@ -433,14 +438,19 @@ RSpec.describe MOSAIK::Graph::Graph do
     context "when the graph is undirected" do
       subject(:graph) { build(:graph, directed: false) }
 
-      it "returns an adjacency list" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_vertex("vertex3")
+      it "returns a CSV" do
+        graph.add_vertex("vertex1", type: "class")
+        graph.add_vertex("vertex2", type: "interface")
+        graph.add_vertex("vertex3", type: "module")
         graph.add_edge("vertex1", "vertex2")
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
+          id,type
+          vertex1,class
+          vertex2,interface
+          vertex3,module
+          --
           from,to,method,weight
           vertex1,vertex2,,
           vertex2,vertex3,method,1.0
@@ -449,10 +459,10 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
 
     context "when the graph has clusters" do
-      it "returns the graph in DOT format" do
-        v1 = graph.add_vertex("vertex1")
-        v2 = graph.add_vertex("vertex2")
-        v3 = graph.add_vertex("vertex3")
+      it "returns a CSV" do
+        v1 = graph.add_vertex("vertex1", type: "class")
+        v2 = graph.add_vertex("vertex2", type: "interface")
+        v3 = graph.add_vertex("vertex3", type: "module")
         graph.add_edge("vertex1", "vertex2")
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
@@ -466,6 +476,11 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_cluster("cluster3")
 
         expect(graph.to_csv).to eq <<~CSV
+          id,type
+          vertex1,class
+          vertex2,interface
+          vertex3,module
+          --
           from,to,method,weight
           vertex1,vertex2,,
           vertex2,vertex3,method,1.0
@@ -481,8 +496,13 @@ RSpec.describe MOSAIK::Graph::Graph do
 
   describe ".from_csv" do
     context "when the graph is undirected" do
-      it "creates a graph from an adjacency list" do
+      it "creates a graph from a CSV" do
         csv = <<~CSV
+          id,type
+          vertex1,class
+          vertex2,interface
+          vertex3,module
+          --
           from,to,method,weight
           vertex1,vertex2,,
           vertex2,vertex3,method,1.0
@@ -493,9 +513,14 @@ RSpec.describe MOSAIK::Graph::Graph do
         expect(graph.directed).to be false
 
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
+        expect(graph.find_vertex("vertex1").attributes).to eq type: "class"
+        expect(graph.find_vertex("vertex2").attributes).to eq type: "interface"
+        expect(graph.find_vertex("vertex3").attributes).to eq type: "module"
+
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
         expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1", "vertex3"]
         expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
+
         expect(graph.find_vertex("vertex3").edges.keys).to eq ["vertex2"]
         expect(graph.find_vertex("vertex3").edges["vertex2"].attributes).to eq method: "method", weight: 1.0
 
@@ -504,8 +529,13 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
 
     context "when the graph is directed" do
-      it "creates a graph from an adjacency list" do
+      it "creates a graph from a CSV" do
         csv = <<~CSV
+          id,type
+          vertex1,class
+          vertex2,interface
+          vertex3,module
+          --
           from,to,method,weight
           vertex1,vertex2,
           vertex2,vertex3,method,1.0
@@ -516,15 +546,26 @@ RSpec.describe MOSAIK::Graph::Graph do
         expect(graph.directed).to be true
 
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
+        expect(graph.find_vertex("vertex1").attributes).to eq type: "class"
+        expect(graph.find_vertex("vertex2").attributes).to eq type: "interface"
+        expect(graph.find_vertex("vertex3").attributes).to eq type: "module"
+
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+
         expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
+
         expect(graph.find_vertex("vertex3").edges).to be_empty
       end
     end
 
     context "when the graph has clusters" do
-      it "returns the graph in DOT format" do
+      it "creates a graph from a CSV" do
         csv = <<~CSV
+          id,type
+          vertex1,class
+          vertex2,interface
+          vertex3,module
+          --
           from,to,method,weight
           vertex1,vertex2,,
           vertex2,vertex3,method,1.0
@@ -540,8 +581,14 @@ RSpec.describe MOSAIK::Graph::Graph do
         expect(graph.directed).to be true
 
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
+        expect(graph.find_vertex("vertex1").attributes).to eq type: "class"
+        expect(graph.find_vertex("vertex2").attributes).to eq type: "interface"
+        expect(graph.find_vertex("vertex3").attributes).to eq type: "module"
+
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+
         expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
+
         expect(graph.find_vertex("vertex3").edges).to be_empty
 
         expect(graph.clusters.keys).to eq ["cluster1", "cluster2"]

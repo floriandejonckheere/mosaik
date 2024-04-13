@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# typed: true
+# typed: strict
 
 module MOSAIK
   module Graph

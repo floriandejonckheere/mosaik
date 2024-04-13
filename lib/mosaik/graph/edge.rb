@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# typed: true
+# typed: strict
 
 module MOSAIK
   module Graph
@@ -14,7 +14,7 @@ module MOSAIK
       attr_reader :attributes
 
       sig { params(attributes: Attributes).void }
-      def initialize(attributes = {})
+      def initialize(attributes = T.let({}, Attributes))
         @attributes = attributes
       end
 

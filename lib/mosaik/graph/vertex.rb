@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# typed: true
+# typed: strict
 
 module MOSAIK
   module Graph
@@ -22,7 +22,7 @@ module MOSAIK
       sig { params(id: String, attributes: Attributes).void }
       def initialize(id, attributes = {})
         @id = id
-        @edges = {}
+        @edges = T.let({}, T::Hash[String, Edge])
         @attributes = attributes
       end
 

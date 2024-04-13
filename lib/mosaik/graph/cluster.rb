@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# typed: true
+# typed: strict
 
 module MOSAIK
   module Graph
@@ -19,7 +19,7 @@ module MOSAIK
       sig { params(id: String).void }
       def initialize(id)
         @id = id
-        @vertices = Set.new
+        @vertices = T.let(Set.new, T::Set[Vertex])
       end
 
       sig { params(vertex: Vertex).void }

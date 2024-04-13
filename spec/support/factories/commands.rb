@@ -14,6 +14,8 @@ FactoryBot.define do
 
   factory :identify_command, parent: :command, class: "MOSAIK::Commands::Identify"
 
+  factory :evaluate_command, parent: :command, class: "MOSAIK::Commands::Evaluate"
+
   factory :init_command, parent: :command, class: "MOSAIK::Commands::Init"
 
   factory :version_command, parent: :command, class: "MOSAIK::Commands::Version"

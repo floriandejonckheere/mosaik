@@ -43,10 +43,14 @@ module MOSAIK
           break if modularity - initial_modularity <= THRESHOLD
         end
 
-        # Return the community assignments
-        communities
-          .transform_keys { |vertex_id| graph.find_vertex(vertex_id) }
-          .transform_values(&:id)
+        # Add clusters to the graph
+        communities.each do |vertex_id, cluster_id|
+          vertex = graph.find_vertex(vertex_id)
+
+          graph
+            .find_or_add_cluster(cluster_id)
+            .add_vertex(vertex)
+        end
       end
 
       private

@@ -292,21 +292,6 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
   end
 
-  describe "#tsort" do
-    it "topologically sorts the vertices" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-      graph.add_vertex("vertex3")
-
-      expect(graph.tsort.map(&:id)).to eq ["vertex1", "vertex2", "vertex3"]
-
-      graph.add_edge("vertex1", "vertex2")
-      graph.add_edge("vertex2", "vertex3")
-
-      expect(graph.tsort.map(&:id)).to eq ["vertex3", "vertex2", "vertex1"]
-    end
-  end
-
   describe "#to_dot" do
     context "when the graph is directed" do
       subject(:graph) { build(:graph, directed: true) }

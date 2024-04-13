@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "csv"
-require "tsort"
 
 module MOSAIK
   module Graph
@@ -9,8 +8,6 @@ module MOSAIK
     # Simple implementation of an (un-)directed graph
     #
     class Graph
-      include TSort
-
       attr_reader :directed, :vertices, :clusters
 
       def initialize(directed: true)
@@ -87,16 +84,6 @@ module MOSAIK
 
             edge.attributes.fetch(:weight, 0.0)
           end
-        end
-      end
-
-      def tsort_each_node(&)
-        vertices.values.each(&)
-      end
-
-      def tsort_each_child(vertex, &)
-        vertices[vertex.id].edges.each_key do |key|
-          yield vertices[key]
         end
       end
 

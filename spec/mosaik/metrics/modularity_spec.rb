@@ -27,10 +27,20 @@ RSpec.describe MOSAIK::Metrics::Modularity do
   #
   # Q_tot = 0.20196280991735538
   #
+
   context "when the graph is undirected" do
     include_context "with a simple undirected graph"
 
-    it "returns the modularity of the graph" do
+    it "sets the modularity values for each cluster, and for the graph" do
+      metric.evaluate
+
+      expect(graph.find_cluster("A").attributes[:modularity]).to be_within(1e-6).of 0.12345041322314049
+      expect(graph.find_cluster("B").attributes[:modularity]).to be_within(1e-6).of 0.08057851239669421
+      expect(graph.find_cluster("C").attributes[:modularity]).to be_within(1e-6).of(-0.002066115702479339)
+      expect(graph.attributes[:modularity]).to be_within(1e-6).of 0.20196280991735538
+    end
+
+    it "returns the total modularity" do
       expect(metric.evaluate).to be_within(1e-6).of 0.20196280991735538
     end
   end
@@ -38,7 +48,16 @@ RSpec.describe MOSAIK::Metrics::Modularity do
   context "when the graph is directed" do
     include_context "with a simple directed graph"
 
-    it "returns the modularity of the graph" do
+    it "sets the modularity values for each cluster, and for the graph" do
+      metric.evaluate
+
+      expect(graph.find_cluster("A").attributes[:modularity]).to be_within(1e-6).of 0.12345041322314049
+      expect(graph.find_cluster("B").attributes[:modularity]).to be_within(1e-6).of 0.08057851239669421
+      expect(graph.find_cluster("C").attributes[:modularity]).to be_within(1e-6).of(-0.002066115702479339)
+      expect(graph.attributes[:modularity]).to be_within(1e-6).of 0.20196280991735538
+    end
+
+    it "returns the total modularity" do
       expect(metric.evaluate).to be_within(1e-6).of 0.20196280991735538
     end
   end

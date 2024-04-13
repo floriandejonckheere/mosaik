@@ -49,11 +49,18 @@ module MOSAIK
             c_weight_internal += weight
           end
 
+          # Calculate modularity value for the cluster
           q_c = (c_weight_internal / (2 * m)) - ((c_weight_total / (2 * m))**2)
+
+          # Store modularity value in the cluster
+          cluster.attributes[:modularity] = q_c
 
           # Calculate modularity contribution from this cluster
           q += q_c
         end
+
+        # Store modularity value in the graph
+        graph.attributes[:modularity] = q
 
         # Return the total modularity
         q

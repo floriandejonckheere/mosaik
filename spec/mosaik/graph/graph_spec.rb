@@ -425,7 +425,7 @@ RSpec.describe MOSAIK::Graph::Graph do
 
   describe "#to_csv" do
     context "when the graph is directed" do
-      subject(:graph) { build(:graph, directed: true) }
+      subject(:graph) { build(:graph, directed: true, attrs: { name: "My graph" }) }
 
       it "returns a CSV" do
         graph.add_vertex("vertex1", type: "class")
@@ -435,6 +435,9 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
+          directed,name
+          true,My graph
+          --
           id,type
           vertex1,class
           vertex2,interface
@@ -448,7 +451,7 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
 
     context "when the graph is undirected" do
-      subject(:graph) { build(:graph, directed: false) }
+      subject(:graph) { build(:graph, directed: false, attrs: { name: "My graph" }) }
 
       it "returns a CSV" do
         graph.add_vertex("vertex1", type: "class")
@@ -458,6 +461,9 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_edge("vertex2", "vertex3", method: "method", weight: 1.0)
 
         expect(graph.to_csv).to eq <<~CSV
+          directed,name
+          false,My graph
+          --
           id,type
           vertex1,class
           vertex2,interface
@@ -488,6 +494,9 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_cluster("cluster3")
 
         expect(graph.to_csv).to eq <<~CSV
+          directed,key
+          true,value
+          --
           id,type
           vertex1,class
           vertex2,interface
@@ -507,9 +516,46 @@ RSpec.describe MOSAIK::Graph::Graph do
   end
 
   describe ".from_csv" do
+    context "when the graph is directed" do
+      it "creates a graph from a CSV" do
+        csv = <<~CSV
+          directed,name
+          true,My graph
+          --
+          id,type
+          vertex1,class
+          vertex2,interface
+          vertex3,module
+          --
+          from,to,method,weight
+          vertex1,vertex2,
+          vertex2,vertex3,method,1.0
+        CSV
+
+        graph = described_class.from_csv(csv)
+
+        expect(graph.directed).to be true
+        expect(graph.attributes[:name]).to eq "My graph"
+
+        expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
+        expect(graph.find_vertex("vertex1").attributes).to eq type: "class"
+        expect(graph.find_vertex("vertex2").attributes).to eq type: "interface"
+        expect(graph.find_vertex("vertex3").attributes).to eq type: "module"
+
+        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+
+        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
+
+        expect(graph.find_vertex("vertex3").edges).to be_empty
+      end
+    end
+
     context "when the graph is undirected" do
       it "creates a graph from a CSV" do
         csv = <<~CSV
+          directed,name
+          false,My graph
+          --
           id,type
           vertex1,class
           vertex2,interface
@@ -520,9 +566,10 @@ RSpec.describe MOSAIK::Graph::Graph do
           vertex2,vertex3,method,1.0
         CSV
 
-        graph = described_class.from_csv(csv, directed: false)
+        graph = described_class.from_csv(csv)
 
         expect(graph.directed).to be false
+        expect(graph.attributes[:name]).to eq "My graph"
 
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
         expect(graph.find_vertex("vertex1").attributes).to eq type: "class"
@@ -540,39 +587,12 @@ RSpec.describe MOSAIK::Graph::Graph do
       end
     end
 
-    context "when the graph is directed" do
-      it "creates a graph from a CSV" do
-        csv = <<~CSV
-          id,type
-          vertex1,class
-          vertex2,interface
-          vertex3,module
-          --
-          from,to,method,weight
-          vertex1,vertex2,
-          vertex2,vertex3,method,1.0
-        CSV
-
-        graph = described_class.from_csv(csv, directed: true)
-
-        expect(graph.directed).to be true
-
-        expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
-        expect(graph.find_vertex("vertex1").attributes).to eq type: "class"
-        expect(graph.find_vertex("vertex2").attributes).to eq type: "interface"
-        expect(graph.find_vertex("vertex3").attributes).to eq type: "module"
-
-        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
-
-        expect(graph.find_vertex("vertex3").edges).to be_empty
-      end
-    end
-
     context "when the graph has clusters" do
       it "creates a graph from a CSV" do
         csv = <<~CSV
+          directed,name
+          true,My graph
+          --
           id,type
           vertex1,class
           vertex2,interface
@@ -588,9 +608,10 @@ RSpec.describe MOSAIK::Graph::Graph do
           vertex3,cluster2,microservice
         CSV
 
-        graph = described_class.from_csv(csv, directed: true)
+        graph = described_class.from_csv(csv)
 
         expect(graph.directed).to be true
+        expect(graph.attributes[:name]).to eq "My graph"
 
         expect(graph.vertices.keys).to eq ["vertex1", "vertex2", "vertex3"]
         expect(graph.find_vertex("vertex1").attributes).to eq type: "class"

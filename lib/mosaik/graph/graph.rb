@@ -167,20 +167,33 @@ module MOSAIK
 
         # rubocop:disable Metrics/BlockLength
         CSV.generate do |csv|
+          # PREAMBLE
+          # Collect all graph attributes
+          attrs = attributes
+            .keys
+
+          csv << ["directed", *attrs]
+
+          # Add graph attributes
+          csv << [directed, *attrs.map { |attr| attributes[attr] }]
+
+          # Separator
+          csv << ["--"]
+
           # VERTICES
           # Collect all vertex attributes
-          attributes = vertices
+          attrs = vertices
             .values
             .flat_map(&:attributes)
             .flat_map(&:keys)
             .uniq
 
           # Header
-          csv << ["id", *attributes]
+          csv << ["id", *attrs]
 
           # Add vertices using a vertex list
           vertices.each do |vertex_id, vertex|
-            csv << [vertex_id, *attributes.map { |attr| vertex.attributes[attr] }]
+            csv << [vertex_id, *attrs.map { |attr| vertex.attributes[attr] }]
           end
 
           # Separator
@@ -188,13 +201,13 @@ module MOSAIK
 
           # EDGES
           # Collect all edge attributes
-          attributes = vertices
+          attrs = vertices
             .values
             .flat_map { |v| v.edges.flat_map { |_, e| e.attributes.keys } }
             .uniq
 
           # Header
-          csv << ["from", "to", *attributes]
+          csv << ["from", "to", *attrs]
 
           # Add vertices and edges using an adjacency list
           vertices.each do |vertex_id, vertex|
@@ -203,7 +216,7 @@ module MOSAIK
 
               visited << edge
 
-              csv << [vertex_id, edge_id, *attributes.map { |attr| edge.attributes[attr] }]
+              csv << [vertex_id, edge_id, *attrs.map { |attr| edge.attributes[attr] }]
             end
           end
 
@@ -215,19 +228,19 @@ module MOSAIK
 
           # VERTICES
           # Collect all vertex attributes
-          attributes = clusters
+          attrs = clusters
             .values
             .flat_map(&:attributes)
             .flat_map(&:keys)
             .uniq
 
           # Header
-          csv << ["vertex", "cluster", *attributes]
+          csv << ["vertex", "cluster", *attrs]
 
           # Add clusters using a cluster mapping
           clusters.each do |cluster_id, cluster|
             cluster.vertices.each do |vertex|
-              csv << [vertex.id, cluster_id, *attributes.map { |attr| cluster.attributes[attr] }]
+              csv << [vertex.id, cluster_id, *attrs.map { |attr| cluster.attributes[attr] }]
             end
           end
         end
@@ -239,11 +252,15 @@ module MOSAIK
         "#<#{self.class.name} vertices=#{vertices.values.map(&:inspect)}>"
       end
 
-      sig { params(csv: String, directed: T::Boolean).returns(Graph) }
-      def self.from_csv(csv, directed: true)
-        graph = new(directed:)
+      sig { params(csv: String).returns(Graph) }
+      def self.from_csv(csv)
+        preamble, vertices, edges, clusters = csv.split("\n--\n")
 
-        vertices, edges, clusters = csv.split("\n--\n")
+        # Parse preamble
+        CSV.parse_line(preamble, headers: true, header_converters: :symbol, converters: :numeric) => { directed:, **attributes }
+
+        # Create a new graph
+        graph = new(attributes, directed: (directed == "true"))
 
         # Add vertices from the vertex list
         CSV.new(vertices, headers: true, header_converters: :symbol, converters: :numeric).each do |row|

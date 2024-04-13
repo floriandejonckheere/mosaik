@@ -21,8 +21,9 @@ FactoryBot.define do
   end
 
   factory :cluster, class: "MOSAIK::Graph::Cluster" do
-    initialize_with { new(id) }
+    initialize_with { new(id, attrs) }
 
     id { "cluster" }
+    attrs { { key: "value" } }
   end
 end

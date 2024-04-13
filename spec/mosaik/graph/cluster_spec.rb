@@ -3,6 +3,12 @@
 RSpec.describe MOSAIK::Graph::Cluster do
   subject(:cluster) { build(:cluster) }
 
+  describe "#attributes" do
+    it "returns the attributes" do
+      expect(cluster.attributes).to eq key: "value"
+    end
+  end
+
   describe "#add_vertex" do
     it "adds a vertex to the cluster" do
       vertex = build(:vertex)

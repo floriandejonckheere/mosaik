@@ -16,8 +16,12 @@ module MOSAIK
       sig { returns(T::Set[Vertex]) }
       attr_reader :vertices
 
-      sig { params(id: String).void }
-      def initialize(id)
+      sig { returns(Attributes) }
+      attr_reader :attributes
+
+      sig { params(id: String, attributes: Attributes).void }
+      def initialize(id, attributes = T.let({}, Attributes))
+        @attributes = attributes
         @id = id
         @vertices = T.let(Set.new, T::Set[Vertex])
       end
@@ -34,7 +38,7 @@ module MOSAIK
 
       sig { returns(String) }
       def inspect
-        "#<#{self.class.name} id=#{id} vertices=#{vertices.count}>"
+        "#<#{self.class.name} id=#{id} vertices=#{vertices.count} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')}>"
       end
     end
   end

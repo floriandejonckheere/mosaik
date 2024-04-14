@@ -19,11 +19,9 @@ module MOSAIK
 
         info "Total modularity: #{modularity}"
 
-        i = 0
-
         # Iterate until no further improvement in modularity
-        loop do
-          debug "Iteration #{i += 1}: modularity=#{modularity}"
+        1.step do |i|
+          debug "Iteration #{i}: modularity=#{modularity}"
 
           initial_modularity = modularity
 

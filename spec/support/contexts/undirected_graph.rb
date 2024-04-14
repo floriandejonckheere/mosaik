@@ -4,12 +4,12 @@ RSpec.shared_context "with a simple undirected graph" do
   let(:graph) do
     graph = build(:graph, directed: false)
 
-    a = graph.add_vertex("A")
-    b = graph.add_vertex("B")
-    c = graph.add_vertex("C")
-    d = graph.add_vertex("D")
-    e = graph.add_vertex("E")
-    f = graph.add_vertex("F")
+    a = graph.add_vertex("A", methods: 3)
+    b = graph.add_vertex("B", methods: 2)
+    c = graph.add_vertex("C", methods: 3)
+    d = graph.add_vertex("D", methods: 6)
+    e = graph.add_vertex("E", methods: 5)
+    f = graph.add_vertex("F", methods: 1)
 
     graph.add_edge("A", "B", weight: 3.0)
     graph.add_edge("A", "C", weight: 1.0)

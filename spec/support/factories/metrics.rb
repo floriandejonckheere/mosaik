@@ -10,5 +10,7 @@ FactoryBot.define do
 
   factory :coupling_metric, parent: :metric, class: "MOSAIK::Metrics::Coupling"
 
+  factory :cohesion_metric, parent: :metric, class: "MOSAIK::Metrics::Cohesion"
+
   factory :modularity_metric, parent: :metric, class: "MOSAIK::Metrics::Modularity"
 end

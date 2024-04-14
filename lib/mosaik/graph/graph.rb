@@ -73,9 +73,9 @@ module MOSAIK
         T.must(vertices[from]).edges[to] if T.must(vertices[from]).edges.key?(to)
       end
 
-      sig { params(from: String, to: String).returns(Edge) }
-      def find_or_add_edge(from, to)
-        find_edge(from, to) || add_edge(from, to)
+      sig { params(from: String, to: String, attributes: Attributes).returns(Edge) }
+      def find_or_add_edge(from, to, attributes = {})
+        find_edge(from, to) || add_edge(from, to, attributes)
       end
 
       sig { params(from: String, to: String).void }

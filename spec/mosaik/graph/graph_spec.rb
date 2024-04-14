@@ -197,6 +197,13 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(graph.find_or_add_edge("vertex1", "vertex2").attributes[:weight]).to eq 3
     end
+
+    it "adds an edge with attributes" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+
+      expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3).attributes[:weight]).to eq 3
+    end
   end
 
   describe "#remove_edge" do

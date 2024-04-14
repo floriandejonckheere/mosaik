@@ -52,7 +52,7 @@ commit jane,
        "lib/app/bat.rb" => "class App::Bat; end"
 
 commit john,
-       "lib/app/foo.rb" => "class App::Foo; end",
+       "lib/app/foo.rb" => "class App::Foo; def initialize; end; def my_method; end; end",
        "lib/app/bak.rb" => "class App::Bak; end"
 
 commit jane,

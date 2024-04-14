@@ -26,6 +26,16 @@ RSpec.describe MOSAIK::Extractors::Structural do
     it "constructs a logical coupling graph" do
       extractor.call
 
+      # Extract constants and methods
+      expect(graph.vertices.transform_values { |v| v.attributes[:methods] }).to eq(
+        "App" => 0,
+        "App::Foo" => 2,
+        "App::Bar" => 0,
+        "App::Bat" => 1,
+        "App::Bak" => 0,
+        "App::Baz" => 0,
+      )
+
       # Extract all vertices with source and destination
       expect(graph.vertices.transform_values { |v| v.edges.transform_values { |es| es.map { |e| e.attributes[:weight] } } }).to eq(
         "App" => {},

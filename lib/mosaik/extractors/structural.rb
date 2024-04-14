@@ -46,6 +46,7 @@ module MOSAIK
           debug ("  " * constant.name.scan("::").count) + constant.name
         end
 
+        # Construct the graph
         tree.each { |constant| construct(constant) } # rubocop:disable Style/CombinableLoops
       end
 
@@ -54,6 +55,9 @@ module MOSAIK
       def construct(constant)
         # Find or create the node for the constant
         caller = graph.find_or_add_vertex(constant.name)
+
+        # Add method cardinality to the vertex
+        caller.attributes[:methods] = constant.methods.count
 
         constant.methods.each_value do |method|
           method.references.each do |reference|

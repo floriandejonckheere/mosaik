@@ -10,7 +10,7 @@ module MOSAIK
         # Total weight of edges in the graph
         m = graph.total_weight
 
-        # Modularity value
+        # Total modularity
         q = 0.0
 
         # Iterate over each cluster

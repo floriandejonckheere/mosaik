@@ -28,8 +28,8 @@ RSpec.describe MOSAIK::Metrics::Modularity do
   # Q_tot = 0.20196280991735538
   #
 
-  context "when the graph is undirected" do
-    include_context "with a simple undirected graph"
+  context "when the graph is directed" do
+    include_context "with a simple directed graph"
 
     it "sets the modularity values for each cluster, and for the graph" do
       metric.evaluate
@@ -45,8 +45,8 @@ RSpec.describe MOSAIK::Metrics::Modularity do
     end
   end
 
-  context "when the graph is directed" do
-    include_context "with a simple directed graph"
+  context "when the graph is undirected" do
+    include_context "with a simple undirected graph"
 
     it "sets the modularity values for each cluster, and for the graph" do
       metric.evaluate

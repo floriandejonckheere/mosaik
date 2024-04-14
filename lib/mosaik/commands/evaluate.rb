@@ -8,30 +8,37 @@ module MOSAIK
     class Evaluate < Command
       self.description = "Evaluate microservice candidates"
 
-      defaults file: "mosaik-candidates.csv"
+      defaults file: "mosaik-candidates.csv",
+               metrics: [:modularity, :coupling]
 
       argument "--file FILE", "File for the identified microservice candidates graph (default: #{defaults[:file]})"
+      argument("--metrics METRICS", Array, "Metrics to evaluate (default: #{defaults[:metrics].join(',')})") { |arg| arg&.map(&:to_sym) }
 
       def validate
         raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
+
+        metrics = options[:metrics] - self.class.defaults[:metrics]
+
+        raise OptionError, "unknown metrics: #{metrics.join(', ')}" unless metrics.empty?
       end
 
       def call
         info "Evaluating microservice candidates (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
-        # Evaluate modularity
-        Metrics::Modularity
-          .new(options, graph)
-          .evaluate
+        # Evaluate metrics
+        options[:metrics].each do |metric|
+          Metrics
+            .const_get(metric.to_s.camelize)
+            .new(options, graph)
+            .evaluate
+        end
 
-        # Evaluate coupling
-        Metrics::Coupling
-          .new(options, graph)
-          .evaluate
+        # Print the graph
+        info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m]}" }.join(', ')})"
 
         # Print the clusters
         graph.clusters.each_value do |cluster|
-          info "Cluster #{cluster.id} (modularity: #{cluster.attributes[:modularity]}, coupling: #{cluster.attributes[:coupling]})"
+          info "Cluster #{cluster.id} (#{options[:metrics].map { |m| "#{m}: #{cluster.attributes[m]}" }.join(', ')})"
 
           next unless options[:debug]
 

@@ -20,23 +20,6 @@ RSpec.describe MOSAIK::Metrics::Coupling do
   #   Coupling = 10
   #
 
-  context "when the graph is undirected" do
-    include_context "with a simple undirected graph"
-
-    it "sets the coupling values for each cluster, and for the graph" do
-      metric.evaluate
-
-      expect(graph.find_cluster("A").attributes[:coupling]).to eq 5.0
-      expect(graph.find_cluster("B").attributes[:coupling]).to eq 3.0
-      expect(graph.find_cluster("C").attributes[:coupling]).to eq 2.0
-      expect(graph.attributes[:coupling]).to eq 10.0
-    end
-
-    it "returns the total coupling" do
-      expect(metric.evaluate).to eq 10.0
-    end
-  end
-
   context "when the graph is directed" do
     include_context "with a simple directed graph"
 
@@ -51,6 +34,23 @@ RSpec.describe MOSAIK::Metrics::Coupling do
 
     it "returns the total coupling" do
       expect(metric.evaluate).to eq 5.0
+    end
+  end
+
+  context "when the graph is undirected" do
+    include_context "with a simple undirected graph"
+
+    it "sets the coupling values for each cluster, and for the graph" do
+      metric.evaluate
+
+      expect(graph.find_cluster("A").attributes[:coupling]).to eq 5.0
+      expect(graph.find_cluster("B").attributes[:coupling]).to eq 3.0
+      expect(graph.find_cluster("C").attributes[:coupling]).to eq 2.0
+      expect(graph.attributes[:coupling]).to eq 10.0
+    end
+
+    it "returns the total coupling" do
+      expect(metric.evaluate).to eq 10.0
     end
   end
 end

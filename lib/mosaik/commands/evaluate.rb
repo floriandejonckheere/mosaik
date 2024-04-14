@@ -24,9 +24,14 @@ module MOSAIK
           .new(options, graph)
           .evaluate
 
+        # Evaluate coupling
+        Metrics::Coupling
+          .new(options, graph)
+          .evaluate
+
         # Print the clusters
         graph.clusters.each_value do |cluster|
-          info "Cluster #{cluster.id} (modularity: #{cluster.attributes[:modularity]})"
+          info "Cluster #{cluster.id} (modularity: #{cluster.attributes[:modularity]}, coupling: #{cluster.attributes[:coupling]})"
 
           next unless options[:debug]
 

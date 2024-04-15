@@ -28,5 +28,5 @@ group :development, :test do
 
   # Type checker
   gem "sorbet", "0.5.11346", require: false
-  gem "tapioca", "0.13.2", require: false
+  gem "tapioca", "0.13.3", require: false
 end

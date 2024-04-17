@@ -102,6 +102,11 @@ module MOSAIK
         clusters[id] || add_cluster(id, attributes)
       end
 
+      sig { params(id: String).void }
+      def remove_cluster(id)
+        clusters.delete(id)
+      end
+
       sig { returns(Numeric) }
       def total_weight
         vertices

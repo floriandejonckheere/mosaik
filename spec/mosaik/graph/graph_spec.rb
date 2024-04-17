@@ -60,13 +60,13 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
 
     describe "#remove_vertex" do
-    it "removes a vertex" do
-      graph.add_vertex("vertex")
+      it "removes a vertex" do
+        graph.add_vertex("vertex")
 
-      graph.remove_vertex("vertex")
+        graph.remove_vertex("vertex")
 
-      expect(graph.vertices).to be_empty
-    end
+        expect(graph.vertices).to be_empty
+      end
     end
   end
 
@@ -305,6 +305,23 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.find_or_add_cluster("cluster", key: "value")
 
         expect(graph.find_cluster("cluster").attributes).to eq key: "value"
+      end
+    end
+
+    describe "#remove_cluster" do
+      it "removes a cluster" do
+        graph.add_cluster("cluster")
+        graph.remove_cluster("cluster")
+
+        expect(graph.clusters).to be_empty
+      end
+
+      it "does not remove a non-existing cluster" do
+        graph.add_cluster("cluster1")
+
+        graph.remove_cluster("cluster2")
+
+        expect(graph.find_cluster("cluster1")).not_to be_nil
       end
     end
   end

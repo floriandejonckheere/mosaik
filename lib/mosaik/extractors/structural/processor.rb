@@ -11,7 +11,7 @@ module MOSAIK
         MAIN = "(main)"
 
         # Ignorelist for constants
-        IGNORE_CONSTANTS = ["T", "File", "FileUtils"].freeze
+        IGNORE_CONSTANTS = ["ENV", "T", "File", "FileUtils"].freeze
 
         # Ignorelist for methods
         IGNORE_METHODS = ["require", "new", "include", "extend", "delegate", "public", "private", "protected", "raise", "attr_reader", "attr_writer", "attr_accessor"].freeze

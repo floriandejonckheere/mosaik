@@ -577,6 +577,20 @@ RSpec.describe MOSAIK::Graph::Graph do
         }
       DOT
     end
+
+    it "hides labels" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+      graph.add_edge("vertex1", "vertex2", weight: 3)
+
+      expect(graph.to_dot(hide_labels: true)).to eq <<~DOT
+        digraph {
+          "vertex1" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
+          "vertex1" -> "vertex2"
+          "vertex2" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
+        }
+      DOT
+    end
   end
 
   describe "#to_csv" do

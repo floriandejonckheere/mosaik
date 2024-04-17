@@ -77,7 +77,7 @@ module MOSAIK
 
       sig { params(from: String, to: String).returns(T.nilable(Edge)) }
       def find_edge(from, to)
-        T.must(vertices[from]).edges[to] if T.must(vertices[from]).edges.key?(to)
+        T.must(vertices[from]).find_edge(to)
       end
 
       sig { params(from: String, to: String, attributes: Attributes).returns(Edge) }

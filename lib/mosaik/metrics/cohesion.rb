@@ -35,7 +35,8 @@ module MOSAIK
 
           # Calculate sum of edges between vertices in the cluster
           sum = vertices_in_cluster
-            .flat_map { |v| v.edges.filter_map { |i, e| e if i.in?(vertices_in_cluster_id) } }
+            .map { |v| v.edges.slice(*vertices_in_cluster_id).values }
+            .flatten(2)
             .uniq
             .count
 

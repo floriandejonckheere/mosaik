@@ -21,10 +21,10 @@ module MOSAIK
 
           # Iterate over all vertices in the cluster
           vertices_in_cluster.each do |v|
-            v.edges.each do |i, e|
+            v.edges.each do |i, es|
               next if i.in? vertices_in_cluster_id
 
-              coupling_c += e.attributes.fetch(:weight, 0.0)
+              coupling_c += es.sum { |e| e.attributes.fetch(:weight, 0.0) }
             end
           end
 

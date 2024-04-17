@@ -45,6 +45,49 @@ RSpec.describe MOSAIK::Graph::Vertex do
     end
   end
 
+  describe "#find_edges" do
+    it "returns nothing when no edges exist" do
+      expect(vertex.find_edges("vertex1")).to be_empty
+    end
+
+    it "returns all edges" do
+      e1 = vertex.add_edge("vertex1")
+      e2 = vertex.add_edge("vertex1")
+
+      expect(vertex.find_edges("vertex1")).to contain_exactly e1, e2
+    end
+  end
+
+  describe "#find_edge" do
+    it "returns nothing when the edge does not exist" do
+      expect(vertex.find_edge("vertex1")).to be_nil
+    end
+
+    it "returns the first edge" do
+      e1 = vertex.add_edge("vertex1")
+      vertex.add_edge("vertex1")
+
+      expect(vertex.find_edge("vertex1")).to eq e1
+    end
+  end
+
+  describe "#find_or_add_edge" do
+    it "returns a new edge when the edge does not exist" do
+      expect(vertex.find_or_add_edge("vertex1")).to be_a MOSAIK::Graph::Edge
+    end
+
+    it "finds the first edge" do
+      e1 = vertex.add_edge("vertex1")
+      vertex.add_edge("vertex1")
+
+      expect(vertex.find_or_add_edge("vertex1")).to eq e1
+    end
+
+    it "adds an edge with attributes" do
+      expect(vertex.find_or_add_edge("vertex1", weight: 3).attributes).to eq weight: 3
+    end
+  end
+
   describe "#remove_edge" do
     context "when no edge is given" do
       it "removes all edges" do

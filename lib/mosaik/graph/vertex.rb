@@ -35,12 +35,27 @@ module MOSAIK
         edge
       end
 
+      sig { params(to: String).returns(T::Array[Edge]) }
+      def find_edges(to)
+        T.must(edges[to])
+      end
+
+      sig { params(to: String).returns(T.nilable(Edge)) }
+      def find_edge(to)
+        T.must(edges[to]).first
+      end
+
+      sig { params(to: String, attributes: Attributes).returns(Edge) }
+      def find_or_add_edge(to, attributes = {})
+        find_edge(to) || add_edge(to, attributes)
+      end
+
       sig { params(id: String, edge: T.nilable(Edge)).void }
       def remove_edge(id, edge = nil)
         if edge.nil?
           edges.delete(id)
         else
-          edges[id].delete(edge)
+          T.must(edges[id]).delete(edge)
         end
       end
 

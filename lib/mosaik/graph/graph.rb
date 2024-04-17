@@ -15,7 +15,7 @@ module MOSAIK
       VERSION = 1
 
       sig { returns(T::Boolean) }
-      attr_reader :directed
+      attr_accessor :directed
 
       sig { returns(T::Hash[String, Vertex]) }
       attr_reader :vertices

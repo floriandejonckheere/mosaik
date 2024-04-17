@@ -467,8 +467,11 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.to_dot).to eq <<~DOT
           digraph {
+            "vertex1" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex1" -> "vertex2"
+            "vertex2" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex2" -> "vertex3" [label="foo: bar, baz: bat"]
+            "vertex3" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
           }
         DOT
       end
@@ -486,8 +489,11 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.to_dot).to eq <<~DOT
           graph {
+            "vertex1" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex1" -- "vertex2"
+            "vertex2" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex2" -- "vertex3" [label="foo: bar, baz: bat"]
+            "vertex3" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
           }
         DOT
       end
@@ -522,7 +528,7 @@ RSpec.describe MOSAIK::Graph::Graph do
               cluster = true
               label = "cluster1"
               color = "lightblue"
-              node [shape=circle, style=filled, fillcolor=lightblue]
+              node [shape=circle, style=filled, fillcolor=gray]
               "vertex1"
               "vertex2"
               "vertex3"
@@ -531,19 +537,24 @@ RSpec.describe MOSAIK::Graph::Graph do
               cluster = true
               label = "cluster2"
               color = "lightblue"
-              node [shape=circle, style=filled, fillcolor=lightblue]
+              node [shape=circle, style=filled, fillcolor=gray]
               "vertex4"
             }
             subgraph "cluster3" {
               cluster = true
               label = "cluster3"
               color = "lightblue"
-              node [shape=circle, style=filled, fillcolor=lightblue]
+              node [shape=circle, style=filled, fillcolor=gray]
             }
+            "vertex1" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex1" -> "vertex2"
             "vertex1" -> "vertex3"
             "vertex1" -> "vertex4"
+            "vertex2" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex2" -> "vertex3" [label="foo: bar, baz: bat"]
+            "vertex3" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
+            "vertex4" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
+            "vertex5" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex5" -> "vertex5"
           }
         DOT

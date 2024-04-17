@@ -141,7 +141,7 @@ module MOSAIK
                  "  cluster = true",
                  "  label = \"#{cluster.id}\"",
                  '  color = "lightblue"',
-                 "  node [shape=circle, style=filled, fillcolor=lightblue]",
+                 "  node [shape=circle, style=filled, fillcolor=gray]",
                  *cluster.vertices.map { |vertex| "  \"#{vertex.id}\"" },
                  "}",
                ]
@@ -150,22 +150,25 @@ module MOSAIK
           vertices
             .values
             .map do |vertex|
-            vertex
-              .edges
-              .flat_map do |key, edges|
-              edges.map do |edge|
-                next if edge.in? visited
+            [
+              "\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]",
+              *vertex
+                .edges
+                .flat_map do |key, edges|
+                edges.map do |edge|
+                  next if edge.in? visited
 
-                visited << edge
+                  visited << edge
 
-                [
-                  "\"#{vertex.id}\" ",
-                  directed? ? "->" : "--",
-                  " \"#{key}\"",
-                  edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
-                ].compact.join
+                  [
+                    "\"#{vertex.id}\" ",
+                    directed? ? "->" : "--",
+                    " \"#{key}\"",
+                    edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
+                  ].compact.join
+                end
               end
-            end.compact_blank.join("\n  ")
+            ].compact_blank.join("\n  ")
           end.compact_blank.join("\n  ").prepend("  "),
           "}\n",
         ].compact.join("\n")

@@ -164,7 +164,7 @@ module MOSAIK
                     "\"#{vertex.id}\" ",
                     directed? ? "->" : "--",
                     " \"#{key}\"",
-                    edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
+                    edge.attributes.any? && !options[:hide_labels] ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
                   ].compact.join
                 end
               end,

@@ -10,11 +10,13 @@ module MOSAIK
 
       defaults file: "mosaik.csv",
                hide_uncoupled: false,
+               hide_labels: false,
                since: nil,
                limit: 100
 
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
       argument("--hide-uncoupled", "Hide uncoupled vertices in the graph (default: #{defaults[:hide_uncoupled]})") { |arg| !arg.nil? }
+      argument("--hide-labels", "Hide labels in the graph (default: #{defaults[:hide_labels]})") { |arg| !arg.nil? }
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"

@@ -11,8 +11,6 @@ module MOSAIK
       end
 
       def call
-        return unless options[:logical].positive? || options[:contributor].positive?
-
         # Open the git repository
         git = Git.open(options[:directory], log: ::Logger.new(File::NULL))
 
@@ -57,34 +55,28 @@ module MOSAIK
           constants.each { |constant| contributors[constant] << commit.author.email }
         end
 
+        info "Constructing logical coupling graph..."
+
         # For each non-zero pair of constants in the co-change matrix (logical coupling)
-        unless options[:logical].zero?
-          info "Constructing logical coupling graph..."
+        co_changes.each do |a, row|
+          row.each do |b, co_change|
+            # Skip if there are no co-changes
+            next if co_change.zero?
 
-          co_changes.each do |a, row|
-            row.each do |b, co_change|
-              # Skip if there are no co-changes
-              next if co_change.zero?
+            graph.find_or_add_vertex(a)
+            graph.find_or_add_vertex(b)
 
-              graph.find_or_add_vertex(a)
-              graph.find_or_add_vertex(b)
+            # Add an edge from the constant to the receiver
+            edge = graph.find_or_add_edge(a, b, type: "logical")
 
-              error "Edge exists: #{a} -> #{b}" if graph.find_edge(a, b)
-
-              # Add an edge from the constant to the receiver
-              edge = graph.find_or_add_edge(a, b, type: :logical)
-
-              # Set or increment weight on edge
-              edge.attributes[:weight] = edge.attributes.fetch(:weight, 0) + co_change
-            end
+            # Set or increment weight on edge
+            edge.attributes[:weight] = edge.attributes.fetch(:weight, 0) + co_change
           end
         end
 
-        # For each non-empty pair of constants in the contributor matrix (contributor coupling)
-        return if options[:contributor].zero?
-
         info "Constructing contributor coupling graph..."
 
+        # For each non-empty pair of constants in the contributor matrix (contributor coupling)
         contributors.keys.permutation(2).each do |(a, b)|
           next if contributors[a].empty? || contributors[b].empty?
 
@@ -97,10 +89,8 @@ module MOSAIK
           graph.find_or_add_vertex(a)
           graph.find_or_add_vertex(b)
 
-          error "Edge exists: #{a} -> #{b}" if graph.find_edge(a, b)
-
           # Add an edge from the constant to the receiver
-          edge = graph.find_or_add_edge(a, b, type: :contributor)
+          edge = graph.find_or_add_edge(a, b, type: "contributor")
 
           # Set weight on edge
           edge.attributes[:weight] = edge.attributes.fetch(:weight, 0) + coupling

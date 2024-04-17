@@ -3,7 +3,7 @@
 RSpec.describe MOSAIK::Extractors::Structural do
   subject(:extractor) { described_class.new(options, graph) }
 
-  let(:options) { { structural: 1 } }
+  let(:options) { {} }
   let(:graph) { build(:graph) }
 
   describe "#validate" do
@@ -12,17 +12,7 @@ RSpec.describe MOSAIK::Extractors::Structural do
     end
   end
 
-  context "when the weight is zero" do
-    let(:options) { { structural: 0 } }
-
-    it "does not extract structural coupling information" do
-      expect { extractor.call }.not_to(change { graph.vertices.count })
-    end
-  end
-
-  describe "structural coupling" do
-    let(:options) { { structural: 1 } }
-
+  describe "#call" do
     it "constructs a logical coupling graph" do
       extractor.call
 
@@ -37,7 +27,7 @@ RSpec.describe MOSAIK::Extractors::Structural do
       )
 
       # Extract all vertices with source and destination
-      expect(graph.vertices.transform_values { |v| v.edges.transform_values { |es| es.map { |e| e.attributes[:weight] } } }).to eq(
+      expect(graph.vertices.transform_values { |v| v.edges.transform_values { |es| es.select { |e| e.attributes[:type] == "structural" }.map { |e| e.attributes[:weight] } } }).to eq(
         "App" => {},
         "App::Foo" => {},
         "App::Bar" => {},

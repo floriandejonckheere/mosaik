@@ -9,17 +9,10 @@ module MOSAIK
       self.description = "Extract information"
 
       defaults file: "mosaik.csv",
-               structural: 1,
-               logical: 1,
-               contributor: 1,
                since: nil,
                limit: 100
 
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
-
-      argument "--structural N", Float, "Weight of structural coupling extraction (default: #{defaults[:structural]})"
-      argument "--logical N", Float, "Weight of logical coupling extraction (default: #{defaults[:logical]})"
-      argument "--contributor N", Float, "Weight of coupling extraction (default: #{defaults[:contributor]})"
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"

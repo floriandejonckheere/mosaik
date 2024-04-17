@@ -8,8 +8,15 @@ module MOSAIK
     class Identify < Command
       self.description = "Identify microservice candidates"
 
-      defaults file: "mosaik.csv",
+      defaults structural: 1,
+               logical: 1,
+               contributor: 1,
+               file: "mosaik.csv",
                algorithm: "louvain"
+
+      argument "--structural N", Float, "Weight of structural coupling (default: #{defaults[:structural]})"
+      argument "--logical N", Float, "Weight of logical coupling (default: #{defaults[:logical]})"
+      argument "--contributor N", Float, "Weight of contributor coupling (default: #{defaults[:contributor]})"
 
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
       argument "--algorithm ALGORITHM", "Algorithm to use for identifying microservice candidates (default: #{defaults[:algorithm]})"
@@ -21,6 +28,11 @@ module MOSAIK
 
       def call
         info "Identifying microservice candidates (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
+
+        # Preprocess the graph (aggregate edges and normalize weights)
+        Graph::Preprocessor
+          .new(options, graph)
+          .call
 
         # Identify microservice candidates
         Algorithms

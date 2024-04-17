@@ -75,14 +75,14 @@ module MOSAIK
         T.must(T.must(vertices[from]).edges[to])
       end
 
-      sig { params(from: String, to: String).returns(T.nilable(Edge)) }
-      def find_edge(from, to)
-        T.must(vertices[from]).find_edge(to)
+      sig { params(from: String, to: String, attributes: Attributes).returns(T.nilable(Edge)) }
+      def find_edge(from, to, attributes = {})
+        T.must(vertices[from]).find_edge(to, attributes)
       end
 
       sig { params(from: String, to: String, attributes: Attributes).returns(Edge) }
       def find_or_add_edge(from, to, attributes = {})
-        find_edge(from, to) || add_edge(from, to, attributes)
+        find_edge(from, to, attributes) || add_edge(from, to, attributes)
       end
 
       sig { params(from: String, to: String, edge: T.nilable(Edge)).void }

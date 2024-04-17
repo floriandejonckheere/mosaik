@@ -199,6 +199,38 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.find_edge("vertex1", "vertex2")).to eq e1
       end
+
+      context "when attributes are given" do
+        it "returns the edge matching the attributes entirely" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.add_edge("vertex1", "vertex2")
+          e1 = graph.add_edge("vertex1", "vertex2", weight: 3)
+
+          expect(graph.find_edge("vertex1", "vertex2", weight: 3)).to eq e1
+        end
+
+        it "returns the edge matching the attributes partially" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.add_edge("vertex1", "vertex2")
+          e1 = graph.add_edge("vertex1", "vertex2", weight: 3, key: "value")
+
+          expect(graph.find_edge("vertex1", "vertex2", weight: 3)).to eq e1
+        end
+
+        it "returns nothing when the edge does not have the attributes" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.add_edge("vertex1", "vertex2")
+          graph.add_edge("vertex1", "vertex2", weight: 3)
+
+          expect(graph.find_edge("vertex1", "vertex2", weight: 4)).to be_nil
+        end
+      end
     end
 
     describe "#find_or_add_edge" do
@@ -219,11 +251,43 @@ RSpec.describe MOSAIK::Graph::Graph do
         expect(graph.find_or_add_edge("vertex1", "vertex2")).to eq e1
       end
 
-      it "adds an edge with attributes" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
+      context "when attributes are given" do
+        it "adds an edge with attributes" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
 
-        expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3).attributes).to eq weight: 3
+          expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3).attributes).to eq weight: 3
+        end
+
+        it "returns the edge matching the attributes entirely" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.add_edge("vertex1", "vertex2")
+          e1 = graph.add_edge("vertex1", "vertex2", weight: 3)
+
+          expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3)).to eq e1
+        end
+
+        it "returns the edge matching the attributes partially" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.add_edge("vertex1", "vertex2")
+          e1 = graph.add_edge("vertex1", "vertex2", weight: 3, key: "value")
+
+          expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3)).to eq e1
+        end
+
+        it "returns a new edge when the edge does not have the attributes" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.add_edge("vertex1", "vertex2")
+          graph.add_edge("vertex1", "vertex2", weight: 3)
+
+          expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 4).attributes).to eq weight: 4
+        end
       end
     end
 

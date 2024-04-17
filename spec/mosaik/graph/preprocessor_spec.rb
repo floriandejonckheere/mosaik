@@ -28,6 +28,14 @@ RSpec.describe MOSAIK::Graph::Preprocessor do
     graph.add_edge("v3", "v2", type: "contributor", weight: 1)
   end
 
+  it "changes the graph to undirected" do
+    expect(graph).to be_directed
+
+    preprocessor.call
+
+    expect(graph).not_to be_directed
+  end
+
   it "aggregates the weights of the edges between vertices" do
     preprocessor.call
 

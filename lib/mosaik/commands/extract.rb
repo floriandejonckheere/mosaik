@@ -9,13 +9,11 @@ module MOSAIK
       self.description = "Extract information"
 
       defaults file: "mosaik.csv",
-               type: ["structural", "logical", "contributor"],
                hide_uncoupled: false,
                since: nil,
                limit: 100
 
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
-      argument "--type TYPE", Array, "Type of coupling to extract (default: #{defaults[:type].join(', ')})"
       argument("--hide-uncoupled", "Hide uncoupled vertices in the graph (default: #{defaults[:hide_uncoupled]})") { |arg| !arg.nil? }
 
       # Evolution options
@@ -23,7 +21,6 @@ module MOSAIK
       argument "--limit N", Integer, "Limit the number of commits to analyze (default: 100)"
 
       def validate
-        raise OptionError, "invalid type: #{options[:type].join(', ')}" unless options[:type].all? { |t| t.in? ["structural", "logical", "contributor"] }
         raise OptionError, "negative value: #{options[:limit]}" if options[:limit].negative?
       end
 

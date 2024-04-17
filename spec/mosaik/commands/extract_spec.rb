@@ -10,14 +10,6 @@ RSpec.describe MOSAIK::Commands::Extract do
       expect { command.validate }.not_to raise_error
     end
 
-    describe "--type" do
-      let(:arguments) { ["--type", "invalid"] }
-
-      it "raises an error" do
-        expect { command.validate }.to raise_error(MOSAIK::OptionError, "invalid type: invalid")
-      end
-    end
-
     describe "--limit" do
       let(:arguments) { ["--limit", "-1"] }
 

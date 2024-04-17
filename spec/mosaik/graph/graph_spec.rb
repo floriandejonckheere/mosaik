@@ -9,56 +9,57 @@ RSpec.describe MOSAIK::Graph::Graph do
     end
   end
 
-  describe "#add_vertex" do
-    it "adds a vertex" do
-      graph.add_vertex("vertex")
+  describe "vertices" do
+    describe "#add_vertex" do
+      it "adds a vertex" do
+        graph.add_vertex("vertex")
 
-      expect(graph.vertices).not_to be_empty
+        expect(graph.vertices).not_to be_empty
+      end
+
+      it "adds a vertex with attributes" do
+        graph.add_vertex("vertex", key: "value")
+
+        expect(graph.find_vertex("vertex").attributes).to eq key: "value"
+      end
     end
 
-    it "adds a vertex with attributes" do
-      graph.add_vertex("vertex", key: "value")
+    describe "#find_vertex" do
+      it "finds a vertex" do
+        graph.add_vertex("vertex")
 
-      expect(graph.find_vertex("vertex").attributes).to eq key: "value"
-    end
-  end
+        vertex = graph.find_vertex("vertex")
 
-  describe "#find_vertex" do
-    it "finds a vertex" do
-      graph.add_vertex("vertex")
-
-      vertex = graph.find_vertex("vertex")
-
-      expect(vertex).to be_a MOSAIK::Graph::Vertex
-      expect(vertex.id).to eq "vertex"
-    end
-  end
-
-  describe "#find_or_add_vertex" do
-    it "finds a vertex" do
-      graph.add_vertex("vertex")
-
-      vertex = graph.find_or_add_vertex("vertex")
-
-      expect(vertex).to be_a MOSAIK::Graph::Vertex
-      expect(vertex.id).to eq "vertex"
+        expect(vertex).to be_a MOSAIK::Graph::Vertex
+        expect(vertex.id).to eq "vertex"
+      end
     end
 
-    it "adds a vertex" do
-      vertex = graph.find_or_add_vertex("vertex")
+    describe "#find_or_add_vertex" do
+      it "finds a vertex" do
+        graph.add_vertex("vertex")
 
-      expect(vertex).to be_a MOSAIK::Graph::Vertex
-      expect(vertex.id).to eq "vertex"
+        vertex = graph.find_or_add_vertex("vertex")
+
+        expect(vertex).to be_a MOSAIK::Graph::Vertex
+        expect(vertex.id).to eq "vertex"
+      end
+
+      it "adds a vertex" do
+        vertex = graph.find_or_add_vertex("vertex")
+
+        expect(vertex).to be_a MOSAIK::Graph::Vertex
+        expect(vertex.id).to eq "vertex"
+      end
+
+      it "adds a vertex with attributes" do
+        vertex = graph.find_or_add_vertex("vertex", key: "value")
+
+        expect(vertex.attributes).to eq key: "value"
+      end
     end
 
-    it "adds a vertex with attributes" do
-      vertex = graph.find_or_add_vertex("vertex", key: "value")
-
-      expect(vertex.attributes).to eq key: "value"
-    end
-  end
-
-  describe "#remove_vertex" do
+    describe "#remove_vertex" do
     it "removes a vertex" do
       graph.add_vertex("vertex")
 
@@ -66,81 +67,61 @@ RSpec.describe MOSAIK::Graph::Graph do
 
       expect(graph.vertices).to be_empty
     end
+    end
   end
 
-  describe "#add_edge" do
-    context "when the graph is directed" do
-      subject(:graph) { build(:graph, directed: true) }
+  describe "edges" do
+    describe "#add_edge" do
+      context "when the graph is directed" do
+        subject(:graph) { build(:graph, directed: true) }
 
-      it "adds a directed edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex2").edges).to be_empty
-      end
-
-      it "sets the attributes" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_edge("vertex1", "vertex2", key: "value")
-
-        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
-      end
-
-      context "when the edge already exists" do
-        it "does not add a directed edge multiple times" do
+        it "adds a directed edge" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2")
-          graph.add_edge("vertex1", "vertex2")
           graph.add_edge("vertex1", "vertex2")
 
           expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-          expect(graph.find_vertex("vertex2").edges.keys).to be_empty
+          expect(graph.find_vertex("vertex2").edges).to be_empty
         end
 
-        it "merges the attributes" do
+        it "sets the attributes" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
           graph.add_edge("vertex1", "vertex2", key: "value")
-          graph.add_edge("vertex1", "vertex2", value: "key")
-          graph.add_edge("vertex1", "vertex2", key: "key")
 
-          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+        end
+
+        context "when the edge already exists" do
+          it "does not add a directed edge multiple times" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            graph.add_edge("vertex1", "vertex2")
+            graph.add_edge("vertex1", "vertex2")
+            graph.add_edge("vertex1", "vertex2")
+
+            expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+            expect(graph.find_vertex("vertex2").edges.keys).to be_empty
+          end
+
+          it "merges the attributes" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            graph.add_edge("vertex1", "vertex2", key: "value")
+            graph.add_edge("vertex1", "vertex2", value: "key")
+            graph.add_edge("vertex1", "vertex2", key: "key")
+
+            expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+          end
         end
       end
-    end
 
-    context "when the graph is undirected" do
-      subject(:graph) { build(:graph, directed: false) }
+      context "when the graph is undirected" do
+        subject(:graph) { build(:graph, directed: false) }
 
-      it "adds an undirected edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
-
-        expect(graph.find_vertex("vertex1").edges["vertex2"].object_id).to eq graph.find_vertex("vertex2").edges["vertex1"].object_id
-      end
-
-      it "sets the attributes" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_edge("vertex1", "vertex2", key: "value")
-
-        expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
-        expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "value"
-      end
-
-      context "when the edge already exists" do
-        it "adds an undirected edge multiple times" do
+        it "adds an undirected edge" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2")
           graph.add_edge("vertex1", "vertex2")
 
           expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
@@ -149,157 +130,182 @@ RSpec.describe MOSAIK::Graph::Graph do
           expect(graph.find_vertex("vertex1").edges["vertex2"].object_id).to eq graph.find_vertex("vertex2").edges["vertex1"].object_id
         end
 
-        it "merges the attributes" do
+        it "sets the attributes" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
           graph.add_edge("vertex1", "vertex2", key: "value")
-          graph.add_edge("vertex1", "vertex2", value: "key")
-          graph.add_edge("vertex1", "vertex2", key: "key")
 
-          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
-          expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "key", value: "key"
+          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+          expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "value"
+        end
+
+        context "when the edge already exists" do
+          it "adds an undirected edge multiple times" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            graph.add_edge("vertex1", "vertex2")
+            graph.add_edge("vertex1", "vertex2")
+
+            expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
+            expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
+
+            expect(graph.find_vertex("vertex1").edges["vertex2"].object_id).to eq graph.find_vertex("vertex2").edges["vertex1"].object_id
+          end
+
+          it "merges the attributes" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            graph.add_edge("vertex1", "vertex2", key: "value")
+            graph.add_edge("vertex1", "vertex2", value: "key")
+            graph.add_edge("vertex1", "vertex2", key: "key")
+
+            expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+            expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "key", value: "key"
+          end
+        end
+      end
+    end
+
+    describe "#find_edge" do
+      it "returns nil when the edge does not exist" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        expect(graph.find_edge("vertex1", "vertex2")).to be_nil
+      end
+
+      it "finds an edge" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        graph.add_edge("vertex1", "vertex2", weight: 3)
+
+        expect(graph.find_edge("vertex1", "vertex2").attributes[:weight]).to eq 3
+      end
+    end
+
+    describe "#find_or_add_edge" do
+      it "returns a new edge when the edge does not exist" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        expect(graph.find_or_add_edge("vertex1", "vertex2").attributes).to be_empty
+      end
+
+      it "finds an edge" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        graph.add_edge("vertex1", "vertex2", weight: 3)
+
+        expect(graph.find_or_add_edge("vertex1", "vertex2").attributes[:weight]).to eq 3
+      end
+
+      it "adds an edge with attributes" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3).attributes[:weight]).to eq 3
+      end
+    end
+
+    describe "#remove_edge" do
+      context "when the graph is directed" do
+        subject(:graph) { build(:graph, directed: true) }
+
+        it "removes a directed edge" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+          graph.add_edge("vertex1", "vertex2")
+
+          graph.remove_edge("vertex1", "vertex2")
+
+          expect(graph.find_vertex("vertex1").edges).to be_empty
+        end
+
+        it "does not remove a non-existing directed edge" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.remove_edge("vertex1", "vertex2")
+
+          expect(graph.find_vertex("vertex1").edges).to be_empty
+        end
+      end
+
+      context "when the graph is undirected" do
+        subject(:graph) { build(:graph, directed: false) }
+
+        it "removes an undirected edge" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+          graph.add_edge("vertex1", "vertex2")
+
+          graph.remove_edge("vertex1", "vertex2")
+
+          expect(graph.find_vertex("vertex1").edges).to be_empty
+        end
+
+        it "does not remove a non-existing directed edge" do
+          graph.add_vertex("vertex1")
+          graph.add_vertex("vertex2")
+
+          graph.remove_edge("vertex1", "vertex2")
+
+          expect(graph.find_vertex("vertex1").edges).to be_empty
         end
       end
     end
   end
 
-  describe "#find_edge" do
-    it "returns nil when the edge does not exist" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
+  describe "clusters" do
+    describe "#add_cluster" do
+      it "adds a cluster" do
+        graph.add_cluster("cluster")
 
-      expect(graph.find_edge("vertex1", "vertex2")).to be_nil
-    end
-
-    it "finds an edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-
-      graph.add_edge("vertex1", "vertex2", weight: 3)
-
-      expect(graph.find_edge("vertex1", "vertex2").attributes[:weight]).to eq 3
-    end
-  end
-
-  describe "#find_or_add_edge" do
-    it "returns a new edge when the edge does not exist" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-
-      expect(graph.find_or_add_edge("vertex1", "vertex2").attributes).to be_empty
-    end
-
-    it "finds an edge" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-
-      graph.add_edge("vertex1", "vertex2", weight: 3)
-
-      expect(graph.find_or_add_edge("vertex1", "vertex2").attributes[:weight]).to eq 3
-    end
-
-    it "adds an edge with attributes" do
-      graph.add_vertex("vertex1")
-      graph.add_vertex("vertex2")
-
-      expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3).attributes[:weight]).to eq 3
-    end
-  end
-
-  describe "#remove_edge" do
-    context "when the graph is directed" do
-      subject(:graph) { build(:graph, directed: true) }
-
-      it "removes a directed edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_edge("vertex1", "vertex2")
-
-        graph.remove_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
+        expect(graph.clusters).not_to be_empty
       end
 
-      it "does not remove a non-existing directed edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
+      it "sets the attributes" do
+        graph.add_cluster("cluster", key: "value")
 
-        graph.remove_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
+        expect(graph.find_cluster("cluster").attributes).to eq key: "value"
       end
     end
 
-    context "when the graph is undirected" do
-      subject(:graph) { build(:graph, directed: false) }
+    describe "#find_cluster" do
+      it "finds a cluster" do
+        graph.add_cluster("cluster")
 
-      it "removes an undirected edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-        graph.add_edge("vertex1", "vertex2")
+        cluster = graph.find_cluster("cluster")
 
-        graph.remove_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
-      end
-
-      it "does not remove a non-existing directed edge" do
-        graph.add_vertex("vertex1")
-        graph.add_vertex("vertex2")
-
-        graph.remove_edge("vertex1", "vertex2")
-
-        expect(graph.find_vertex("vertex1").edges).to be_empty
+        expect(cluster).to be_a MOSAIK::Graph::Cluster
+        expect(cluster.id).to eq "cluster"
       end
     end
-  end
 
-  describe "#add_cluster" do
-    it "adds a cluster" do
-      graph.add_cluster("cluster")
+    describe "#find_or_add_cluster" do
+      it "finds a cluster" do
+        graph.add_cluster("cluster")
 
-      expect(graph.clusters).not_to be_empty
-    end
+        cluster = graph.find_or_add_cluster("cluster")
 
-    it "sets the attributes" do
-      graph.add_cluster("cluster", key: "value")
+        expect(cluster).to be_a MOSAIK::Graph::Cluster
+        expect(cluster.id).to eq "cluster"
+      end
 
-      expect(graph.find_cluster("cluster").attributes).to eq key: "value"
-    end
-  end
+      it "adds a cluster" do
+        cluster = graph.find_or_add_cluster("cluster")
 
-  describe "#find_cluster" do
-    it "finds a cluster" do
-      graph.add_cluster("cluster")
+        expect(cluster).to be_a MOSAIK::Graph::Cluster
+        expect(cluster.id).to eq "cluster"
+      end
 
-      cluster = graph.find_cluster("cluster")
+      it "sets the attributes" do
+        graph.find_or_add_cluster("cluster", key: "value")
 
-      expect(cluster).to be_a MOSAIK::Graph::Cluster
-      expect(cluster.id).to eq "cluster"
-    end
-  end
-
-  describe "#find_or_add_cluster" do
-    it "finds a cluster" do
-      graph.add_cluster("cluster")
-
-      cluster = graph.find_or_add_cluster("cluster")
-
-      expect(cluster).to be_a MOSAIK::Graph::Cluster
-      expect(cluster.id).to eq "cluster"
-    end
-
-    it "adds a cluster" do
-      cluster = graph.find_or_add_cluster("cluster")
-
-      expect(cluster).to be_a MOSAIK::Graph::Cluster
-      expect(cluster.id).to eq "cluster"
-    end
-
-    it "sets the attributes" do
-      graph.find_or_add_cluster("cluster", key: "value")
-
-      expect(graph.find_cluster("cluster").attributes).to eq key: "value"
+        expect(graph.find_cluster("cluster").attributes).to eq key: "value"
+      end
     end
   end
 

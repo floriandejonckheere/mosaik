@@ -35,7 +35,7 @@ RSpec.describe MOSAIK::Extractors::Evolution do
       extractor.call
 
       # Extract all vertices with source and destination
-      expect(graph.vertices.transform_values { |v| v.edges.transform_values { |e| e.attributes[:weight] } }).to eq(
+      expect(graph.vertices.transform_values { |v| v.edges.transform_values { |es| es.sum { |e| e.attributes[:weight] } } }).to eq(
         "App::Foo" => { "App::Bak" => 1, "App::Bat" => 1, "App::Bar" => 1 },
         "App::Bar" => { "App::Foo" => 1 },
         "App::Bat" => { "App::Baz" => 3, "App::Foo" => 1 },
@@ -52,7 +52,7 @@ RSpec.describe MOSAIK::Extractors::Evolution do
       extractor.call
 
       # Extract all vertices with source and destination
-      expect(graph.vertices.transform_values { |v| v.edges.transform_values { |e| e.attributes[:weight] } }).to eq(
+      expect(graph.vertices.transform_values { |v| v.edges.transform_values { |es| es.sum { |e| e.attributes[:weight] } } }).to eq(
         "App::Foo" => { "App::Baz" => 2, "App::Bat" => 2 },
         "App::Bat" => { "App::Baz" => 3, "App::Foo" => 2 },
         "App::Baz" => { "App::Bat" => 3, "App::Foo" => 2 },

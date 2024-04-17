@@ -62,18 +62,20 @@ module MOSAIK
           info "Constructing logical coupling graph..."
 
           co_changes.each do |a, row|
-            row.each do |b, value|
-              next if value.zero?
+            row.each do |b, co_change|
+              # Skip if there are no co-changes
+              next if co_change.zero?
 
               graph.find_or_add_vertex(a)
               graph.find_or_add_vertex(b)
 
+              error "Edge exists: #{a} -> #{b}" if graph.find_edge(a, b)
+
               # Add an edge from the constant to the receiver
-              edge = graph.find_or_add_edge(a, b)
+              edge = graph.find_or_add_edge(a, b, type: :logical)
 
               # Set or increment weight on edge
-              edge.attributes[:weight] ||= 0
-              edge.attributes[:weight] += value * options[:logical]
+              edge.attributes[:weight] = edge.attributes.fetch(:weight, 0) + co_change
             end
           end
         end
@@ -95,12 +97,13 @@ module MOSAIK
           graph.find_or_add_vertex(a)
           graph.find_or_add_vertex(b)
 
-          # Add an edge from the constant to the receiver
-          edge = graph.find_or_add_edge(a, b)
+          error "Edge exists: #{a} -> #{b}" if graph.find_edge(a, b)
 
-          # Set or increment weight on edge
-          edge.attributes[:weight] ||= 0
-          edge.attributes[:weight] += coupling * options[:contributor]
+          # Add an edge from the constant to the receiver
+          edge = graph.find_or_add_edge(a, b, type: :contributor)
+
+          # Set weight on edge
+          edge.attributes[:weight] = edge.attributes.fetch(:weight, 0) + coupling
         end
       end
 

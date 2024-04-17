@@ -13,7 +13,7 @@ module MOSAIK
       sig { returns(String) }
       attr_reader :id
 
-      sig { returns(T::Hash[String, Edge]) }
+      sig { returns(T::Hash[String, T::Array[Edge]]) }
       attr_reader :edges
 
       sig { returns(Attributes) }
@@ -22,25 +22,26 @@ module MOSAIK
       sig { params(id: String, attributes: Attributes).void }
       def initialize(id, attributes = {})
         @id = id
-        @edges = T.let({}, T::Hash[String, Edge])
+        @edges = T.let(Hash.new { |h, k| h[k] = [] }, T::Hash[String, T::Array[Edge]])
         @attributes = attributes
       end
 
       sig { params(to: String, attributes: Attributes).returns(Edge) }
       def add_edge(to, attributes = {})
-        edges[to] ||= Edge.new
+        edge = Edge.new(attributes)
 
-        edges
-          .fetch(to)
-          .attributes
-          .merge!(attributes)
+        T.must(edges[to]) << edge
 
-        edges.fetch(to)
+        edge
       end
 
-      sig { params(id: String).void }
-      def remove_edge(id)
-        edges.delete(id)
+      sig { params(id: String, edge: T.nilable(Edge)).void }
+      def remove_edge(id, edge = nil)
+        if edge.nil?
+          edges.delete(id)
+        else
+          edges[id].delete(edge)
+        end
       end
 
       sig { returns(String) }

@@ -177,13 +177,13 @@ module MOSAIK
       sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
       def to_png(file, options = {})
         File.write("#{file}.dot", to_dot(options))
-        system("#{directed ? 'dot' : 'sfdp -x -Goverlap=scale'} -Tpng #{file}.dot -o #{file}.png")
+        system("sfdp -x -Goverlap=scale -Tpng #{file}.dot -o #{file}.png")
       end
 
       sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
       def to_svg(file, options = {})
         File.write("#{file}.dot", to_dot(options))
-        system("#{directed ? 'dot' : 'sfdp -x -Goverlap=scale'} -Tsvg #{file}.dot -o #{file}.svg")
+        system("sfdp -x -Goverlap=scale -Tsvg #{file}.dot -o #{file}.svg")
       end
 
       sig { returns(String) }

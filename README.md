@@ -12,6 +12,8 @@ It provides a set of tools to analyze, extract, and refactor monolithic applicat
 MOSAIK requires your application to use the [Zeitwerk](https://github.com/fxn/zeitwerk) code loader, and to adhere to Zeitwerk's [file structure](https://github.com/fxn/zeitwerk#file-structure) and [naming conventions](https://github.com/fxn/zeitwerk#zeitwerkinflector).
 At the moment, only Ruby 3.3 is supported.
 
+If you intend on visualizing the resulting graphs, you will need to have [Graphviz](https://graphviz.org/) installed on your system.
+
 ## Installation
 
 Add this line to your application's Gemfile:

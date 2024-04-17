@@ -60,11 +60,7 @@ module MOSAIK
             debug "Edge from #{caller.id} to #{receiver.id}##{reference.method}"
 
             # Add an edge from the constant to the receiver
-            edge = graph.find_or_add_edge(caller.id, receiver.id)
-
-            # Set or increment weight on edge
-            edge.attributes[:weight] ||= 0
-            edge.attributes[:weight] += options[:structural]
+            graph.add_edge(caller.id, receiver.id, type: :structural, method: reference.method)
           end
         end
       end

@@ -9,16 +9,19 @@ module MOSAIK
       self.description = "Extract information"
 
       defaults file: "mosaik.csv",
+               type: ["structural", "logical", "contributor"],
                since: nil,
                limit: 100
 
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
+      argument "--type TYPE", Array, "Type of coupling to extract (default: #{defaults[:type].join(', ')})"
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"
       argument "--limit N", Integer, "Limit the number of commits to analyze (default: 100)"
 
       def validate
+        raise OptionError, "invalid type: #{options[:type].join(', ')}" unless options[:type].all? { |t| t.in? ["structural", "logical", "contributor"] }
         raise OptionError, "negative value: #{options[:limit]}" if options[:limit].negative?
       end
 

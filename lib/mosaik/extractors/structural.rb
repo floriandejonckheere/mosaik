@@ -7,6 +7,8 @@ module MOSAIK
     #
     class Structural < Extractor
       def call
+        return unless options[:type].include?("structural")
+
         # Instantiate a constant tree
         tree = Syntax::Tree.new
 

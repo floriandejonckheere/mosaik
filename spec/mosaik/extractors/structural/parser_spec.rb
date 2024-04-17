@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe MOSAIK::Parsers::Ruby do
+RSpec.describe MOSAIK::Extractors::Structural::Parser do
   subject(:parser) { described_class.new }
 
   let(:file) { Tempfile.new(["ruby", ".rb"]) }

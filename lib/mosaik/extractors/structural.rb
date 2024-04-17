@@ -6,24 +6,17 @@ module MOSAIK
     # Structural coupling extractor
     #
     class Structural < Extractor
-      PARSERS = {
-        ".rb" => Parsers::Ruby,
-      }.freeze
-
       def call
         return unless options[:structural].positive?
 
         # Instantiate a constant tree
         tree = Syntax::Tree.new
 
-        # Parse file with an appropriate parser
+        # Parse files
         MOSAIK.configuration.files.each do |file|
-          PARSERS
-            .fetch(File.extname(file))
+          Parser
             .new
             .parse(file, tree)
-        rescue KeyError
-          raise UnknownFileType, "No parser for file type: #{File.extname(file)}"
         end
 
         # Count total constants and methods

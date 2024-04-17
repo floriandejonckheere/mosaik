@@ -125,8 +125,8 @@ module MOSAIK
           .sum { |e| e.attributes.fetch(:weight, 0.0) }
       end
 
-      sig { returns(String) }
-      def to_dot
+      sig { params(options: T::Hash[Symbol, T.untyped]).returns(String) }
+      def to_dot(options = {})
         # Set of visited edges (to avoid duplicates in undirected graphs)
         visited = Set.new
 
@@ -151,7 +151,7 @@ module MOSAIK
             .values
             .map do |vertex|
             [
-              "\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]",
+              ("\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]" if vertex.edges.any? || !options[:hide_uncoupled]),
               *vertex
                 .edges
                 .flat_map do |key, edges|
@@ -174,15 +174,15 @@ module MOSAIK
         ].compact.join("\n")
       end
 
-      sig { params(file: String).void }
-      def to_png(file)
-        File.write("#{file}.dot", to_dot)
+      sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
+      def to_png(file, options = {})
+        File.write("#{file}.dot", to_dot(options))
         system("dot -Tpng #{file}.dot -o #{file}.png")
       end
 
-      sig { params(file: String).void }
-      def to_svg(file)
-        File.write("#{file}.dot", to_dot)
+      sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
+      def to_svg(file, options = {})
+        File.write("#{file}.dot", to_dot(options))
         system("dot -Tsvg #{file}.dot -o #{file}.svg")
       end
 

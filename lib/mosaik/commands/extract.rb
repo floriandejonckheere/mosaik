@@ -10,11 +10,13 @@ module MOSAIK
 
       defaults file: "mosaik.csv",
                type: ["structural", "logical", "contributor"],
+               hide_uncoupled: false,
                since: nil,
                limit: 100
 
       argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
       argument "--type TYPE", Array, "Type of coupling to extract (default: #{defaults[:type].join(', ')})"
+      argument("--hide-uncoupled", "Hide uncoupled vertices in the graph (default: #{defaults[:hide_uncoupled]})") { |arg| !arg.nil? }
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"
@@ -59,8 +61,8 @@ module MOSAIK
         file = File.basename(options[:file], ".*")
 
         # Write visualization to file
-        debug graph.to_dot
-        graph.to_svg(file)
+        debug graph.to_dot(options)
+        graph.to_svg(file, options)
 
         info "Dependency graph written to #{file}.dot and rendered to #{file}.svg"
       end

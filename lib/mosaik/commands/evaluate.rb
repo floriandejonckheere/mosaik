@@ -55,8 +55,8 @@ module MOSAIK
         return unless options[:visualize]
 
         # Write visualization to file
-        debug graph.to_dot
-        graph.to_png(file)
+        debug graph.to_dot(options)
+        graph.to_png(file, options)
 
         info "Evaluated microservice candidate graph written to #{file}.dot and rendered to #{file}.png"
       end

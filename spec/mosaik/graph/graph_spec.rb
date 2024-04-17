@@ -560,6 +560,23 @@ RSpec.describe MOSAIK::Graph::Graph do
         DOT
       end
     end
+
+    it "hides uncoupled nodes" do
+      graph.add_vertex("vertex1")
+      graph.add_vertex("vertex2")
+      graph.add_vertex("vertex3")
+      graph.add_edge("vertex1", "vertex2")
+      graph.add_edge("vertex2", "vertex3", foo: "bar", baz: "bat")
+
+      expect(graph.to_dot(hide_uncoupled: true)).to eq <<~DOT
+        digraph {
+          "vertex1" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
+          "vertex1" -> "vertex2"
+          "vertex2" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
+          "vertex2" -> "vertex3" [label="foo: bar, baz: bat"]
+        }
+      DOT
+    end
   end
 
   describe "#to_csv" do

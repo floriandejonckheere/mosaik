@@ -58,7 +58,7 @@ module MOSAIK
             debug "Edge from #{caller.id} to #{receiver.id}##{reference.method}"
 
             # Add an edge from the constant to the receiver
-            graph.add_edge(caller.id, receiver.id, type: "structural", method: reference.method)
+            graph.add_edge(caller.id, receiver.id, type: "structural", weight: 1.0, method: reference.method)
           end
         end
       end

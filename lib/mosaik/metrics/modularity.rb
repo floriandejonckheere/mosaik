@@ -21,14 +21,17 @@ module MOSAIK
 
           # Edges outgoing from the cluster
           e_outgoing = vertices_in_cluster
-            .flat_map { |v| v.edges.values }
+            .map { |v| v.edges.values }
+            .flatten(2)
+            .uniq
 
           # Edges incoming to the cluster
           e_incoming = graph
             .vertices
             .each_value
-            .flat_map { |v| v.edges.to_a }
-            .filter_map { |i, e| e if i.in? vertices_in_cluster_id }
+            .map { |v| v.edges.slice(*vertices_in_cluster_id).values }
+            .flatten(2)
+            .uniq
 
           # Total weight of edges in the cluster
           c_weight_total = (e_outgoing + e_incoming)
@@ -42,9 +45,8 @@ module MOSAIK
           vertices_in_cluster.to_a.combination(2) do |v, w|
             # Get weight of the edge between v and w
             weight = graph
-              .find_edge(v.id, w.id)
-              &.attributes
-              &.[](:weight) || 0.0
+              .find_edges(v.id, w.id)
+              .sum { |e| e.attributes.fetch(:weight, 0.0) }
 
             c_weight_internal += weight
           end

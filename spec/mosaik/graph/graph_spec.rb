@@ -206,23 +206,24 @@ RSpec.describe MOSAIK::Graph::Graph do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
 
-        expect(graph.find_or_add_edge("vertex1", "vertex2").attributes).to be_empty
+        expect(graph.find_or_add_edge("vertex1", "vertex2")).to be_a MOSAIK::Graph::Edge
       end
 
-      it "finds an edge" do
+      it "returns the first edge" do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
 
-        graph.add_edge("vertex1", "vertex2", weight: 3)
+        e1 = graph.add_edge("vertex1", "vertex2")
+        graph.add_edge("vertex1", "vertex2")
 
-        expect(graph.find_or_add_edge("vertex1", "vertex2").attributes[:weight]).to eq 3
+        expect(graph.find_or_add_edge("vertex1", "vertex2")).to eq e1
       end
 
       it "adds an edge with attributes" do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
 
-        expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3).attributes[:weight]).to eq 3
+        expect(graph.find_or_add_edge("vertex1", "vertex2", weight: 3).attributes).to eq weight: 3
       end
     end
 

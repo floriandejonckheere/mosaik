@@ -74,7 +74,7 @@ RSpec.describe MOSAIK::Graph::Vertex do
       expect(vertex.find_or_add_edge("vertex1")).to be_a MOSAIK::Graph::Edge
     end
 
-    it "finds the first edge" do
+    it "returns the first edge" do
       e1 = vertex.add_edge("vertex1")
       vertex.add_edge("vertex1")
 

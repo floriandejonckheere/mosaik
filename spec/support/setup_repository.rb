@@ -56,7 +56,7 @@ commit john,
        "lib/app/bak.rb" => "class App::Bak; end"
 
 commit jane,
-       "lib/app/bat.rb" => "class App::Bat; def initialize; end; end",
+       "lib/app/bat.rb" => "class App::Bat; def initialize; FileUtils.rm_rf('tmp'); end; end",
        "lib/app/baz.rb" => "class App::Baz; end"
 
 commit john,

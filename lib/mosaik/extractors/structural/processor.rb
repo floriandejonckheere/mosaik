@@ -10,8 +10,11 @@ module MOSAIK
         # Magic value for root namespace
         MAIN = "(main)"
 
+        # Ignorelist for constants
+        IGNORE_CONSTANTS = ["T", "File", "FileUtils"].freeze
+
         # Ignorelist for methods
-        IGNORE = ["require", "new", "include", "extend", "delegate", "public", "private", "protected", "raise", "attr_reader", "attr_writer", "attr_accessor"].freeze
+        IGNORE_METHODS = ["require", "new", "include", "extend", "delegate", "public", "private", "protected", "raise", "attr_reader", "attr_writer", "attr_accessor"].freeze
 
         attr_reader :tree
         attr_accessor :current_class, :current_method
@@ -121,6 +124,8 @@ module MOSAIK
           # TODO: handle method calls on variables
           return if constant_name.blank?
 
+          debug "Ignoring constant #{constant_name} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}" and return if constant_name.in? IGNORE_CONSTANTS
+
           debug "Reference to #{constant_name}##{callee} from #{current_class}##{current_method} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 
           warn "No sender for method call #{constant_name}##{callee}" and return if current_class == MAIN
@@ -134,7 +139,7 @@ module MOSAIK
           receiver = node.children[0]
           callee = node.children[1].to_s
 
-          debug "Ignoring method call #{callee} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}" and return if callee.in? IGNORE
+          debug "Ignoring method call #{callee} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}" and return if callee.in? IGNORE_METHODS
 
           warn "No receiver for method call #{callee} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}" if receiver.nil?
 

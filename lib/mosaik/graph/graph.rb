@@ -119,6 +119,7 @@ module MOSAIK
         vertices
           .values
           .flat_map { |v| v.edges.values }
+          .flatten
           .compact
           .to_set
           .sum { |e| e.attributes.fetch(:weight, 0.0) }
@@ -151,17 +152,19 @@ module MOSAIK
             .map do |vertex|
             vertex
               .edges
-              .map do |key, edge|
-              next if edge.in? visited
+              .flat_map do |key, edges|
+              edges.map do |edge|
+                next if edge.in? visited
 
-              visited << edge
+                visited << edge
 
-              [
-                "\"#{vertex.id}\" ",
-                directed? ? "->" : "--",
-                " \"#{key}\"",
-                edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
-              ].compact.join
+                [
+                  "\"#{vertex.id}\" ",
+                  directed? ? "->" : "--",
+                  " \"#{key}\"",
+                  edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
+                ].compact.join
+              end
             end.compact_blank.join("\n  ")
           end.compact_blank.join("\n  ").prepend("  "),
           "}\n",
@@ -223,7 +226,7 @@ module MOSAIK
           # Collect all edge attributes
           attrs = vertices
             .values
-            .flat_map { |v| v.edges.flat_map { |_, e| e.attributes.keys } }
+            .flat_map { |v| v.edges.flat_map { |_, es| es.flat_map { |e| e.attributes.keys } } }
             .uniq
 
           # Header
@@ -231,12 +234,14 @@ module MOSAIK
 
           # Add vertices and edges using an adjacency list
           vertices.each do |vertex_id, vertex|
-            vertex.edges.each do |edge_id, edge|
-              next if edge.in? visited
+            vertex.edges.each do |edge_id, edges|
+              edges.each do |edge|
+                next if edge.in? visited
 
-              visited << edge
+                visited << edge
 
-              csv << [vertex_id, edge_id, *attrs.map { |attr| edge.attributes[attr] }]
+                csv << [vertex_id, edge_id, *attrs.map { |attr| edge.attributes[attr] }]
+              end
             end
           end
 

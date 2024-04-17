@@ -617,7 +617,7 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
 
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
+        expect(graph.find_edge("vertex2", "vertex3").attributes).to eq method: "method", weight: 1.0
 
         expect(graph.find_vertex("vertex3").edges).to be_empty
       end
@@ -651,12 +651,12 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
         expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1", "vertex3"]
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
+        expect(graph.find_edge("vertex2", "vertex3").attributes).to eq method: "method", weight: 1.0
 
         expect(graph.find_vertex("vertex3").edges.keys).to eq ["vertex2"]
-        expect(graph.find_vertex("vertex3").edges["vertex2"].attributes).to eq method: "method", weight: 1.0
+        expect(graph.find_edge("vertex3", "vertex2").attributes).to eq method: "method", weight: 1.0
 
-        expect(graph.find_vertex("vertex2").edges["vertex3"].object_id).to eq graph.find_vertex("vertex3").edges["vertex2"].object_id
+        expect(graph.find_edge("vertex2", "vertex3")).to eq graph.find_edge("vertex3", "vertex2")
       end
     end
 
@@ -693,7 +693,7 @@ RSpec.describe MOSAIK::Graph::Graph do
 
         expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
 
-        expect(graph.find_vertex("vertex2").edges["vertex3"].attributes).to eq method: "method", weight: 1.0
+        expect(graph.find_edge("vertex2", "vertex3").attributes).to eq method: "method", weight: 1.0
 
         expect(graph.find_vertex("vertex3").edges).to be_empty
 

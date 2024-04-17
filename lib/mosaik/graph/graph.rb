@@ -70,6 +70,11 @@ module MOSAIK
         edge
       end
 
+      sig { params(from: String, to: String).returns(T::Array[Edge]) }
+      def find_edges(from, to)
+        T.must(T.must(vertices[from]).edges[to])
+      end
+
       sig { params(from: String, to: String).returns(T.nilable(Edge)) }
       def find_edge(from, to)
         T.must(vertices[from]).edges[to] if T.must(vertices[from]).edges.key?(to)

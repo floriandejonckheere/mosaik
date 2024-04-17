@@ -163,6 +163,25 @@ RSpec.describe MOSAIK::Graph::Graph do
       end
     end
 
+    describe "#find_edges" do
+      it "returns nothing when no edges exist" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        expect(graph.find_edges("vertex1", "vertex2")).to be_empty
+      end
+
+      it "returns all edges" do
+        graph.add_vertex("vertex1")
+        graph.add_vertex("vertex2")
+
+        e1 = graph.add_edge("vertex1", "vertex2")
+        e2 = graph.add_edge("vertex1", "vertex2")
+
+        expect(graph.find_edges("vertex1", "vertex2")).to contain_exactly e1, e2
+      end
+    end
+
     describe "#find_edge" do
       it "returns nil when the edge does not exist" do
         graph.add_vertex("vertex1")

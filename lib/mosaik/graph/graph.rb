@@ -85,13 +85,13 @@ module MOSAIK
         find_edge(from, to) || add_edge(from, to, attributes)
       end
 
-      sig { params(from: String, to: String).void }
-      def remove_edge(from, to)
-        T.must(vertices[from]).remove_edge(to)
+      sig { params(from: String, to: String, edge: T.nilable(Edge)).void }
+      def remove_edge(from, to, edge = nil)
+        T.must(vertices[from]).remove_edge(to, edge)
 
         return if directed?
 
-        T.must(vertices[to]).remove_edge(from)
+        T.must(vertices[to]).remove_edge(from, edge)
       end
 
       sig { params(id: String, attributes: Attributes).returns(Cluster) }

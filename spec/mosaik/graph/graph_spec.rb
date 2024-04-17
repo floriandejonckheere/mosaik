@@ -231,46 +231,62 @@ RSpec.describe MOSAIK::Graph::Graph do
       context "when the graph is directed" do
         subject(:graph) { build(:graph, directed: true) }
 
-        it "removes a directed edge" do
-          graph.add_vertex("vertex1")
-          graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2")
+        context "when no edge is given" do
+          it "removes all edges" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            graph.add_edge("vertex1", "vertex2")
+            graph.add_edge("vertex1", "vertex2")
 
-          graph.remove_edge("vertex1", "vertex2")
+            graph.remove_edge("vertex1", "vertex2")
 
-          expect(graph.find_vertex("vertex1").edges).to be_empty
+            expect(graph.find_edges("vertex1", "vertex2")).to be_empty
+          end
         end
 
-        it "does not remove a non-existing directed edge" do
-          graph.add_vertex("vertex1")
-          graph.add_vertex("vertex2")
+        context "when a specific edge is given" do
+          it "removes the edge" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            e1 = graph.add_edge("vertex1", "vertex2")
+            e2 = graph.add_edge("vertex1", "vertex2")
 
-          graph.remove_edge("vertex1", "vertex2")
+            graph.remove_edge("vertex1", "vertex2", e1)
 
-          expect(graph.find_vertex("vertex1").edges).to be_empty
+            expect(graph.find_edges("vertex1", "vertex2")).to contain_exactly e2
+          end
         end
       end
 
       context "when the graph is undirected" do
         subject(:graph) { build(:graph, directed: false) }
 
-        it "removes an undirected edge" do
-          graph.add_vertex("vertex1")
-          graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2")
+        context "when no edge is given" do
+          it "removes all edges" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            graph.add_edge("vertex1", "vertex2")
+            graph.add_edge("vertex1", "vertex2")
 
-          graph.remove_edge("vertex1", "vertex2")
+            graph.remove_edge("vertex1", "vertex2")
 
-          expect(graph.find_vertex("vertex1").edges).to be_empty
+            expect(graph.find_edges("vertex1", "vertex2")).to be_empty
+            expect(graph.find_edges("vertex2", "vertex1")).to be_empty
+          end
         end
 
-        it "does not remove a non-existing directed edge" do
-          graph.add_vertex("vertex1")
-          graph.add_vertex("vertex2")
+        context "when a specific edge is given" do
+          it "removes the edge" do
+            graph.add_vertex("vertex1")
+            graph.add_vertex("vertex2")
+            e1 = graph.add_edge("vertex1", "vertex2")
+            e2 = graph.add_edge("vertex1", "vertex2")
 
-          graph.remove_edge("vertex1", "vertex2")
+            graph.remove_edge("vertex1", "vertex2", e1)
 
-          expect(graph.find_vertex("vertex1").edges).to be_empty
+            expect(graph.find_edges("vertex1", "vertex2")).to contain_exactly e2
+            expect(graph.find_edges("vertex2", "vertex1")).to contain_exactly e2
+          end
         end
       end
     end

@@ -94,7 +94,7 @@ RSpec.describe MOSAIK::Graph::Vertex do
 
         vertex.remove_edge("child")
 
-        expect(vertex.edges).to be_empty
+        expect(vertex.find_edges("child")).to be_empty
       end
     end
 
@@ -105,8 +105,7 @@ RSpec.describe MOSAIK::Graph::Vertex do
 
         vertex.remove_edge("child", e1)
 
-        expect(vertex.edges.keys).to eq ["child"]
-        expect(vertex.edges["child"]).to contain_exactly e2
+        expect(vertex.find_edges("child")).to contain_exactly e2
       end
     end
   end

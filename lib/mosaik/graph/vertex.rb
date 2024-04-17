@@ -40,14 +40,18 @@ module MOSAIK
         T.must(edges[to])
       end
 
-      sig { params(to: String).returns(T.nilable(Edge)) }
-      def find_edge(to)
-        T.must(edges[to]).first
+      sig { params(to: String, attributes: Attributes).returns(T.nilable(Edge)) }
+      def find_edge(to, attributes = {})
+        if attributes.empty?
+          T.must(edges[to]).first
+        else
+          T.must(edges[to]).find { |edge| attributes.all? { |k, v| edge.attributes[k] == v } }
+        end
       end
 
       sig { params(to: String, attributes: Attributes).returns(Edge) }
       def find_or_add_edge(to, attributes = {})
-        find_edge(to) || add_edge(to, attributes)
+        find_edge(to, attributes) || add_edge(to, attributes)
       end
 
       sig { params(id: String, edge: T.nilable(Edge)).void }

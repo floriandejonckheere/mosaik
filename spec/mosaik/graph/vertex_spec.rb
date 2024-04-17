@@ -67,6 +67,29 @@ RSpec.describe MOSAIK::Graph::Vertex do
 
       expect(vertex.find_edge("vertex1")).to eq e1
     end
+
+    context "when attributes are given" do
+      it "returns the edge matching the attributes entirely" do
+        vertex.add_edge("vertex1")
+        e1 = vertex.add_edge("vertex1", weight: 3)
+
+        expect(vertex.find_edge("vertex1", weight: 3)).to eq e1
+      end
+
+      it "returns the edge matching the attributes partially" do
+        vertex.add_edge("vertex1")
+        e1 = vertex.add_edge("vertex1", weight: 3, key: "value")
+
+        expect(vertex.find_edge("vertex1", weight: 3)).to eq e1
+      end
+
+      it "returns nothing when the edge does not have the attributes" do
+        vertex.add_edge("vertex1")
+        vertex.add_edge("vertex1", weight: 3)
+
+        expect(vertex.find_edge("vertex1", weight: 4)).to be_nil
+      end
+    end
   end
 
   describe "#find_or_add_edge" do
@@ -81,8 +104,31 @@ RSpec.describe MOSAIK::Graph::Vertex do
       expect(vertex.find_or_add_edge("vertex1")).to eq e1
     end
 
-    it "adds an edge with attributes" do
-      expect(vertex.find_or_add_edge("vertex1", weight: 3).attributes).to eq weight: 3
+    context "when attributes are given" do
+      it "returns a new edge when the edge does not exist" do
+        expect(vertex.find_or_add_edge("vertex1", weight: 3).attributes).to eq weight: 3
+      end
+
+      it "returns the edge matching the attributes entirely" do
+        vertex.add_edge("vertex1")
+        e1 = vertex.add_edge("vertex1", weight: 3)
+
+        expect(vertex.find_or_add_edge("vertex1", weight: 3)).to eq e1
+      end
+
+      it "returns the edge matching the attributes partially" do
+        vertex.add_edge("vertex1")
+        e1 = vertex.add_edge("vertex1", weight: 3, key: "value")
+
+        expect(vertex.find_or_add_edge("vertex1", weight: 3)).to eq e1
+      end
+
+      it "returns a new edge when none of the edges match the attributes" do
+        vertex.add_edge("vertex1")
+        vertex.add_edge("vertex1", weight: 3)
+
+        expect(vertex.find_or_add_edge("vertex1", weight: 4).attributes).to eq weight: 4
+      end
     end
   end
 

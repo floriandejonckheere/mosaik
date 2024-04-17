@@ -75,43 +75,44 @@ RSpec.describe MOSAIK::Graph::Graph do
       context "when the graph is directed" do
         subject(:graph) { build(:graph, directed: true) }
 
-        it "adds a directed edge" do
+        it "adds a directed edge and returns it" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2")
+          edge = graph.add_edge("vertex1", "vertex2")
 
-          expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-          expect(graph.find_vertex("vertex2").edges).to be_empty
+          expect(edge).to be_a MOSAIK::Graph::Edge
+
+          expect(graph.find_edges("vertex1", "vertex2")).to contain_exactly edge
+          expect(graph.find_edges("vertex2", "vertex1")).to be_empty
         end
 
         it "sets the attributes" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2", key: "value")
+          edge = graph.add_edge("vertex1", "vertex2", key: "value")
 
-          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
+          expect(edge.attributes).to eq key: "value"
         end
 
         context "when the edge already exists" do
-          it "does not add a directed edge multiple times" do
+          it "adds another directed edge and returns it" do
             graph.add_vertex("vertex1")
             graph.add_vertex("vertex2")
-            graph.add_edge("vertex1", "vertex2")
-            graph.add_edge("vertex1", "vertex2")
-            graph.add_edge("vertex1", "vertex2")
 
-            expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-            expect(graph.find_vertex("vertex2").edges.keys).to be_empty
-          end
+            e1 = graph.add_edge("vertex1", "vertex2")
+            e2 = graph.add_edge("vertex1", "vertex2")
+            e3 = graph.add_edge("vertex1", "vertex2")
 
-          it "merges the attributes" do
-            graph.add_vertex("vertex1")
-            graph.add_vertex("vertex2")
-            graph.add_edge("vertex1", "vertex2", key: "value")
-            graph.add_edge("vertex1", "vertex2", value: "key")
-            graph.add_edge("vertex1", "vertex2", key: "key")
+            expect(e1).to be_a MOSAIK::Graph::Edge
+            expect(e2).to be_a MOSAIK::Graph::Edge
+            expect(e3).to be_a MOSAIK::Graph::Edge
 
-            expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
+            expect(e1).not_to eq e2
+            expect(e1).not_to eq e3
+            expect(e2).not_to eq e3
+
+            expect(graph.find_edges("vertex1", "vertex2")).to contain_exactly e1, e2, e3
+            expect(graph.find_edges("vertex2", "vertex1")).to be_empty
           end
         end
       end
@@ -119,48 +120,44 @@ RSpec.describe MOSAIK::Graph::Graph do
       context "when the graph is undirected" do
         subject(:graph) { build(:graph, directed: false) }
 
-        it "adds an undirected edge" do
+        it "adds an undirected edge and returns it" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2")
+          edge = graph.add_edge("vertex1", "vertex2")
 
-          expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-          expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
+          expect(edge).to be_a MOSAIK::Graph::Edge
 
-          expect(graph.find_vertex("vertex1").edges["vertex2"].object_id).to eq graph.find_vertex("vertex2").edges["vertex1"].object_id
+          expect(graph.find_edges("vertex1", "vertex2")).to contain_exactly edge
+          expect(graph.find_edges("vertex2", "vertex1")).to contain_exactly edge
         end
 
         it "sets the attributes" do
           graph.add_vertex("vertex1")
           graph.add_vertex("vertex2")
-          graph.add_edge("vertex1", "vertex2", key: "value")
+          edge = graph.add_edge("vertex1", "vertex2", key: "value")
 
-          expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "value"
-          expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "value"
+          expect(edge.attributes).to eq key: "value"
         end
 
         context "when the edge already exists" do
-          it "adds an undirected edge multiple times" do
+          it "adds another undirected edge and returns it" do
             graph.add_vertex("vertex1")
             graph.add_vertex("vertex2")
-            graph.add_edge("vertex1", "vertex2")
-            graph.add_edge("vertex1", "vertex2")
 
-            expect(graph.find_vertex("vertex1").edges.keys).to eq ["vertex2"]
-            expect(graph.find_vertex("vertex2").edges.keys).to eq ["vertex1"]
+            e1 = graph.add_edge("vertex1", "vertex2")
+            e2 = graph.add_edge("vertex1", "vertex2")
+            e3 = graph.add_edge("vertex1", "vertex2")
 
-            expect(graph.find_vertex("vertex1").edges["vertex2"].object_id).to eq graph.find_vertex("vertex2").edges["vertex1"].object_id
-          end
+            expect(e1).to be_a MOSAIK::Graph::Edge
+            expect(e2).to be_a MOSAIK::Graph::Edge
+            expect(e3).to be_a MOSAIK::Graph::Edge
 
-          it "merges the attributes" do
-            graph.add_vertex("vertex1")
-            graph.add_vertex("vertex2")
-            graph.add_edge("vertex1", "vertex2", key: "value")
-            graph.add_edge("vertex1", "vertex2", value: "key")
-            graph.add_edge("vertex1", "vertex2", key: "key")
+            expect(e1).not_to eq e2
+            expect(e1).not_to eq e3
+            expect(e2).not_to eq e3
 
-            expect(graph.find_vertex("vertex1").edges["vertex2"].attributes).to eq key: "key", value: "key"
-            expect(graph.find_vertex("vertex2").edges["vertex1"].attributes).to eq key: "key", value: "key"
+            expect(graph.find_edges("vertex1", "vertex2")).to contain_exactly e1, e2, e3
+            expect(graph.find_edges("vertex2", "vertex1")).to contain_exactly e1, e2, e3
           end
         end
       end

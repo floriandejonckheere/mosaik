@@ -65,7 +65,9 @@ module MOSAIK
         return edge if directed?
 
         # Add the same edge in the other direction
-        T.must(vertices[to]).edges[from] = T.must(vertices[from]).edges.fetch(to)
+        T.must(T.must(vertices[to]).edges[from]) << edge
+
+        edge
       end
 
       sig { params(from: String, to: String).returns(T.nilable(Edge)) }

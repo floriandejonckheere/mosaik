@@ -15,14 +15,13 @@ RSpec.describe MOSAIK::Graph::Vertex do
 
       expect(edge).to be_an MOSAIK::Graph::Edge
 
-      expect(vertex.edges.keys).to eq ["child"]
-      expect(vertex.edges["child"]).to include edge
+      expect(vertex.find_edges("child")).to contain_exactly edge
     end
 
     it "sets the attributes" do
-      vertex.add_edge("child", key: "value")
+      edge = vertex.add_edge("child", key: "value")
 
-      expect(vertex.edges["child"].first.attributes).to eq key: "value"
+      expect(edge.attributes).to eq key: "value"
     end
 
     context "when the edge already exists" do
@@ -39,8 +38,7 @@ RSpec.describe MOSAIK::Graph::Vertex do
         expect(e1).not_to eq e3
         expect(e2).not_to eq e3
 
-        expect(vertex.edges.keys).to eq ["child"]
-        expect(vertex.edges["child"]).to contain_exactly e1, e2, e3
+        expect(vertex.find_edges("child")).to contain_exactly e1, e2, e3
       end
     end
   end

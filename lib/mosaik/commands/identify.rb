@@ -5,7 +5,7 @@ module MOSAIK
     ##
     # Identify microservice candidates
     #
-    class Identify < Command
+    class Identify < Command::Graph
       self.description = "Identify microservice candidates"
 
       defaults structural: 1,

@@ -26,6 +26,10 @@ group :development, :test do
   gem "rubocop-performance", "1.21.0", require: false
   gem "rubocop-rspec", "2.29.1", require: false
 
+  # Performance profiler
+  gem "ruby-prof", "0.13.0", require: false
+  gem "ruby-prof-flamegraph", "0.3.0", require: false
+
   # Type checker
   gem "sorbet", "0.5.11346", require: false
   gem "tapioca", "0.13.3", require: false

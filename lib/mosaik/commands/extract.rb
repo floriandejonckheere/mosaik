@@ -5,14 +5,11 @@ module MOSAIK
     ##
     # Extract information from the application
     #
-    class Extract < Command
+    class Extract < Command::Graph
       self.description = "Extract information"
 
-      defaults file: "mosaik.csv",
-               since: nil,
+      defaults since: nil,
                limit: 100
-
-      argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"

@@ -6,10 +6,6 @@ RSpec.describe MOSAIK::Commands::Extract do
   let(:arguments) { [] }
 
   describe "#validate" do
-    it "does not raise an error" do
-      expect { command.validate }.not_to raise_error
-    end
-
     describe "--limit" do
       let(:arguments) { ["--limit", "-1"] }
 

@@ -11,7 +11,6 @@ module MOSAIK
       defaults structural: 1,
                logical: 1,
                contributor: 1,
-               file: "mosaik.csv",
                algorithm: "louvain",
                profile: false
 
@@ -19,12 +18,12 @@ module MOSAIK
       argument "--logical N", Float, "Weight of logical coupling (default: #{defaults[:logical]})"
       argument "--contributor N", Float, "Weight of contributor coupling (default: #{defaults[:contributor]})"
 
-      argument "--file FILE", "File for the extracted information graph (default: #{defaults[:file]})"
       argument "--algorithm ALGORITHM", "Algorithm to use for identifying microservice candidates (default: #{defaults[:algorithm]})"
       argument "--profile", "Enable profiling (default: false)"
 
       def validate
-        raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
+        super
+
         raise OptionError, "unknown algorithm: #{options[:algorithm]}" unless options[:algorithm].in? ["louvain"]
 
         return unless options[:profile]

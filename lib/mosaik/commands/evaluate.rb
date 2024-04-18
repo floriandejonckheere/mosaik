@@ -5,17 +5,16 @@ module MOSAIK
     ##
     # Evaluate microservice candidates
     #
-    class Evaluate < Command
+    class Evaluate < Command::Graph
       self.description = "Evaluate microservice candidates"
 
       defaults file: "mosaik-candidates.csv",
                metrics: [:modularity, :coupling]
 
-      argument "--file FILE", "File for the identified microservice candidates graph (default: #{defaults[:file]})"
       argument("--metrics METRICS", Array, "Metrics to evaluate (default: #{defaults[:metrics].join(',')})") { |arg| arg&.map(&:to_sym) }
 
       def validate
-        raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
+        super
 
         metrics = options[:metrics] - self.class.defaults[:metrics]
 

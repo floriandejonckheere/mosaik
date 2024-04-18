@@ -16,6 +16,8 @@ module MOSAIK
       argument "--limit N", Integer, "Limit the number of commits to analyze (default: 100)"
 
       def validate
+        super
+
         raise OptionError, "negative value: #{options[:limit]}" if options[:limit].negative?
       end
 

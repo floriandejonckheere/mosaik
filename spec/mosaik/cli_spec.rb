@@ -24,16 +24,6 @@ describe MOSAIK::CLI do
       end
     end
 
-    describe "--visualize" do
-      let(:args) { ["--visualize"] }
-
-      it "turns on visualizations" do
-        cli
-
-        expect(cli.options[:visualize]).to be true
-      end
-    end
-
     describe "--help" do
       let(:args) { ["--help"] }
 

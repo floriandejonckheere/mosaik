@@ -16,6 +16,16 @@ RSpec.describe MOSAIK::Command do
           expect { command.validate }.to raise_error MOSAIK::OptionError, "file not found: doesnotexist.csv"
         end
       end
+
+      describe "--visualize" do
+        let(:arguments) { ["--visualize"] }
+
+        it "turns on visualizations" do
+          command.validate
+
+          expect(command.options[:visualize]).to be true
+        end
+      end
     end
   end
 end

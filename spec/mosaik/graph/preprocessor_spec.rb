@@ -47,6 +47,9 @@ RSpec.describe MOSAIK::Graph::Preprocessor do
 
     expect(graph.find_edge("v2", "v3").attributes[:weight]).to eq v2_v3
     expect(graph.find_edge("v3", "v2").attributes[:weight]).to eq v2_v3
+
+    expect(graph.find_edge("v1", "v3")).to be_nil
+    expect(graph.find_edge("v3", "v1")).to be_nil
   end
 
   describe "structural coupling" do
@@ -63,6 +66,9 @@ RSpec.describe MOSAIK::Graph::Preprocessor do
 
       expect(graph.find_edge("v2", "v3").attributes[:weight]).to eq v2_v3
       expect(graph.find_edge("v3", "v2").attributes[:weight]).to eq v2_v3
+
+      expect(graph.find_edge("v1", "v3")).to be_nil
+      expect(graph.find_edge("v3", "v1")).to be_nil
     end
   end
 
@@ -80,6 +86,9 @@ RSpec.describe MOSAIK::Graph::Preprocessor do
 
       expect(graph.find_edge("v2", "v3").attributes[:weight]).to eq v2_v3
       expect(graph.find_edge("v3", "v2").attributes[:weight]).to eq v2_v3
+
+      expect(graph.find_edge("v1", "v3")).to be_nil
+      expect(graph.find_edge("v3", "v1")).to be_nil
     end
   end
 
@@ -97,6 +106,9 @@ RSpec.describe MOSAIK::Graph::Preprocessor do
 
       expect(graph.find_edge("v2", "v3").attributes[:weight]).to eq v2_v3
       expect(graph.find_edge("v3", "v2").attributes[:weight]).to eq v2_v3
+
+      expect(graph.find_edge("v1", "v3")).to be_nil
+      expect(graph.find_edge("v3", "v1")).to be_nil
     end
   end
 end

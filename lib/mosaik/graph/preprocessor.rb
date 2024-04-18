@@ -50,7 +50,7 @@ module MOSAIK
         graph.directed = false
 
         # Add new edges
-        weights.each { |v1, v2, weight| graph.add_edge(v1, v2, weight:) }
+        weights.each { |v1, v2, weight| graph.add_edge(v1, v2, weight:) unless weight.zero? }
       end
     end
   end

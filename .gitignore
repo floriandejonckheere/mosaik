@@ -62,7 +62,7 @@ html/
 
 # Graph files
 /*.csv
-/*.dot
+/*.gv
 /*.png
 /*.svg
 /mosaik.yml

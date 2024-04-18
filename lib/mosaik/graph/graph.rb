@@ -176,14 +176,14 @@ module MOSAIK
 
       sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
       def to_png(file, options = {})
-        File.write("#{file}.dot", to_dot(options))
-        system("#{options[:renderer]} -x -Goverlap=scale -Tpng #{file}.dot -o #{file}.png")
+        File.write("#{file}.gv", to_dot(options))
+        system("#{options[:renderer]} -x -Goverlap=scale -Tpng #{file}.gv -o #{file}.png")
       end
 
       sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
       def to_svg(file, options = {})
-        File.write("#{file}.dot", to_dot(options))
-        system("#{options[:renderer]} -x -Goverlap=scale -Tsvg #{file}.dot -o #{file}.svg")
+        File.write("#{file}.gv", to_dot(options))
+        system("#{options[:renderer]} -x -Goverlap=scale -Tsvg #{file}.gv -o #{file}.svg")
       end
 
       sig { returns(String) }

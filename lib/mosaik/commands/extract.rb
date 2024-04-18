@@ -58,7 +58,7 @@ module MOSAIK
         debug graph.to_dot(options)
         graph.to_svg(file, options)
 
-        info "Dependency graph written to #{file}.dot and rendered to #{file}.svg"
+        info "Dependency graph written to #{file}.gv and rendered to #{file}.svg"
       end
 
       private

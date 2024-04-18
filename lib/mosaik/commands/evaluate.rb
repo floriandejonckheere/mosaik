@@ -57,7 +57,7 @@ module MOSAIK
         debug graph.to_dot(options)
         graph.to_png(file, options)
 
-        info "Evaluated microservice candidate graph written to #{file}.dot and rendered to #{file}.png"
+        info "Evaluated microservice candidate graph written to #{file}.gv and rendered to #{file}.png"
       end
 
       private

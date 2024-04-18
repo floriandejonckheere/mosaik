@@ -79,7 +79,7 @@ module MOSAIK
         debug graph.to_dot(options)
         graph.to_svg(file, options)
 
-        info "Microservice candidate graph written to #{file}.dot and rendered to #{file}.svg"
+        info "Microservice candidate graph written to #{file}.gv and rendered to #{file}.svg"
       end
 
       private

@@ -23,14 +23,14 @@ module MOSAIK
       argument "--file FILE", "File for the identified microservice candidates graph (default: #{defaults[:file]})"
 
       argument "--visualize", "Enable graph visualization (default: #{defaults[:visualize]})"
-      argument "--renderer RENDERER", "Graph renderer: dot, sfdp, or neato (default: #{defaults[:renderer]})"
+      argument "--renderer RENDERER", "Graph renderer: dot, fdp, sfdp, or neato (default: #{defaults[:renderer]})"
 
       argument("--hide-uncoupled", "Hide uncoupled vertices in the graph (default: #{defaults[:hide_uncoupled]})") { |arg| !arg.nil? }
       argument("--hide-labels", "Hide labels in the graph (default: #{defaults[:hide_labels]})") { |arg| !arg.nil? }
 
       def validate
         raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
-        raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "sfdp", "neato"]
+        raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "fdp", "sfdp", "neato"]
       end
     end
   end

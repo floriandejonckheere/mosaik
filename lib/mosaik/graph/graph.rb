@@ -140,8 +140,7 @@ module MOSAIK
                  "subgraph \"#{cluster.id}\" {",
                  "  cluster = true",
                  "  label = \"#{cluster.id}\"",
-                 '  color = "lightblue"',
-                 "  node [shape=circle, style=filled, fillcolor=gray]",
+                 '  color = "gray"',
                  *cluster.vertices.map { |vertex| "  \"#{vertex.id}\"" },
                  "}",
                ]

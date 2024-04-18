@@ -527,8 +527,7 @@ RSpec.describe MOSAIK::Graph::Graph do
             subgraph "cluster1" {
               cluster = true
               label = "cluster1"
-              color = "lightblue"
-              node [shape=circle, style=filled, fillcolor=gray]
+              color = "gray"
               "vertex1"
               "vertex2"
               "vertex3"
@@ -536,15 +535,13 @@ RSpec.describe MOSAIK::Graph::Graph do
             subgraph "cluster2" {
               cluster = true
               label = "cluster2"
-              color = "lightblue"
-              node [shape=circle, style=filled, fillcolor=gray]
+              color = "gray"
               "vertex4"
             }
             subgraph "cluster3" {
               cluster = true
               label = "cluster3"
-              color = "lightblue"
-              node [shape=circle, style=filled, fillcolor=gray]
+              color = "gray"
             }
             "vertex1" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
             "vertex1" -> "vertex2"

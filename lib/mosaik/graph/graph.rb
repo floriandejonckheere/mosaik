@@ -136,6 +136,8 @@ module MOSAIK
              clusters
               .values
               .filter_map do |cluster|
+               next if (cluster.vertices.empty? || cluster.vertices.all? { |vertex| vertex.edges.empty? }) && options[:hide_uncoupled]
+
                [
                  "subgraph \"#{cluster.id}\" {",
                  "  cluster = true",

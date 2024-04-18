@@ -26,6 +26,14 @@ RSpec.describe MOSAIK::Command do
           expect(command.options[:visualize]).to be true
         end
       end
+
+      describe "--renderer" do
+        let(:arguments) { ["--renderer", "invalid"] }
+
+        it "raises an error" do
+          expect { command.validate }.to raise_error MOSAIK::OptionError, "unknown renderer: invalid"
+        end
+      end
     end
   end
 end

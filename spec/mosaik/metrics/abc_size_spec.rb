@@ -25,7 +25,7 @@ RSpec.describe MOSAIK::Metrics::ABCSize do
   # Cluster 1: 1.0 / 1 = 1.0
   # Cluster 2: 15.04 / 2 + 5.0 / 3 = 9.19 (rounded)
   #
-  # ABC size = 10.19
+  # ABC size = 10.19 (rounded)
   #
 
   it "sets the ABC size values for each vertex, cluster, and for the graph" do

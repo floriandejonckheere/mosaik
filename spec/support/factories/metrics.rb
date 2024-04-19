@@ -8,9 +8,11 @@ FactoryBot.define do
     graph
   end
 
-  factory :coupling_metric, parent: :metric, class: "MOSAIK::Metrics::Coupling"
+  factory :abc_size_metric, parent: :metric, class: "MOSAIK::Metrics::ABCSize"
 
   factory :cohesion_metric, parent: :metric, class: "MOSAIK::Metrics::Cohesion"
+
+  factory :coupling_metric, parent: :metric, class: "MOSAIK::Metrics::Coupling"
 
   factory :modularity_metric, parent: :metric, class: "MOSAIK::Metrics::Modularity"
 end

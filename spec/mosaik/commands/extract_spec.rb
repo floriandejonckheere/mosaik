@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Commands::Extract do
-  subject(:command) { build(:extract_command, arguments:) }
+  subject(:command) { build(:extract_command, options:, arguments:) }
 
   let(:options) { { file: "README.md" } }
   let(:arguments) { [] }

@@ -20,7 +20,7 @@ module MOSAIK
 
       def initialize(options, *command_args)
         # Initialize options with default values
-        @options = options.merge(self.class.options.dup)
+        @options = self.class.options.merge(options)
 
         # Parse command arguments
         self.class.parser.parse!(command_args, into: @options)

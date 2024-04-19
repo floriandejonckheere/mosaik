@@ -5,6 +5,9 @@ require "yaml"
 
 require "active_support/all"
 require "git"
+require "parser"
+require "rubocop"
+require "rubocop/ast"
 require "sorbet-runtime"
 require "zeitwerk"
 

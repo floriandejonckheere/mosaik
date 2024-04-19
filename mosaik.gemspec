@@ -27,6 +27,8 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "csv", "~> 3.3"
   spec.add_runtime_dependency "git", "~> 1.19.1"
   spec.add_runtime_dependency "parser", "~> 3.3.0.5"
+  spec.add_runtime_dependency "rubocop", "~> 1.63.1"
+  spec.add_runtime_dependency "rubocop-ast", "~> 1.31.2"
   spec.add_runtime_dependency "sorbet-runtime", "~> 0.5.11346"
   spec.add_runtime_dependency "zeitwerk", "~> 2.6"
 end

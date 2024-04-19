@@ -11,13 +11,16 @@ module MOSAIK
           debug "Parsing file: #{file}"
 
           # Parse Abstract Syntax Tree
-          ast = ::Parser::Ruby33
-            .parse_file(file)
+          source = RuboCop::AST::ProcessedSource
+            .new(File.read(file), 3.3)
 
           # Process AST to extract constants, methods and references
-          Processor
-            .new(tree)
-            .process(ast)
+          processor = Processor.new(tree)
+
+          source.ast.each_node do |node|
+            processor
+              .process(node)
+          end
         end
       end
     end

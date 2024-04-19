@@ -7,6 +7,8 @@ module MOSAIK
       # Abstract Syntax Tree parser for Ruby code
       #
       class Processor < AST::Processor
+        include RuboCop::AST::Traversal
+
         # Magic value for root namespace
         MAIN = "(main)"
 

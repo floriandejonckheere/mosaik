@@ -2,7 +2,7 @@
 
 module MOSAIK
   ##
-  # Inference engine for resolving file paths to constant names
+  # Inference engine for resolving file paths to constant names, and vice versa
   #
   class Resolver
     attr_reader :directory, :load_paths, :overrides
@@ -43,14 +43,39 @@ module MOSAIK
         .join("::")
     end
 
+    def resolve_constant(constant_name)
+      # Convert the constant name to a file path
+      file = constant_name
+        .split("::")
+        .map { |c| underscore(c) }
+        .join("/")
+
+      # Check if the file exists in any of the load paths
+      load_paths.each do |load_path|
+        abspath = File.join(directory, load_path, "#{file}.rb")
+
+        return abspath if File.file?(abspath)
+      end
+
+      nil
+    end
+
     def resolve_file!(abspath)
       resolve_file(abspath) || raise(ResolveError, "cannot resolve #{abspath} in: #{load_paths.join(', ')}")
+    end
+
+    def resolve_constant!(constant)
+      resolve_constant(constant) || raise(ResolveError, "cannot resolve #{constant} in: #{load_paths.join(', ')}")
     end
 
     private
 
     def camelize(string)
       overrides[string] || string.split("_").map(&:capitalize).join
+    end
+
+    def underscore(string)
+      string.gsub(/([a-z])([A-Z])/, '\1_\2').downcase
     end
   end
 end

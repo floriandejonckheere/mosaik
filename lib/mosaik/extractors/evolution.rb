@@ -42,7 +42,7 @@ module MOSAIK
             .select { |file| file.in? MOSAIK.configuration.files }
 
           # Resolve file paths to class name
-          constants = files.map { |file| resolver.resolve!(file) }
+          constants = files.map { |file| resolver.resolve_file!(file) }
 
           debug "Commit #{commit.sha} (#{constants.count} constants: #{constants.join(', ')})"
 

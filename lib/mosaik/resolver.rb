@@ -17,7 +17,7 @@ module MOSAIK
       @overrides.merge!(overrides)
     end
 
-    def resolve(abspath)
+    def resolve_file(abspath)
       # Get the file name without the extension
       file = File.basename(abspath, ".rb")
 
@@ -43,8 +43,8 @@ module MOSAIK
         .join("::")
     end
 
-    def resolve!(abspath)
-      resolve(abspath) || raise(ResolveError, "cannot resolve #{abspath} in: #{load_paths.join(', ')}")
+    def resolve_file!(abspath)
+      resolve_file(abspath) || raise(ResolveError, "cannot resolve #{abspath} in: #{load_paths.join(', ')}")
     end
 
     private

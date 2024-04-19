@@ -27,7 +27,7 @@ module MOSAIK
         # Add a vertex for each constant in the load path
         MOSAIK.configuration.files.each do |file|
           # Resolve file path to class name
-          class_name = resolver.resolve(file)
+          class_name = resolver.resolve_file(file)
 
           # Add class to graph
           graph.find_or_add_vertex(class_name)

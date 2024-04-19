@@ -9,7 +9,7 @@ module MOSAIK
       self.description = "Evaluate microservice candidates"
 
       defaults file: "mosaik-candidates.csv",
-               metrics: [:modularity, :coupling]
+               metrics: [:abc_size, :cohesion, :complexity, :coupling, :modularity]
 
       argument("--metrics METRICS", Array, "Metrics to evaluate (default: #{defaults[:metrics].join(',')})") { |arg| arg&.map(&:to_sym) }
 

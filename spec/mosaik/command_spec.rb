@@ -5,7 +5,7 @@ RSpec.describe MOSAIK::Command do
   describe MOSAIK::Command::Graph do
     subject(:command) { described_class.new(options, *arguments) }
 
-    let(:options) { {} }
+    let(:options) { { file: "README.md" } }
     let(:arguments) { [] }
 
     describe "#validate" do

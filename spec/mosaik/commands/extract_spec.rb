@@ -3,6 +3,7 @@
 RSpec.describe MOSAIK::Commands::Extract do
   subject(:command) { build(:extract_command, arguments:) }
 
+  let(:options) { { file: "README.md" } }
   let(:arguments) { [] }
 
   describe "#validate" do

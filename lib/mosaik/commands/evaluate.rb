@@ -16,6 +16,8 @@ module MOSAIK
       def validate
         super
 
+        raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
+
         metrics = options[:metrics] - self.class.defaults[:metrics]
 
         raise OptionError, "unknown metrics: #{metrics.join(', ')}" unless metrics.empty?

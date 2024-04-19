@@ -29,7 +29,6 @@ module MOSAIK
       argument("--hide-labels", "Hide labels in the graph (default: #{defaults[:hide_labels]})") { |arg| !arg.nil? }
 
       def validate
-        raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
         raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "fdp", "sfdp", "neato"]
       end
     end

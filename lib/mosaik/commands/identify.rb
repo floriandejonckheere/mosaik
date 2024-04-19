@@ -24,6 +24,7 @@ module MOSAIK
       def validate
         super
 
+        raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
         raise OptionError, "unknown algorithm: #{options[:algorithm]}" unless options[:algorithm].in? ["louvain"]
 
         return unless options[:profile]

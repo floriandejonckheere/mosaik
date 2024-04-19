@@ -12,6 +12,8 @@ RSpec.describe MOSAIK::Resolver do
     FileUtils.touch("#{directory}/lib/mosaik.rb")
     FileUtils.touch("#{directory}/lib/mosaik/version.rb")
 
+    FileUtils.touch("#{directory}/lib/foo_bar.rb")
+
     FileUtils.mkdir_p("#{directory}/app")
     FileUtils.touch("#{directory}/app/user.rb")
     FileUtils.mkdir_p("#{directory}/app/users")
@@ -85,10 +87,13 @@ RSpec.describe MOSAIK::Resolver do
     end
 
     it "resolves constant names with custom overrides" do
-      resolver.override("mosaik" => "MOSAIK")
+      resolver.override("mosaik" => "MOSAIK", "foo_bar" => "Foobar")
 
       expect(resolver.resolve_constant("MOSAIK::Version"))
         .to eq("#{directory}/lib/mosaik/version.rb")
+
+      expect(resolver.resolve_constant("Foobar"))
+        .to eq("#{directory}/lib/foo_bar.rb")
     end
 
     it "does not resolve constant names that do not exist" do

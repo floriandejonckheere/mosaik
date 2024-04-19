@@ -29,7 +29,7 @@ module MOSAIK
               .parse(file)
 
             # Calculate the ABC size for the vertex
-            abc_size_v = abc_sizes.values.sum
+            abc_size_v = (abc_sizes.values.sum / abc_sizes.size).round(2)
 
             # Store ABC size value in the vertex
             v.attributes[:abc_size] = abc_size_v

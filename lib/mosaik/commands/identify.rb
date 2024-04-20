@@ -68,7 +68,7 @@ module MOSAIK
         end
 
         # Change file name
-        options[:file] = "#{File.basename(options[:file], '.*')}-candidates"
+        options[:file] = "#{File.basename(options[:file], '.*')}-candidates.csv"
 
         # Write graph to file
         visualize

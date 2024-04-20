@@ -21,7 +21,7 @@ module MOSAIK
                hide_labels: false,
                reduce: false
 
-      argument "--file FILE", "File for the identified microservice candidates graph (default: #{defaults[:file]})"
+      argument "--file FILE", "File for the dependency graph (default: #{defaults[:file]})"
 
       argument "--visualize", "Enable graph visualization (default: #{defaults[:visualize]})"
       argument "--renderer RENDERER", "Graph renderer: dot, fdp, sfdp, or neato (default: #{defaults[:renderer]})"

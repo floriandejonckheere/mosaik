@@ -117,15 +117,13 @@ RSpec.describe MOSAIK::Graph::Visualizer do
         graph.add_vertex("vertex1")
         graph.add_vertex("vertex2")
         graph.add_vertex("vertex3")
-        graph.add_edge("vertex1", "vertex2")
-        graph.add_edge("vertex2", "vertex3", foo: "bar", baz: "bat")
+        graph.add_edge("vertex1", "vertex2", foo: "bar", baz: "bat")
 
         expect(visualizer.to_dot).to eq <<~DOT
           digraph {
             "vertex1" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
-            "vertex1" -> "vertex2"
+            "vertex1" -> "vertex2" [label="foo: bar, baz: bat"]
             "vertex2" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]
-            "vertex2" -> "vertex3" [label="foo: bar, baz: bat"]
           }
         DOT
       end

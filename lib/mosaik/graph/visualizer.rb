@@ -17,6 +17,18 @@ module MOSAIK
         # Set of visited edges (to avoid duplicates in undirected graphs)
         visited = Set.new
 
+        # List of vertices with incoming or outgoing edges
+        coupled_vertices = graph
+          .vertices
+          .values
+          .select { |v| v.edges.any? } + graph
+            .vertices
+            .values
+            .map { |v| v.edges.keys }
+            .flatten(2)
+            .uniq
+            .map { |id| graph.find_vertex(id) }
+
         [
           graph.directed ? "digraph {" : "graph {",
           (if graph.clusters.any?
@@ -41,7 +53,7 @@ module MOSAIK
             .values
             .map do |vertex|
             [
-              ("\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]" if vertex.edges.any? || !options[:hide_uncoupled]),
+              ("\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]" if vertex.in?(coupled_vertices) || !options[:hide_uncoupled]),
               *vertex
                 .edges
                 .flat_map do |key, edges|

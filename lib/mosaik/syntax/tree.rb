@@ -12,7 +12,7 @@ module MOSAIK
 
       def initialize
         # Create a top-level constant to represent the root of the hierarchy
-        @top = Constant.new("main", type: "module")
+        @top = Constant.new("main")
       end
 
       def [](constant_path)

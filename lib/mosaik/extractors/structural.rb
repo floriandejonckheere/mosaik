@@ -44,9 +44,6 @@ module MOSAIK
       private
 
       def construct(constant)
-        # Skip modules
-        return if constant.type == "module"
-
         # Find or create the node for the constant
         caller = graph.find_or_add_vertex(constant.name)
 

@@ -55,7 +55,7 @@ module MOSAIK
           self.current_class = current_class == MAIN ? module_name : [current_class, module_name].join("::")
 
           # Register module
-          tree[current_class].type = "module"
+          tree[current_class]
 
           debug "Module #{current_class} in #{node.loc.expression.source_buffer.name}:#{node.loc.line}"
 

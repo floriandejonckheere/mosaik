@@ -9,9 +9,11 @@ module MOSAIK
       self.description = "Evaluate microservice candidates"
 
       defaults file: "mosaik-candidates.csv",
-               metrics: [:abc_size, :cohesion, :complexity, :coupling, :modularity]
+               metrics: [:abc_size, :cohesion, :complexity, :coupling, :modularity],
+               statistics: false
 
       argument("--metrics METRICS", Array, "Metrics to evaluate (default: #{defaults[:metrics].join(',')})") { |arg| arg&.map(&:to_sym) }
+      argument "--statistics", "Compute statistics (default: #{defaults[:statistics]})"
 
       def validate
         super
@@ -51,6 +53,20 @@ module MOSAIK
 
         # Write graph to file
         visualize
+
+        return unless options[:statistics]
+
+        # Compute statistics
+        statistics = Graph::Statistics
+          .new(options, graph)
+          .call
+
+        # Write statistics to file
+        file = File.basename(options[:file], ".*")
+
+        File.write("#{file}.yml", statistics.to_yaml)
+
+        info "Statistics written to #{file}.yml"
       end
 
       private

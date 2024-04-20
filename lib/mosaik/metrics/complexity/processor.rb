@@ -22,28 +22,28 @@ module MOSAIK
         def on_def(node)
           method_name = node.children[0].to_s
 
-          # Calculate complexity for the method
-          _, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
-
-          # Extract complexity from <A, B, C> triplet
-          complexity = abc.split(",")[1].to_f
-
-          # Store complexity for the method
-          complexities[method_name] = complexity
+          # Calculate and store complexity for the method
+          complexities[method_name] = complexity_for(node)
         end
 
         # Class methods
         def on_defs(node)
           method_name = "self.#{node.children[1]}"
 
-          # Calculate complexity for the method
+          # Calculate and store complexity for the method
+          complexities[method_name] = complexity_for(node)
+        end
+
+        private
+
+        def complexity_for(node)
+          # Calculate complexity
           _, abc = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
 
           # Extract complexity from <A, B, C> triplet
-          complexity = abc.split(",")[1].to_i
+          abc.split(",")[1].to_i
 
-          # Store complexity for the method
-          complexities[method_name] = complexity
+          # Return complexity
         end
       end
     end

@@ -22,22 +22,26 @@ module MOSAIK
         def on_def(node)
           method_name = node.children[0].to_s
 
-          # Calculate ABC size for the method
-          abc_size, = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
-
-          # Store ABC size for the method
-          abc_sizes[method_name] = abc_size
+          # Calculate and store ABC size for the method
+          abc_sizes[method_name] = abc_size_for(node)
         end
 
         # Class methods
         def on_defs(node)
           method_name = "self.#{node.children[1]}"
 
-          # Calculate ABC size for the method
-          abc_size = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
+          # Calculate and store ABC size for the method
+          abc_sizes[method_name] = abc_size_for(node)
+        end
 
-          # Store ABC size for the method
-          abc_sizes[method_name] = abc_size
+        private
+
+        def abc_size_for(node)
+          # Calculate ABC size
+          abc_size, = RuboCop::Cop::Metrics::Utils::AbcSizeCalculator.calculate(node)
+
+          # Return ABC size
+          abc_size
         end
       end
     end

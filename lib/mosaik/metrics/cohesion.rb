@@ -38,7 +38,7 @@ module MOSAIK
             .map { |v| v.edges.slice(*vertices_in_cluster_id).values }
             .flatten(2)
             .uniq
-            .count
+            .size
 
           # Calculate cohesion value for the cluster
           cohesion_c = sum.to_f / (cardinality_c * (cardinality_c - 1) / 2)

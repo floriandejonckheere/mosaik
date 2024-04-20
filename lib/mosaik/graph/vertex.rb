@@ -65,7 +65,7 @@ module MOSAIK
 
       sig { returns(String) }
       def inspect
-        "#<#{self.class.name} id=#{id} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')} edges=#{edges.count}>"
+        "#<#{self.class.name} id=#{id} attributes=#{attributes.map { |k, v| "#{k}: #{v}" }.join(',')} edges=#{edges.size}>"
       end
     end
   end

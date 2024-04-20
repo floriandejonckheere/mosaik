@@ -18,8 +18,8 @@ module MOSAIK
         end
 
         # Count total constants and methods
-        total = tree.to_h { |c| [c.name, c.methods.count] }
-        info "Parsed #{total.count} classes and #{total.values.sum} methods"
+        total = tree.to_h { |c| [c.name, c.methods.size] }
+        info "Parsed #{total.size} classes and #{total.values.sum} methods"
 
         # Print the constant tree
         tree.each do |constant|
@@ -34,7 +34,7 @@ module MOSAIK
           end
 
           # Print the hierarchy
-          debug ("  " * constant.name.scan("::").count) + constant.name
+          debug ("  " * constant.name.scan("::").size) + constant.name
         end
 
         # Construct the graph
@@ -48,7 +48,7 @@ module MOSAIK
         caller = graph.find_or_add_vertex(constant.name)
 
         # Add method cardinality to the vertex
-        caller.attributes[:methods] = constant.methods.count
+        caller.attributes[:methods] = constant.methods.size
 
         constant.methods.each_value do |method|
           method.references.each do |reference|

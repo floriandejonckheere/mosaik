@@ -25,7 +25,7 @@ module MOSAIK
         # Limit commits to a specific date
         commits = commits.since(options[:since]) if options[:since]
 
-        info "Analyzing #{commits.count} commits"
+        info "Analyzing #{commits.size} commits"
 
         # Create a co-change matrix for each pair of constants (logical coupling)
         co_changes = Hash.new { |h, k| h[k] = Hash.new(0) }
@@ -46,7 +46,7 @@ module MOSAIK
           # Resolve file paths to class name
           constants = files.map { |file| resolver.resolve_file!(file) }
 
-          debug "Commit #{commit.sha} (#{constants.count} constants: #{constants.join(', ')})"
+          debug "Commit #{commit.sha} (#{constants.size} constants: #{constants.join(', ')})"
 
           # Increment the co-change number between each pair of constants (logical coupling)
           constants
@@ -83,7 +83,7 @@ module MOSAIK
           next if contributors[a].empty? || contributors[b].empty?
 
           # Calculate coupling (cardinality of the intersection of sets of developers)
-          coupling = (contributors[a] & contributors[b]).count
+          coupling = (contributors[a] & contributors[b]).size
 
           # Skip if the coupling is one (no shared contributors)
           next if coupling == 1

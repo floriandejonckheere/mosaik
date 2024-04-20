@@ -105,9 +105,9 @@ module MOSAIK
 
     def usage(code: 1, tail: nil)
       # Extract command class usage message (if present)
-      if command_args.any?
-        klass = "MOSAIK::Commands::#{command_args.first.camelize}".safe_constantize
+      klass = "MOSAIK::Commands::#{command_args.first.camelize}".safe_constantize if command_args.any?
 
+      if klass
         # Add command arguments to global argument parser (for the usage message)
         klass.arguments.each do |args, kwargs, block|
           parser.on(*args, **kwargs, &block)

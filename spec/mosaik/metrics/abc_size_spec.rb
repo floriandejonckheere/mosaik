@@ -31,13 +31,13 @@ RSpec.describe MOSAIK::Metrics::ABCSize do
   it "sets the ABC size values for each vertex, cluster, and for the graph" do
     metric.evaluate
 
-    expect(graph.find_vertex("CoreExt::Object").attributes[:abc_size]).to eq 1.0
-    expect(graph.find_vertex("MOSAIK::Logger").attributes[:abc_size]).to eq 7.52
-    expect(graph.find_vertex("MOSAIK::Algorithm").attributes[:abc_size]).to eq 1.67
+    expect(graph.find_vertex("CoreExt::Object").attributes[:abc_size]).to be_within(1e-2).of 1.0
+    expect(graph.find_vertex("MOSAIK::Logger").attributes[:abc_size]).to be_within(1e-2).of 7.52
+    expect(graph.find_vertex("MOSAIK::Algorithm").attributes[:abc_size]).to be_within(1e-2).of 1.67
 
-    expect(graph.find_cluster("cluster1").attributes[:abc_size]).to eq 1.0
-    expect(graph.find_cluster("cluster2").attributes[:abc_size]).to eq 9.19
+    expect(graph.find_cluster("cluster1").attributes[:abc_size]).to be_within(1e-2).of 1.0
+    expect(graph.find_cluster("cluster2").attributes[:abc_size]).to be_within(1e-2).of 9.19
 
-    expect(graph.attributes[:abc_size]).to eq 10.19
+    expect(graph.attributes[:abc_size]).to be_within(1e-2).of 10.19
   end
 end

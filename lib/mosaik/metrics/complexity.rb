@@ -31,7 +31,7 @@ module MOSAIK
               .parse(file)
 
             # Calculate the complexity for the vertex
-            complexity_v = complexities.any? ? (complexities.values.sum.to_f / complexities.size).round(2) : 0.0
+            complexity_v = complexities.any? ? (complexities.values.sum.to_f / complexities.size) : 0.0
 
             # Store complexity value in the vertex
             v.attributes[:complexity] = complexity_v

@@ -32,13 +32,13 @@ RSpec.describe MOSAIK::Metrics::Complexity do
   it "sets the ABC size values for each vertex, cluster, and for the graph" do
     metric.evaluate
 
-    expect(graph.find_vertex("CoreExt::Object").attributes[:complexity]).to eq 1.0
-    expect(graph.find_vertex("MOSAIK::Logger").attributes[:complexity]).to eq 5.5
-    expect(graph.find_vertex("MOSAIK::Algorithm").attributes[:complexity]).to eq 0.33
+    expect(graph.find_vertex("CoreExt::Object").attributes[:complexity]).to be_within(1e-2).of 1.0
+    expect(graph.find_vertex("MOSAIK::Logger").attributes[:complexity]).to be_within(1e-2).of 5.5
+    expect(graph.find_vertex("MOSAIK::Algorithm").attributes[:complexity]).to be_within(1e-2).of 0.33
 
-    expect(graph.find_cluster("cluster1").attributes[:complexity]).to eq 1.0
-    expect(graph.find_cluster("cluster2").attributes[:complexity]).to eq 5.83
+    expect(graph.find_cluster("cluster1").attributes[:complexity]).to be_within(1e-2).of 1.0
+    expect(graph.find_cluster("cluster2").attributes[:complexity]).to be_within(1e-2).of 5.83
 
-    expect(graph.attributes[:complexity]).to eq 6.83
+    expect(graph.attributes[:complexity]).to be_within(1e-2).of 6.83
   end
 end

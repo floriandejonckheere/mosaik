@@ -14,6 +14,9 @@ RSpec.describe MOSAIK::Resolver do
 
     FileUtils.touch("#{directory}/lib/foo_bar.rb")
 
+    FileUtils.mkdir_p("#{directory}/lib/core_ext")
+    FileUtils.touch("#{directory}/lib/core_ext/object.rb")
+
     FileUtils.mkdir_p("#{directory}/app")
     FileUtils.touch("#{directory}/app/user.rb")
     FileUtils.mkdir_p("#{directory}/app/users")
@@ -28,6 +31,12 @@ RSpec.describe MOSAIK::Resolver do
       expect(resolver.resolve_file("lib/mosaik/version.rb"))
         .to eq("Mosaik::Version")
 
+      expect(resolver.resolve_file("lib/foo_bar.rb"))
+        .to eq("FooBar")
+
+      expect(resolver.resolve_file("lib/core_ext/object.rb"))
+        .to eq("CoreExt::Object")
+
       expect(resolver.resolve_file("app/user.rb"))
         .to eq("User")
 
@@ -41,6 +50,12 @@ RSpec.describe MOSAIK::Resolver do
 
       expect(resolver.resolve_file("#{directory}/lib/mosaik/version.rb"))
         .to eq("Mosaik::Version")
+
+      expect(resolver.resolve_file("#{directory}/lib/foo_bar.rb"))
+        .to eq("FooBar")
+
+      expect(resolver.resolve_file("#{directory}/lib/core_ext/object.rb"))
+        .to eq("CoreExt::Object")
 
       expect(resolver.resolve_file("#{directory}/app/user.rb"))
         .to eq("User")
@@ -78,6 +93,12 @@ RSpec.describe MOSAIK::Resolver do
 
       expect(resolver.resolve_constant("Mosaik::Version"))
         .to eq "#{directory}/lib/mosaik/version.rb"
+
+      expect(resolver.resolve_constant("FooBar"))
+        .to eq "#{directory}/lib/foo_bar.rb"
+
+      expect(resolver.resolve_constant("CoreExt::Object"))
+        .to eq "#{directory}/lib/core_ext/object.rb"
 
       expect(resolver.resolve_constant("User"))
         .to eq "#{directory}/app/user.rb"

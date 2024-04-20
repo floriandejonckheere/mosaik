@@ -8,12 +8,14 @@ module MOSAIK
     class Constant
       attr_reader :name, :methods, :parent, :descendants
 
-      def initialize(name, parent = nil)
+      attr_accessor :type
+
+      def initialize(name, parent = nil, type = "class")
         @name = name
+        @parent = parent
+        @type = type
 
         @methods = {}
-
-        @parent = parent
         @descendants = Set.new
       end
 
@@ -34,7 +36,7 @@ module MOSAIK
       end
 
       def inspect
-        "#<Constant #{self}>"
+        "#<#{name} #{self}>"
       end
     end
   end

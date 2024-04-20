@@ -21,7 +21,9 @@ module MOSAIK
           # Iterate over all vertices in the cluster
           vertices_in_cluster.each do |v|
             # Resolve the constant name to a file
-            file = resolver.resolve_constant!(v.id)
+            file = resolver.resolve_constant(v.id)
+
+            warn "Could not resolve constant #{v.id}" and next unless file
 
             # Parse file to extract ABC sizes
             abc_sizes = Parser

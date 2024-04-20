@@ -5,9 +5,9 @@
 module MOSAIK
   module Graph
     ##
-    # Preprocess the graph (aggregate common edges and normalize weights)
+    # Reduce the graph (aggregate common edges and normalize weights)
     #
-    class Preprocessor
+    class Reducer
       attr_reader :options, :graph
 
       def initialize(options, graph)

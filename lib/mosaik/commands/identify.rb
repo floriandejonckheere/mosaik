@@ -36,8 +36,8 @@ module MOSAIK
       def call
         info "Identifying microservice candidates (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
-        # Preprocess the graph
-        Graph::Preprocessor
+        # Reduce the graph
+        Graph::Reducer
           .new(options, graph)
           .call
 

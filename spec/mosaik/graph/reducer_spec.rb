@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # typed: true
 
-RSpec.describe MOSAIK::Graph::Preprocessor do
+RSpec.describe MOSAIK::Graph::Reducer do
   subject(:preprocessor) { described_class.new(options, graph) }
 
   let(:options) { { structural: 0.5, logical: 0.3, contributor: 0.2 } }

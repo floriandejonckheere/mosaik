@@ -19,7 +19,7 @@ module MOSAIK
                renderer: "dot",
                hide_uncoupled: false,
                hide_labels: false,
-               preprocess: false
+               reduce: false
 
       argument "--file FILE", "File for the identified microservice candidates graph (default: #{defaults[:file]})"
 
@@ -29,7 +29,7 @@ module MOSAIK
       argument("--hide-uncoupled", "Hide uncoupled vertices in the graph (default: #{defaults[:hide_uncoupled]})") { |arg| !arg.nil? }
       argument("--hide-labels", "Hide labels in the graph (default: #{defaults[:hide_labels]})") { |arg| !arg.nil? }
 
-      argument "--preprocess", "Preprocess the graph before visualization (default: #{defaults[:preprocess]})"
+      argument "--reduce", "Reduce the graph before visualization (default: #{defaults[:reduce]})"
 
       def validate
         raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "fdp", "sfdp", "neato"]
@@ -45,14 +45,14 @@ module MOSAIK
 
         return unless options[:visualize]
 
-        if options[:preprocess]
+        if options[:reduce]
           # Set correct options
           options[:structural] = 1
           options[:logical] = 1
           options[:contributor] = 1
 
-          # Preprocess the graph
-          MOSAIK::Graph::Preprocessor
+          # Reduce the graph
+          MOSAIK::Graph::Reducer
             .new(options, graph)
             .call(directed: true)
         end

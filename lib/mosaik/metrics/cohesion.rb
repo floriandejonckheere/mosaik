@@ -18,9 +18,9 @@ module MOSAIK
 
           # Calculate the cardinality of the cluster
           cardinality_c = vertices_in_cluster.sum do |v|
-            warn "No `methods` attribute found for #{v.id}, did you extract structural coupling information?" unless v.attributes.key?(:methods)
+            warn "No `methods` attribute found for #{v.id}, did you extract structural coupling information?" if v.attributes[:methods].nil?
 
-            v.attributes.fetch(:methods, 0.0)
+            v.attributes[:methods] || 0.0
           end
 
           # Skip if the vertex has less than 2 methods (denominator would be 0)

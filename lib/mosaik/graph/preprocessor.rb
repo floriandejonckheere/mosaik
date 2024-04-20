@@ -5,7 +5,7 @@
 module MOSAIK
   module Graph
     ##
-    # Preprocess the graph (aggregate common edges, normalize weights, and set graph to directed)
+    # Preprocess the graph (aggregate common edges and normalize weights)
     #
     class Preprocessor
       attr_reader :options, :graph
@@ -15,7 +15,7 @@ module MOSAIK
         @graph = graph
       end
 
-      def call
+      def call(directed: false)
         # Iterate over all combinations of vertices
         weights = graph.vertices.keys.combination(2).map do |v1, v2|
           # Find all edges between the two vertices
@@ -46,8 +46,8 @@ module MOSAIK
         # Remove all existing edges
         graph.vertices.each_value { |v| v.edges.clear }
 
-        # Set graph to undirected
-        graph.directed = false
+        # Set graph directionality
+        graph.directed = directed
 
         # Add new edges
         weights.each { |v1, v2, weight| graph.add_edge(v1, v2, weight:) unless weight.zero? }

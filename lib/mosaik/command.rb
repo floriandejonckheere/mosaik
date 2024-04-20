@@ -54,7 +54,7 @@ module MOSAIK
           # Preprocess the graph
           MOSAIK::Graph::Preprocessor
             .new(options, graph)
-            .call
+            .call(directed: true)
         end
 
         file = File.basename(options[:file], ".*")

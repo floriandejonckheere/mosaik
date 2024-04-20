@@ -125,68 +125,6 @@ module MOSAIK
           .sum { |e| e.attributes.fetch(:weight, 0.0) }
       end
 
-      sig { params(options: T::Hash[Symbol, T.untyped]).returns(String) }
-      def to_dot(options = {})
-        # Set of visited edges (to avoid duplicates in undirected graphs)
-        visited = Set.new
-
-        [
-          directed ? "digraph {" : "graph {",
-          (if clusters.any?
-             clusters
-              .values
-              .filter_map do |cluster|
-               next if (cluster.vertices.empty? || cluster.vertices.all? { |vertex| vertex.edges.empty? }) && options[:hide_uncoupled]
-
-               [
-                 "subgraph \"#{cluster.id}\" {",
-                 "  cluster = true",
-                 "  label = \"#{cluster.id}\"",
-                 '  color = "gray"',
-                 *cluster.vertices.map { |vertex| "  \"#{vertex.id}\"" },
-                 "}",
-               ]
-             end.join("\n  ").prepend("  ")
-           end),
-          vertices
-            .values
-            .map do |vertex|
-            [
-              ("\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]" if vertex.edges.any? || !options[:hide_uncoupled]),
-              *vertex
-                .edges
-                .flat_map do |key, edges|
-                edges.map do |edge|
-                  next if edge.in? visited
-
-                  visited << edge
-
-                  [
-                    "\"#{vertex.id}\" ",
-                    directed? ? "->" : "--",
-                    " \"#{key}\"",
-                    edge.attributes.any? && !options[:hide_labels] ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
-                  ].compact.join
-                end
-              end,
-            ].compact_blank.join("\n  ")
-          end.compact_blank.join("\n  ").prepend("  "),
-          "}\n",
-        ].compact.join("\n")
-      end
-
-      sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
-      def to_png(file, options = {})
-        File.write("#{file}.gv", to_dot(options))
-        system("#{options[:renderer]} -x -Goverlap=scale -Tpng #{file}.gv -o #{file}.png")
-      end
-
-      sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
-      def to_svg(file, options = {})
-        File.write("#{file}.gv", to_dot(options))
-        system("#{options[:renderer]} -x -Goverlap=scale -Tsvg #{file}.gv -o #{file}.svg")
-      end
-
       sig { returns(String) }
       def to_csv
         # Set of visited edges (to avoid duplicates in undirected graphs)

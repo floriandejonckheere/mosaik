@@ -45,8 +45,11 @@ module MOSAIK
 
         return unless options[:visualize]
 
+        visualizer = MOSAIK::Graph::Visualizer
+          .new(options, graph)
+
         if options[:reduce]
-          # Set correct options
+          # Override edge weights
           options[:structural] = 1
           options[:logical] = 1
           options[:contributor] = 1
@@ -60,8 +63,8 @@ module MOSAIK
         file = File.basename(options[:file], ".*")
 
         # Write visualization to file
-        debug graph.to_dot(options)
-        graph.to_svg(file, options)
+        debug visualizer.to_dot
+        visualizer.to_svg(file)
 
         info "Dependency graph written to #{file}.gv and rendered to #{file}.svg"
       end

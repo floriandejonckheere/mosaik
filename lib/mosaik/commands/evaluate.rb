@@ -34,9 +34,6 @@ module MOSAIK
             .evaluate
         end
 
-        # Print the graph
-        info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m]}" }.join(', ')})"
-
         # Print the clusters
         graph.clusters.each_value do |cluster|
           info "Cluster #{cluster.id} (#{options[:metrics].map { |m| "#{m}: #{cluster.attributes[m]}" }.join(', ')})"
@@ -45,6 +42,9 @@ module MOSAIK
 
           debug "Components: #{cluster.vertices.map(&:id).join(', ')}"
         end
+
+        # Print the graph
+        info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m]}" }.join(', ')})"
 
         # Change file name
         options[:file] = "#{File.basename(options[:file], '.*')}-evaluation"

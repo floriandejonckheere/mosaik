@@ -25,7 +25,7 @@ module MOSAIK
 
           # Skip if the vertex has less than 2 methods (denominator would be 0)
           if cardinality_c < 2
-            warn "Cluster #{cluster.id} has less than 2 methods, skipping cohesion calculation"
+            debug "Cluster #{cluster.id} has less than 2 methods, skipping cohesion calculation"
 
             # Store cohesion value in the cluster
             cluster.attributes[:cohesion] = 0.0

@@ -36,7 +36,7 @@ module MOSAIK
 
         # Print the clusters
         graph.clusters.each_value do |cluster|
-          info "Cluster #{cluster.id} (#{options[:metrics].map { |m| "#{m}: #{cluster.attributes[m]}" }.join(', ')})"
+          info "Cluster #{cluster.id} (#{options[:metrics].map { |m| "#{m}: #{cluster.attributes[m].round(2)}" }.join(', ')})"
 
           next unless options[:debug]
 
@@ -44,7 +44,7 @@ module MOSAIK
         end
 
         # Print the graph
-        info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m]}" }.join(', ')})"
+        info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m].round(2)}" }.join(', ')})"
 
         # Change file name
         options[:file] = "#{File.basename(options[:file], '.*')}-evaluation.csv"

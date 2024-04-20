@@ -31,6 +31,25 @@ module MOSAIK
       def validate
         raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "fdp", "sfdp", "neato"]
       end
+
+      protected
+
+      def visualize
+        # Write graph to file
+        File.write(options[:file], graph.to_csv)
+
+        info "Dependency graph written to #{options[:file]}"
+
+        return unless options[:visualize]
+
+        file = File.basename(options[:file], ".*")
+
+        # Write visualization to file
+        debug graph.to_dot(options)
+        graph.to_svg(file, options)
+
+        info "Dependency graph written to #{file}.gv and rendered to #{file}.svg"
+      end
     end
   end
 end

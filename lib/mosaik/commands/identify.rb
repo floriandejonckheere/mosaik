@@ -67,20 +67,11 @@ module MOSAIK
           end
         end
 
-        file = "#{File.basename(options[:file], '.*')}-candidates"
+        # Change file name
+        options[:file] = "#{File.basename(options[:file], '.*')}-candidates"
 
         # Write graph to file
-        File.write("#{file}.csv", graph.to_csv)
-
-        info "Dependency graph written to #{options[:file]}"
-
-        return unless options[:visualize]
-
-        # Write visualization to file
-        debug graph.to_dot(options)
-        graph.to_svg(file, options)
-
-        info "Microservice candidate graph written to #{file}.gv and rendered to #{file}.svg"
+        visualize
       end
 
       private

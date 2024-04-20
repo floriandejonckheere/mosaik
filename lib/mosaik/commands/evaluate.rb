@@ -46,20 +46,11 @@ module MOSAIK
           debug "Components: #{cluster.vertices.map(&:id).join(', ')}"
         end
 
-        file = "#{File.basename(options[:file], '.*')}-evaluation"
+        # Change file name
+        options[:file] = "#{File.basename(options[:file], '.*')}-evaluation"
 
         # Write graph to file
-        File.write("#{file}.csv", graph.to_csv)
-
-        info "Dependency graph written to #{options[:file]}"
-
-        return unless options[:visualize]
-
-        # Write visualization to file
-        debug graph.to_dot(options)
-        graph.to_png(file, options)
-
-        info "Evaluated microservice candidate graph written to #{file}.gv and rendered to #{file}.png"
+        visualize
       end
 
       private

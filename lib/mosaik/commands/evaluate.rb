@@ -47,7 +47,7 @@ module MOSAIK
         info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m]}" }.join(', ')})"
 
         # Change file name
-        options[:file] = "#{File.basename(options[:file], '.*')}-evaluation"
+        options[:file] = "#{File.basename(options[:file], '.*')}-evaluation.csv"
 
         # Write graph to file
         visualize

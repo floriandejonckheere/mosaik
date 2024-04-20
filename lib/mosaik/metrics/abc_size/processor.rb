@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rubocop"
+
 module MOSAIK
   module Metrics
     class ABCSize

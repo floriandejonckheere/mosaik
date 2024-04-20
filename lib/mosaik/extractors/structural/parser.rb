@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "parser"
+
 module MOSAIK
   module Extractors
     class Structural

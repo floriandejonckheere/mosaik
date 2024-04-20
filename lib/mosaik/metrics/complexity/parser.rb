@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "rubocop"
+require "rubocop/ast"
+
 module MOSAIK
   module Metrics
     class Complexity

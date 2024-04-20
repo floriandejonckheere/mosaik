@@ -17,7 +17,7 @@ module MOSAIK
             .add_vertex(vertex)
         end
 
-        info "Total modularity: #{modularity}"
+        info "Initial modularity: #{modularity}"
 
         # Iterate until no further improvement in modularity
         1.step do |i|
@@ -35,6 +35,8 @@ module MOSAIK
 
           break if modularity - initial_modularity <= THRESHOLD
         end
+
+        info "Final modularity: #{modularity}"
       end
 
       private

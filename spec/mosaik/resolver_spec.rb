@@ -34,6 +34,9 @@ RSpec.describe MOSAIK::Resolver do
       expect(resolver.resolve_file("lib/foo_bar.rb"))
         .to eq("FooBar")
 
+      expect(resolver.resolve_file("lib/core_ext"))
+        .to eq("CoreExt")
+
       expect(resolver.resolve_file("lib/core_ext/object.rb"))
         .to eq("CoreExt::Object")
 
@@ -53,6 +56,9 @@ RSpec.describe MOSAIK::Resolver do
 
       expect(resolver.resolve_file("#{directory}/lib/foo_bar.rb"))
         .to eq("FooBar")
+
+      expect(resolver.resolve_file("#{directory}/lib/core_ext"))
+        .to eq("CoreExt")
 
       expect(resolver.resolve_file("#{directory}/lib/core_ext/object.rb"))
         .to eq("CoreExt::Object")
@@ -87,7 +93,7 @@ RSpec.describe MOSAIK::Resolver do
   end
 
   describe "#resolve_constant" do
-    it "resolves constant names to absolute file paths" do
+    it "resolves constant names to absolute file or directory paths" do
       expect(resolver.resolve_constant("Mosaik"))
         .to eq "#{directory}/lib/mosaik.rb"
 
@@ -96,6 +102,9 @@ RSpec.describe MOSAIK::Resolver do
 
       expect(resolver.resolve_constant("FooBar"))
         .to eq "#{directory}/lib/foo_bar.rb"
+
+      expect(resolver.resolve_constant("CoreExt"))
+        .to eq "#{directory}/lib/core_ext"
 
       expect(resolver.resolve_constant("CoreExt::Object"))
         .to eq "#{directory}/lib/core_ext/object.rb"

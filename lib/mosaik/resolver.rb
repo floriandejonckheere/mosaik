@@ -50,11 +50,17 @@ module MOSAIK
         .map { |c| underscore(c) }
         .join("/")
 
-      # Check if the file exists in any of the load paths
+      # Check if the file or directory exists in any of the load paths
       load_paths.each do |load_path|
+        # Check first if the file exists
         abspath = File.join(directory, load_path, "#{file}.rb")
 
         return abspath if File.file?(abspath)
+
+        # Check if the directory exists
+        abspath = File.join(directory, load_path, file)
+
+        return abspath if File.directory?(abspath)
       end
 
       nil

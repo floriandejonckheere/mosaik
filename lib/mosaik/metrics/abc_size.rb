@@ -24,6 +24,7 @@ module MOSAIK
             file = resolver.resolve_constant(v.id)
 
             warn "Could not resolve constant #{v.id}" and next unless file
+            warn "#{v.id} (#{file}) is a directory" and next if File.directory?(file)
 
             # Parse file to extract ABC sizes
             abc_sizes = Parser

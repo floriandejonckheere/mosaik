@@ -5,7 +5,7 @@
 module MOSAIK
   module Graph
     ##
-    # Preprocess the graph
+    # Preprocess the graph (aggregate common edges, normalize weights, and set graph to directed)
     #
     class Preprocessor
       attr_reader :options, :graph

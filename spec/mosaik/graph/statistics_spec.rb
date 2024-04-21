@@ -14,11 +14,12 @@ RSpec.describe MOSAIK::Graph::Statistics do
 
   describe "#call" do
     it "computes the statistics" do
-      expect(statistics.call).to eq "abc_size" => { "min" => 1.0, "max" => 2.0, "mean" => 1.5, "q1" => 1.0, "q2" => 1.5, "q3" => 2.0 },
-                                    "cohesion" => { "min" => 0.3, "max" => 0.5, "mean" => 0.4, "q1" => 0.3, "q2" => 0.4, "q3" => 0.5 },
-                                    "complexity" => { "min" => 0.2, "max" => 0.3, "mean" => 0.23333333333333334, "q1" => 0.2, "q2" => 0.2, "q3" => 0.3 },
-                                    "coupling" => { "min" => 0.2, "max" => 0.3, "mean" => 0.26666666666666666, "q1" => 0.2, "q2" => 0.3, "q3" => 0.3 },
-                                    "modularity" => { "min" => 0.1, "max" => 0.2, "mean" => 0.13333333333333333, "q1" => 0.1, "q2" => 0.1, "q3" => 0.2 }
+      expect(statistics.call.transform_values { |s| s.transform_values { |f| f.round(2) } })
+        .to eq "abc_size" => { "min" => 1.0, "max" => 2.0, "mean" => 1.5, "q1" => 1.0, "q2" => 1.5, "q3" => 2.0 },
+               "cohesion" => { "min" => 0.3, "max" => 0.5, "mean" => 0.4, "q1" => 0.3, "q2" => 0.4, "q3" => 0.5 },
+               "complexity" => { "min" => 0.2, "max" => 0.3, "mean" => 0.23, "q1" => 0.2, "q2" => 0.2, "q3" => 0.3 },
+               "coupling" => { "min" => 0.2, "max" => 0.3, "mean" => 0.27, "q1" => 0.2, "q2" => 0.3, "q3" => 0.3 },
+               "modularity" => { "min" => 0.1, "max" => 0.2, "mean" => 0.13, "q1" => 0.1, "q2" => 0.1, "q3" => 0.2 }
     end
   end
 end

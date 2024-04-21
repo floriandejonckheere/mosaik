@@ -17,13 +17,14 @@ module MOSAIK
             .add_vertex(vertex)
         end
 
+        # Calculate initial modularity
+        modularity = modularity_for(graph)
+
         info "Initial modularity: #{modularity}"
 
         # Iterate until no further improvement in modularity
         1.step do |i|
-          debug "Iteration #{i}: modularity=#{modularity}"
-
-          initial_modularity = modularity
+          debug "Iteration #{i}: initial modularity = #{modularity}"
 
           # Phase 1: reassign vertices to optimize modularity
           graph.vertices.each_value do |vertex|
@@ -33,7 +34,14 @@ module MOSAIK
           # Phase 2: reduce communities to a single node
           # TODO: Implement this phase
 
-          break if modularity - initial_modularity <= THRESHOLD
+          # Calculate final modularity
+          final_modularity = modularity_for(graph)
+
+          # Stop iterating if no further improvement in modularity
+          break if final_modularity - modularity <= THRESHOLD
+
+          # Update modularity
+          modularity = final_modularity
         end
 
         info "Final modularity: #{modularity}"
@@ -49,7 +57,7 @@ module MOSAIK
         best_gain = 0.0
 
         # Initialize best modularity
-        best_modularity = modularity
+        best_modularity = modularity_for(graph)
 
         # Store the original community of the vertex
         community = graph.clusters.values.find { |cluster| cluster.vertices.include? vertex }
@@ -67,7 +75,7 @@ module MOSAIK
           neighbour_community.add_vertex(vertex)
 
           # Calculate the new modularity
-          new_modularity = modularity
+          new_modularity = modularity_for(graph)
 
           # Calculate the modularity gain
           gain = new_modularity - best_modularity
@@ -86,9 +94,12 @@ module MOSAIK
         # Move the vertex to the best community
         community.remove_vertex(vertex)
         best_community.add_vertex(vertex)
+
+        # Return the best modularity
+        best_modularity
       end
 
-      def modularity
+      def modularity_for(graph)
         Metrics::Modularity
           .new(options, graph)
           .evaluate

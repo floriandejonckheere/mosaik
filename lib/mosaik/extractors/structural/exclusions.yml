@@ -1,0 +1,23 @@
+---
+classes:
+  - ENV
+  - T
+  - File
+  - FileUtils
+  - Dir
+methods:
+  - require
+  - require_relative
+  - new
+  - include
+  - extend
+  - prepend
+  - delegate
+  - public
+  - private
+  - protected
+  - raise
+  - attr_reader
+  - attr_writer
+  - attr_accessor
+  - puts

@@ -19,7 +19,7 @@ module MOSAIK
         # Iterate over all combinations of vertices
         weights = graph.vertices.keys.combination(2).map do |v1, v2|
           # Find all edges between the two vertices
-          edges = graph.find_edges(v1, v2) + graph.find_edges(v2, v1)
+          edges = Set.new(graph.find_edges(v1, v2) + graph.find_edges(v2, v1))
 
           # Calculate the weight for the aggregate edge
           weight = 0.0

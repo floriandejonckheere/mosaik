@@ -7,6 +7,14 @@ RSpec.describe MOSAIK::Commands::Extract do
   let(:arguments) { [] }
 
   describe "#validate" do
+    describe "--couplings" do
+      let(:arguments) { ["--couplings", "structural,doesnotexist"] }
+
+      it "raises an error" do
+        expect { command.validate }.to raise_error MOSAIK::OptionError, "unknown coupling: doesnotexist"
+      end
+    end
+
     describe "--limit" do
       let(:arguments) { ["--limit", "-1"] }
 

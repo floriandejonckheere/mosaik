@@ -21,7 +21,7 @@ RSpec.describe MOSAIK::Extractors::Evolution do
   end
 
   describe "#call" do
-    let(:options) { { directory: "tmp/repository", limit: 100, logical: 1, contributor: 0 } }
+    let(:options) { { directory: "tmp/repository", limit: 100, couplings: [:logical, :contributor] } }
 
     it "constructs a logical coupling graph" do
       extractor.call

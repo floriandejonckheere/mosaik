@@ -8,8 +8,11 @@ module MOSAIK
     class Extract < Command::Graph
       self.description = "Extract information"
 
-      defaults since: nil,
+      defaults couplings: [:structural, :logical, :contributor],
+               since: nil,
                limit: 100
+
+      argument("--couplings COUPLINGS", Array, "Coupling information to extract (default: #{defaults[:couplings].join(',')})") { |arg| arg&.map(&:to_sym) }
 
       # Evolution options
       argument "--since DATE", "Include only commits from a specific date"
@@ -17,6 +20,10 @@ module MOSAIK
 
       def validate
         super
+
+        couplings = options[:couplings] - self.class.defaults[:couplings]
+
+        raise OptionError, "unknown coupling: #{couplings.join(', ')}" unless couplings.empty?
 
         raise OptionError, "negative value: #{options[:limit]}" if options[:limit].negative?
       end
@@ -34,16 +41,20 @@ module MOSAIK
         end
 
         # Extract structural coupling information and add to graph
-        Extractors::Structural
-          .new(options, graph)
-          .tap(&:validate)
-          .call
+        if options[:couplings].include?(:structural)
+          Extractors::Structural
+            .new(options, graph)
+            .tap(&:validate)
+            .call
+        end
 
         # Extract evolutionary (logical and contributor) coupling information and add to graph
-        Extractors::Evolution
-          .new(options, graph)
-          .tap(&:validate)
-          .call
+        if options[:couplings].include?(:logical) || options[:couplings].include?(:contributor)
+          Extractors::Evolution
+            .new(options, graph)
+            .tap(&:validate)
+            .call
+        end
 
         # Write graph to file(s)
         visualize

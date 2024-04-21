@@ -13,7 +13,7 @@ module MOSAIK
                statistics: false
 
       argument("--metrics METRICS", Array, "Metrics to evaluate (default: #{defaults[:metrics].join(',')})") { |arg| arg&.map(&:to_sym) }
-      argument "--statistics", "Compute statistics (default: #{defaults[:statistics]})"
+      argument "--statistics STATISTICS", "File for the statistics (default: #{defaults[:statistics]})"
 
       def validate
         super
@@ -62,11 +62,9 @@ module MOSAIK
           .call
 
         # Write statistics to file
-        file = File.basename(options[:file], ".*")
+        File.write(options[:statistics], statistics.to_yaml)
 
-        File.write("#{file}.yml", statistics.to_yaml)
-
-        info "Statistics written to #{file}.yml"
+        info "Statistics written to #{options[:statistics]}"
       end
 
       private

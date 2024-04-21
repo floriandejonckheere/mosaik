@@ -26,6 +26,8 @@ module MOSAIK
         raise OptionError, "unknown coupling: #{couplings.join(', ')}" unless couplings.empty?
 
         raise OptionError, "negative value: #{options[:limit]}" if options[:limit].negative?
+
+        options[:limit] = nil if options[:limit].zero?
       end
 
       def call

@@ -14,7 +14,6 @@ module MOSAIK
       @options = {
         directory: Dir.pwd,
         debug: false,
-        visualize: false,
       }
 
       @args = args

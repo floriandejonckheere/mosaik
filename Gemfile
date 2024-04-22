@@ -27,7 +27,7 @@ group :development, :test do
   gem "rubocop-rspec", "2.29.1", require: false
 
   # Performance profiler
-  gem "ruby-prof", "0.13.0", require: false
+  gem "ruby-prof", "0.18.0", require: false
   gem "ruby-prof-flamegraph", "0.3.0", require: false
 
   # Type checker

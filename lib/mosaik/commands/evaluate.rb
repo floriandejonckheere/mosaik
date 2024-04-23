@@ -10,10 +10,10 @@ module MOSAIK
 
       defaults file: "mosaik-candidates.csv",
                metrics: [:abc_size, :cohesion, :complexity, :coupling, :modularity],
-               statistics: false
+               statistics: nil
 
       argument("--metrics METRICS", Array, "Metrics to evaluate (default: #{defaults[:metrics].join(',')})") { |arg| arg&.map(&:to_sym) }
-      argument "--statistics STATISTICS", "File for the statistics (default: #{defaults[:statistics]})"
+      argument "--statistics STATISTICS", "File for the statistics (default: #{defaults[:statistics].inspect})"
 
       def validate
         super

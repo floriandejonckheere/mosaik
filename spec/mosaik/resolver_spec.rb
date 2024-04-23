@@ -154,6 +154,7 @@ RSpec.describe MOSAIK::Resolver do
       expect(resolver.send(:underscore, "Foo")).to eq "foo"
       expect(resolver.send(:underscore, "FooBar")).to eq "foo_bar"
       expect(resolver.send(:underscore, "FOOBAR")).to eq "foobar"
+      expect(resolver.send(:underscore, "Foo9000")).to eq "foo_9000"
     end
 
     it "respects custom overrides" do

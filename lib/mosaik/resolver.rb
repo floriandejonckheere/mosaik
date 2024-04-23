@@ -83,6 +83,8 @@ module MOSAIK
     def underscore(string)
       overrides.key(string) || string
         .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+        .gsub(/([a-z])(\d)/, '\1_\2')
+        .gsub(/(\d)([A-Z])/, '\1_\2')
         .gsub(/([a-z\d])([A-Z])/, '\1_\2')
         .tr("-", "_")
         .downcase

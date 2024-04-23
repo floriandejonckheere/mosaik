@@ -148,4 +148,19 @@ RSpec.describe MOSAIK::Resolver do
         .to raise_error MOSAIK::ResolveError
     end
   end
+
+  describe "#underscore" do
+    it "converts camel case to snake case" do
+      expect(resolver.send(:underscore, "Foo")).to eq "foo"
+      expect(resolver.send(:underscore, "FooBar")).to eq "foo_bar"
+      expect(resolver.send(:underscore, "FOOBAR")).to eq "foobar"
+    end
+
+    it "respects custom overrides" do
+      resolver.override("foobar" => "FooBar", "foo" => "FOO")
+
+      expect(resolver.send(:underscore, "FooBar")).to eq "foobar"
+      expect(resolver.send(:underscore, "FOO")).to eq "foo"
+    end
+  end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Configuration do
-  subject(:configuration) { described_class.new(directory: "/tmp", load_paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"], overrides: { "foobar" => "FooBar" }) }
+  subject(:configuration) { described_class.new(directory: "/tmp", load_paths: ["lib"], includes: ["*.rb"], excludes: ["vendor"], overrides: { "foobar" => "FooBar" }, collapsed: ["app/models"]) }
 
   describe "#files" do
     it "returns only included files" do
@@ -45,6 +45,10 @@ RSpec.describe MOSAIK::Configuration do
 
       it "sets the overrides attribute" do
         expect(described_class.from(file).overrides).to eq "foobar" => "FooBar"
+      end
+
+      it "sets the collapsed attribute" do
+        expect(described_class.from(file).collapsed).to eq ["app/models"]
       end
     end
 

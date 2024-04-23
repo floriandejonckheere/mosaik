@@ -5,14 +5,15 @@ module MOSAIK
   # Configuration parser (mosaik.yml)
   #
   class Configuration
-    attr_reader :load_paths, :includes, :excludes, :overrides
+    attr_reader :load_paths, :includes, :excludes, :overrides, :collapsed
 
-    def initialize(directory:, load_paths: [], includes: [], excludes: [], overrides: {})
+    def initialize(directory:, load_paths: [], includes: [], excludes: [], overrides: {}, collapsed: [])
       @directory = directory
       @load_paths = load_paths
       @includes = includes
       @excludes = excludes
       @overrides = overrides
+      @collapsed = collapsed
     end
 
     def files
@@ -35,6 +36,7 @@ module MOSAIK
         includes: Array(configuration["include"]),
         excludes: Array(configuration["exclude"]),
         overrides: configuration["overrides"] || {},
+        collapsed: Array(configuration["collapsed"]),
       )
     end
 

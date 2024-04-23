@@ -14,3 +14,7 @@ exclude:
 # Dictionary of constant name overrides
 overrides:
   foobar: FooBar
+
+# List of collapsed directories
+collapsed:
+  - app/models

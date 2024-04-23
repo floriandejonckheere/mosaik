@@ -17,6 +17,9 @@ RSpec.describe MOSAIK::Resolver do
     FileUtils.mkdir_p("#{directory}/lib/core_ext")
     FileUtils.touch("#{directory}/lib/core_ext/object.rb")
 
+    FileUtils.mkdir_p("#{directory}/lib/concerns")
+    FileUtils.touch("#{directory}/lib/concerns/arguments.rb")
+
     FileUtils.mkdir_p("#{directory}/app")
     FileUtils.touch("#{directory}/app/user.rb")
     FileUtils.mkdir_p("#{directory}/app/users")
@@ -80,6 +83,13 @@ RSpec.describe MOSAIK::Resolver do
         .to eq("MOSAIK::Version")
     end
 
+    it "resolves file paths with collapsed directories" do
+      resolver.collapse("lib/concerns")
+
+      expect(resolver.resolve_file("lib/concerns/arguments.rb"))
+        .to eq("Arguments")
+    end
+
     it "does not resolve file paths outside of the load paths" do
       expect(resolver.resolve_file("tmp/mosaik.rb"))
         .to be_nil
@@ -124,6 +134,13 @@ RSpec.describe MOSAIK::Resolver do
 
       expect(resolver.resolve_constant("Foobar"))
         .to eq("#{directory}/lib/foo_bar.rb")
+    end
+
+    it "resolves constant names with collapsed directories" do
+      resolver.collapse("lib/concerns")
+
+      expect(resolver.resolve_constant("Arguments"))
+        .to eq("#{directory}/lib/concerns/arguments.rb")
     end
 
     it "does not resolve constant names that do not exist" do

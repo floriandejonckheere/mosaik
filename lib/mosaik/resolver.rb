@@ -5,16 +5,21 @@ module MOSAIK
   # Inference engine for resolving file paths to constant names, and vice versa
   #
   class Resolver
-    attr_reader :directory, :load_paths, :overrides
+    attr_reader :directory, :load_paths, :overrides, :collapsed
 
-    def initialize(directory, load_paths, overrides = {})
+    def initialize(directory, load_paths, overrides = {}, collapsed = [])
       @directory = directory
       @load_paths = load_paths
       @overrides = overrides
+      @collapsed = collapsed
     end
 
     def override(**overrides)
       @overrides.merge!(overrides)
+    end
+
+    def collapse(*collapsed)
+      @collapsed += collapsed
     end
 
     def resolve_file(abspath)
@@ -23,6 +28,11 @@ module MOSAIK
 
       # Get the path without the file name
       path = File.dirname(abspath)
+
+      # Remove the collapsed directories
+      collapsed.each do |dir|
+        path = path.gsub(%r(#{dir}/?), dir.split("/")[..-2].join("/"))
+      end
 
       # Remove the directory prefix
       path = path.gsub(%r(#{directory}/?), "")
@@ -50,8 +60,15 @@ module MOSAIK
         .map { |c| underscore(c) }
         .join("/")
 
+      # Expand load paths with collapsed directories
+      expanded_load_paths = load_paths.flat_map do |load_path|
+        collapsed.map do |dir|
+          load_path.gsub(dir.split("/")[..-2].join("/"), dir)
+        end
+      end
+
       # Check if the file or directory exists in any of the load paths
-      load_paths.each do |load_path|
+      (expanded_load_paths + load_paths).uniq.each do |load_path|
         # Check first if the file exists
         abspath = File.join(directory, load_path, "#{file}.rb")
 

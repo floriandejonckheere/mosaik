@@ -36,7 +36,7 @@ module MOSAIK
                .clusters
                .values
                .filter_map do |cluster|
-               next if (cluster.vertices.empty? || cluster.vertices.all? { |vertex| vertex.edges.empty? }) && options[:hide_uncoupled]
+               next if options[:show_uncoupled] || (cluster.vertices.empty? || cluster.vertices.all? { |vertex| vertex.edges.empty? })
 
                [
                  "subgraph \"#{cluster.id}\" {",
@@ -53,7 +53,7 @@ module MOSAIK
             .values
             .map do |vertex|
             [
-              ("\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]" if vertex.in?(coupled_vertices) || !options[:hide_uncoupled]),
+              ("\"#{vertex.id}\" [shape=circle, width=1, fixedsize=true, fontsize=12, style=filled, fillcolor=lightblue]" if options[:show_uncoupled] || vertex.in?(coupled_vertices)),
               *vertex
                 .edges
                 .flat_map do |key, edges|
@@ -66,7 +66,7 @@ module MOSAIK
                     "\"#{vertex.id}\" ",
                     graph.directed? ? "->" : "--",
                     " \"#{key}\"",
-                    edge.attributes.any? && !options[:hide_labels] ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
+                    options[:show_labels] && edge.attributes.any? ? " [label=\"#{edge.attributes.map { |ek, ev| "#{ek}: #{ev}" }.join(', ')}\"]" : nil,
                   ].compact.join
                 end
               end,

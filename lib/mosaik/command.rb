@@ -17,8 +17,8 @@ module MOSAIK
       defaults file: "mosaik.csv",
                visualize: false,
                renderer: "dot",
-               hide_uncoupled: false,
-               hide_labels: false,
+               show_uncoupled: false,
+               show_labels: false,
                reduce: false
 
       argument "--file FILE", "File for the dependency graph (default: #{defaults[:file]})"
@@ -26,8 +26,8 @@ module MOSAIK
       argument "--visualize", "Enable graph visualization (default: #{defaults[:visualize]})"
       argument "--renderer RENDERER", "Graph renderer: dot, fdp, sfdp, or neato (default: #{defaults[:renderer]})"
 
-      argument("--hide-uncoupled", "Hide uncoupled vertices in the graph (default: #{defaults[:hide_uncoupled]})") { |arg| !arg.nil? }
-      argument("--hide-labels", "Hide labels in the graph (default: #{defaults[:hide_labels]})") { |arg| !arg.nil? }
+      argument("--show-uncoupled", "Show uncoupled vertices in the graph (default: #{defaults[:show_uncoupled]})") { |arg| !arg.nil? }
+      argument("--show-labels", "Show labels in the graph (default: #{defaults[:show_labels]})") { |arg| !arg.nil? }
 
       argument "--reduce", "Reduce the graph before visualization (default: #{defaults[:reduce]})"
 

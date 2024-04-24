@@ -11,9 +11,9 @@ module MOSAIK
 
       def call
         # Assign initial set of communities (each vertex in its own community)
-        graph.vertices.each_value do |vertex|
+        graph.vertices.each_value.with_index do |vertex, i|
           graph
-            .add_cluster(vertex.id)
+            .add_cluster("C#{i}")
             .add_vertex(vertex)
         end
 

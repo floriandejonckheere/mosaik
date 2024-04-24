@@ -5,7 +5,7 @@ load_paths:
 
 # List of patterns for files to include
 include:
-  - "**/*.{rb,rake,erb}"
+  - "**/*.rb"
 
 # List of patterns for files to exclude
 exclude:

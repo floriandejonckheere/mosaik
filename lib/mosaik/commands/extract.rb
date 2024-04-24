@@ -33,6 +33,8 @@ module MOSAIK
       def call
         info "Extracting information from the codebase (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
+        warn "No files found in the load paths, check if a valid mosaik.yml file exists in #{options[:directory]}" if MOSAIK.configuration.files.empty?
+
         # Add a vertex for each constant in the load path
         MOSAIK.configuration.files.each do |file|
           # Resolve file path to class name

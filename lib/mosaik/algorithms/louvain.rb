@@ -7,7 +7,7 @@ module MOSAIK
     #
     class Louvain < Algorithm
       # Threshold of modularity improvement
-      THRESHOLD = 1e-6
+      EPSILON = 1e-6
 
       def call
         # Assign initial set of communities (each vertex in its own community)
@@ -38,7 +38,7 @@ module MOSAIK
           final_modularity = modularity_for(graph)
 
           # Stop iterating if no further improvement in modularity
-          break if final_modularity - modularity <= THRESHOLD
+          break if final_modularity - modularity <= EPSILON
 
           # Update modularity
           modularity = final_modularity

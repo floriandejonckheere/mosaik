@@ -42,7 +42,7 @@ module MOSAIK
       end
 
       def argument(*args, **kwargs, &block)
-        self.arguments << [args, kwargs, block] # rubocop:disable Style/RedundantSelf
+        self.arguments += [[args, kwargs, block]]
       end
 
       def defaults(**kwargs)

@@ -60,27 +60,24 @@ module MOSAIK
         .map { |c| underscore(c) }
         .join("/")
 
-      # Expand load paths with collapsed directories
-      expanded_load_paths = load_paths.flat_map do |load_path|
-        collapsed.map do |dir|
-          load_path.gsub(dir.split("/")[..-2].join("/"), dir)
-        end
-      end
-
-      # Check if the file or directory exists in any of the load paths
-      (expanded_load_paths + load_paths).uniq.each do |load_path|
-        # Check first if the file exists
+      # Generate potential paths
+      paths = load_paths.flat_map do |load_path|
+        # Regular file path
         abspath = File.join(directory, load_path, "#{file}.rb")
 
-        return abspath if File.file?(abspath)
+        # Directory path
+        dirpath = File.join(directory, load_path, file)
 
-        # Check if the directory exists
-        abspath = File.join(directory, load_path, file)
+        # Expanded file path
+        expaths = collapsed.map do |dir|
+          abspath.gsub(dir.split("/")[..-2].join("/"), dir)
+        end
 
-        return abspath if File.directory?(abspath)
+        [abspath, dirpath, *expaths]
       end
 
-      nil
+      # Check if the file or directory exists
+      paths.uniq.find { |path| File.file?(path) || File.directory?(path) }
     end
 
     def resolve_file!(abspath)

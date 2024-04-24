@@ -73,6 +73,7 @@ module MOSAIK
           options[:directory],
           MOSAIK.configuration.load_paths,
           MOSAIK.configuration.overrides,
+          MOSAIK.configuration.collapsed,
         )
       end
     end

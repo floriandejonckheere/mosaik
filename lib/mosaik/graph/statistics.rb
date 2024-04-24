@@ -20,15 +20,18 @@ module MOSAIK
         options[:metrics].to_h do |metric|
           values = graph.clusters.each_value.map { |cluster| cluster.attributes[metric] }
 
-          [
-            metric,
+          statistics = {
             min: values.min,
             max: values.max,
             mean: values.sum.to_f / values.size,
             q1: percentile(values, 25),
             q2: percentile(values, 50),
             q3: percentile(values, 75),
-          ]
+          }
+
+          debug "Statistics for #{metric}: #{statistics.map { |k, v| "#{k} = #{v&.round(2)}" }.join(', ')}"
+
+          [metric, statistics]
         end.deep_stringify_keys
       end
 

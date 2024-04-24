@@ -42,7 +42,7 @@ module MOSAIK
 
           next unless options[:debug]
 
-          debug "Components: #{cluster.vertices.map(&:id).join(', ')}"
+          debug "Cluster #{cluster.id}: #{cluster.vertices.map(&:id).join(', ')}"
         end
 
         # Print the graph

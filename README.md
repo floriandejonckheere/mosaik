@@ -2,10 +2,10 @@
 [![Continuous Integration](https://github.com/floriandejonckheere/mosaik/actions/workflows/ci.yml/badge.svg)](https://github.com/floriandejonckheere/mosaik/actions/workflows/ci.yml)
 ![Release](https://img.shields.io/github/v/release/floriandejonckheere/mosaik?label=Latest%20release)
 
-Modular Optimization to Service-oriented Architecture Implementation Kit (MOSAIK)
+Modular Optimization to Service-oriented Architecture Identification Kit (MOSAIK)
 
-MOSAIK is an automated toolkit for software architects and developers to convert monolithic applications into service-oriented architectures.
-It provides a set of tools to analyze, extract, and refactor monolithic applications into modular monoliths or microservices.
+MOSAIK is a toolkit for software architects and developers to convert monolithic applications into service-oriented architectures.
+It analyzes, extracts information, identifies suitable service candidates in monolith codebases using advanced technologies and machine learning.
 
 ## Prerequisites
 
@@ -57,7 +57,7 @@ $ mosaik extract --help
 
 ### Identify
 
-The `identify` command identifies microservice candidates within the monolithic application.
+The `identify` command identifies service candidates in the monolithic application.
 
 ```bash
 $ mosaik identify --help
@@ -65,7 +65,7 @@ $ mosaik identify --help
 
 ### Evaluate
 
-The `evaluate` command analyzes the given microservices architecture, and evaluates the quality.
+The `evaluate` command analyzes the given service candidates, and evaluates the quality of the decomposition.
 
 ```bash
 $ mosaik evaluate --help

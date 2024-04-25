@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Florian Dejonckheere"]
   spec.email         = ["florian@floriandejonckheere.be"]
 
-  spec.summary       = "Modular Optimization to Service-oriented Architecture Implementation Kit"
+  spec.summary       = "Modular Optimization to Service-oriented Architecture Identification Kit"
   spec.description   = "Toolkit for converting monolithic applications into modular, service-oriented architectures."
   spec.homepage      = "https://github.com/floriandejonckheere/mosaik"
   spec.license       = "MIT"

@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+set -e
+
+ARGS="--directory ~/Code/link --file link.csv --debug"
+
+bin/mosaik identify --structural 1 --logical 1 --contributor 1 ${ARGS}
+mv link-candidates.csv candidates/structural-logical-contributor.csv
+
+bin/mosaik identify --structural 1 --logical 1 --contributor 0 ${ARGS}
+mv link-candidates.csv candidates/structural-logical.csv
+
+bin/mosaik identify --structural 1 --logical 0 --contributor 1 ${ARGS}
+mv link-candidates.csv candidates/structural-contributor.csv
+
+bin/mosaik identify --structural 0 --logical 1 --contributor 1 ${ARGS}
+mv link-candidates.csv candidates/logical-contributor.csv

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+set -e
+
+ARGS="--directory ~/Code/link --file link.csv"
+
+bin/mosaik extract --since 2023-10-27 --limit 0 --reduce --visualize --renderer neato

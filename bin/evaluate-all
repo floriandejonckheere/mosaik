@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+set -e
+
+ARGS="--directory ~/Code/link"
+
+bin/mosaik evaluate --file evaluation/structural-logical-contributor.csv --statistics evaluation/structural-logical-contributor.csv
+
+bin/mosaik evaluate --file evaluation/structural-logical.csv --statistics evaluation/structural-logical.csv
+
+bin/mosaik evaluate --file evaluation/structural-contributor.csv --statistics evaluation/structural-contributor.csv
+
+bin/mosaik evaluate --file evaluation/logical-contributor.csv --statistics evaluation/logical-contributor.csv

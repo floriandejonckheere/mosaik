@@ -43,12 +43,18 @@ module MOSAIK
 
         RubyProf.start if options[:profile]
 
+        # Save start time
+        start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
         # Identify microservice candidates
         Algorithms
           .const_get(options[:algorithm].camelize)
           .new(options, graph)
           .tap(&:validate)
           .call
+
+        # Save end time
+        end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
         if options[:profile]
           profile = RubyProf.stop
@@ -58,6 +64,8 @@ module MOSAIK
 
           info "Profiling information written to profile.html"
         end
+
+        info "Time elapsed: #{end_time - start_time} seconds"
 
         # Print the clusters
         graph.clusters.each_value do |cluster|

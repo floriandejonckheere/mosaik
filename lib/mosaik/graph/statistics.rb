@@ -16,8 +16,8 @@ module MOSAIK
       end
 
       def call
-        # Compute statistics
-        options[:metrics].to_h do |metric|
+        # Compute metric statistics
+        metrics = options[:metrics].to_h do |metric|
           values = graph.clusters.each_value.map { |cluster| cluster.attributes[metric] }
 
           statistics = {
@@ -32,7 +32,18 @@ module MOSAIK
           debug "Statistics for #{metric}: #{statistics.map { |k, v| "#{k} = #{v&.round(2)}" }.join(', ')}"
 
           [metric, statistics]
-        end.deep_stringify_keys
+        end
+
+        # Compute cluster statistics
+        metrics[:clusters] = {
+          count: graph.clusters.size,
+          min: graph.clusters.values.map { |cluster| cluster.vertices.size }.min,
+          max: graph.clusters.values.map { |cluster| cluster.vertices.size }.max,
+          size: graph.clusters.values.map { |cluster| cluster.vertices.size },
+        }
+
+        # Return statistics
+        metrics.deep_stringify_keys
       end
 
       private

@@ -8,7 +8,8 @@ module MOSAIK
     class Evaluate < Command::Graph
       self.description = "Evaluate microservice candidates"
 
-      defaults file: "mosaik-candidates.csv",
+      defaults input: "mosaik-candidates.csv",
+               output: "mosaik-evaluation.csv",
                metrics: [:abc_size, :cohesion, :complexity, :coupling, :modularity],
                statistics: nil
 
@@ -18,7 +19,7 @@ module MOSAIK
       def validate
         super
 
-        raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
+        raise OptionError, "input file not found: #{options[:input]}" unless File.exist? options[:input]
 
         metrics = options[:metrics] - self.class.defaults[:metrics]
 
@@ -48,9 +49,6 @@ module MOSAIK
         # Print the graph
         info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m].round(2)}" }.join(', ')})"
 
-        # Change file name
-        options[:file] = "#{File.basename(options[:file], '.*')}-evaluation.csv"
-
         # Write graph to file
         visualize
 
@@ -70,7 +68,7 @@ module MOSAIK
       private
 
       def graph
-        @graph ||= Graph::Graph.from_csv(File.read(options[:file]))
+        @graph ||= Graph::Graph.from_csv(File.read(options[:input]))
       end
     end
   end

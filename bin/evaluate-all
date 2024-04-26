@@ -4,10 +4,10 @@ set -e
 
 ARGS="--directory ~/Code/link"
 
-bin/mosaik evaluate --file evaluation/structural-logical-contributor.csv --statistics evaluation/structural-logical-contributor.csv
+bin/mosaik evaluate --input candidates/structural-logical-contributor.csv --output evaluation/structural-logical-contributor.csv --statistics statistics/structural-logical-contributor.csv
 
-bin/mosaik evaluate --file evaluation/structural-logical.csv --statistics evaluation/structural-logical.csv
+bin/mosaik evaluate --input candidates/structural-logical.csv --output evaluation/structural-logical.csv --statistics statistics/structural-logical.csv
 
-bin/mosaik evaluate --file evaluation/structural-contributor.csv --statistics evaluation/structural-contributor.csv
+bin/mosaik evaluate --input candidates/structural-contributor.csv --output evaluation/structural-contributor.csv --statistics statistics/structural-contributor.csv
 
-bin/mosaik evaluate --file evaluation/logical-contributor.csv --statistics evaluation/logical-contributor.csv
+bin/mosaik evaluate --input candidates/logical-contributor.csv --output evaluation/logical-contributor.csv --statistics statistics/logical-contributor.csv

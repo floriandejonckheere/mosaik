@@ -8,7 +8,9 @@ module MOSAIK
     class Identify < Command::Graph
       self.description = "Identify microservice candidates"
 
-      defaults structural: 1,
+      defaults input: "mosaik.csv",
+               output: "mosaik-candidates.csv",
+               structural: 1,
                logical: 1,
                contributor: 1,
                algorithm: "louvain",
@@ -24,7 +26,7 @@ module MOSAIK
       def validate
         super
 
-        raise OptionError, "file not found: #{options[:file]}" unless File.exist? options[:file]
+        raise OptionError, "input file not found: #{options[:input]}" unless File.exist? options[:input]
         raise OptionError, "unknown algorithm: #{options[:algorithm]}" unless options[:algorithm].in? ["louvain"]
 
         return unless options[:profile]
@@ -75,9 +77,6 @@ module MOSAIK
           end
         end
 
-        # Change file name
-        options[:file] = "#{File.basename(options[:file], '.*')}-candidates.csv"
-
         # Write graph to file
         visualize
       end
@@ -85,7 +84,7 @@ module MOSAIK
       private
 
       def graph
-        @graph ||= Graph::Graph.from_csv(File.read(options[:file]))
+        @graph ||= Graph::Graph.from_csv(File.read(options[:input]))
       end
     end
   end

@@ -14,14 +14,16 @@ module MOSAIK
     ##
     # Base class for commands that output graphs
     class Graph < Command
-      defaults file: "mosaik.csv",
+      defaults input: "mosaik.csv",
+               output: "mosaik.csv",
                visualize: false,
                renderer: "dot",
                show_uncoupled: false,
                show_labels: false,
                reduce: false
 
-      argument "--file FILE", "File for the dependency graph (default: #{defaults[:file]})"
+      argument "--input FILE", "Input file for the dependency graph (default: #{defaults[:input]})"
+      argument "--output FILE", "Output file for the dependency graph (default: #{defaults[:output]})"
 
       argument "--visualize", "Enable graph visualization (default: #{defaults[:visualize]})"
       argument "--renderer RENDERER", "Graph renderer: dot, fdp, sfdp, or neato (default: #{defaults[:renderer]})"
@@ -39,9 +41,9 @@ module MOSAIK
 
       def visualize
         # Write graph to file
-        File.write(options[:file], graph.to_csv)
+        File.write(options[:output], graph.to_csv)
 
-        info "Dependency graph written to #{options[:file]}"
+        info "Dependency graph written to #{options[:output]}"
 
         return unless options[:visualize]
 
@@ -60,7 +62,7 @@ module MOSAIK
             .call(directed: true)
         end
 
-        file = File.basename(options[:file], ".*")
+        file = File.basename(options[:output], ".*")
 
         # Write visualization to file
         debug visualizer.to_dot

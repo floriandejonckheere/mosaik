@@ -6,11 +6,11 @@ RSpec.describe MOSAIK::Commands::Evaluate do
   let(:arguments) { [] }
 
   describe "#validate" do
-    describe "--file" do
-      let(:arguments) { ["--file", "doesnotexist.csv"] }
+    describe "--input" do
+      let(:arguments) { ["--input", "doesnotexist.csv"] }
 
       it "raises an error" do
-        expect { command.validate }.to raise_error MOSAIK::OptionError, "file not found: doesnotexist.csv"
+        expect { command.validate }.to raise_error MOSAIK::OptionError, "input file not found: doesnotexist.csv"
       end
     end
 

@@ -8,7 +8,9 @@ module MOSAIK
     class Extract < Command::Graph
       self.description = "Extract information"
 
-      defaults couplings: [:structural, :logical, :contributor],
+      defaults input: nil,
+               output: "mosaik.csv",
+               couplings: [:structural, :logical, :contributor],
                since: nil,
                limit: 100
 

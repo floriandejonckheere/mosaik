@@ -36,7 +36,7 @@ module MOSAIK
                .clusters
                .values
                .filter_map do |cluster|
-               next if options[:show_uncoupled] || (cluster.vertices.empty? || cluster.vertices.all? { |vertex| vertex.edges.empty? })
+               next unless options[:show_uncoupled] || (cluster.vertices.any? { |vertex| vertex.edges.any? })
 
                [
                  "subgraph \"#{cluster.id}\" {",

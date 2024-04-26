@@ -111,7 +111,7 @@ RSpec.describe MOSAIK::Graph::Visualizer do
     end
 
     context "when uncoupled vertices are hidden" do
-      let(:options) { { show_uncoupled: false } }
+      let(:options) { { show_uncoupled: false, show_labels: true } }
 
       it "returns the graph in DOT format" do
         graph.add_vertex("vertex1")
@@ -130,7 +130,7 @@ RSpec.describe MOSAIK::Graph::Visualizer do
     end
 
     context "when labels are hidden" do
-      let(:options) { { show_labels: false } }
+      let(:options) { { show_uncoupled: true, show_labels: false } }
 
       it "returns the graph in DOT format" do
         graph.add_vertex("vertex1")

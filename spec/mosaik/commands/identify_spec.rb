@@ -19,7 +19,7 @@ RSpec.describe MOSAIK::Commands::Identify do
       let(:arguments) { ["--algorithm", "invalid"] }
 
       it "raises an error" do
-        FileUtils.touch("mosaik-candidates.csv")
+        FileUtils.touch("mosaik.csv")
 
         expect { command.validate }.to raise_error MOSAIK::OptionError, "unknown algorithm: invalid"
       end

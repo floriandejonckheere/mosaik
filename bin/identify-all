@@ -2,12 +2,12 @@
 
 set -e
 
-ARGS="--directory ~/Code/link --input link.csv --debug"
+ARGS="--directory ~/Code/link --input tmp/link.csv --debug"
 
-bin/mosaik identify --structural 1 --logical 1 --contributor 1 --output candidates/structural-logical-contributor.csv ${ARGS}
+bin/mosaik identify --structural 1 --logical 1 --contributor 1 --output tmp/structural-logical-contributor.csv ${ARGS}
 
-bin/mosaik identify --structural 1 --logical 1 --contributor 0 --output candidates/structural-logical.csv ${ARGS}
+bin/mosaik identify --structural 1 --logical 1 --contributor 0 --output tmp/structural-logical.csv ${ARGS}
 
-bin/mosaik identify --structural 1 --logical 0 --contributor 1 --output candidates/structural-contributor.csv ${ARGS}
+bin/mosaik identify --structural 1 --logical 0 --contributor 1 --output tmp/structural-contributor.csv ${ARGS}
 
-bin/mosaik identify --structural 0 --logical 1 --contributor 1 --output candidates/logical-contributor.csv ${ARGS}
+bin/mosaik identify --structural 0 --logical 1 --contributor 1 --output tmp/logical-contributor.csv ${ARGS}

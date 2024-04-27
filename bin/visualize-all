@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+set -e
+
+ARGS="--directory ~/Code/link"
+
+bin/mosaik visualize --input tmp/structural-logical-contributor.csv --output tmp/structural-logical-contributor.svg
+bin/mosaik visualize --input tmp/structural-logical.csv --output tmp/structural-logical.svg
+bin/mosaik visualize --input tmp/structural-contributor.csv --output tmp/structural-contributor.svg
+bin/mosaik visualize --input tmp/logical-contributor.csv --output tmp/logical-contributor.svg

@@ -214,6 +214,27 @@ module MOSAIK
         # rubocop:enable Metrics/BlockLength
       end
 
+      sig { params(options: T::Hash[Symbol, T.untyped]).returns(String) }
+      def to_dot(options = {})
+        Visualizer
+          .new(options, self)
+          .to_dot
+      end
+
+      sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
+      def to_png(file, options = {})
+        Visualizer
+          .new(options, self)
+          .to_png(file)
+      end
+
+      sig { params(file: String, options: T::Hash[Symbol, T.untyped]).void }
+      def to_svg(file, options = {})
+        Visualizer
+          .new(options, self)
+          .to_svg(file)
+      end
+
       sig { returns(String) }
       def inspect
         "#<#{self.class.name} vertices=#{vertices.values.map(&:inspect)}>"

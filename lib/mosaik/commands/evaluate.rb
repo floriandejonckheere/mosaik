@@ -29,6 +29,9 @@ module MOSAIK
       def call
         info "Evaluating microservice candidates (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
 
+        # Remove clusters with cardinality less than 2
+        graph.clusters.delete_if { |_, cluster| cluster.vertices.size < 2 }
+
         # Evaluate metrics
         options[:metrics].each do |metric|
           Metrics

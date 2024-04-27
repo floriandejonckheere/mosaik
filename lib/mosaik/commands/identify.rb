@@ -78,7 +78,10 @@ module MOSAIK
         end
 
         # Write graph to file
-        visualize
+        write_graph
+
+        # Render graph visualization
+        visualize_graph
       end
 
       private

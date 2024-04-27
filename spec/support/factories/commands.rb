@@ -19,4 +19,6 @@ FactoryBot.define do
   factory :init_command, parent: :command, class: "MOSAIK::Commands::Init"
 
   factory :version_command, parent: :command, class: "MOSAIK::Commands::Version"
+
+  factory :visualize_command, parent: :command, class: "MOSAIK::Commands::Visualize"
 end

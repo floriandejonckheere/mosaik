@@ -39,12 +39,14 @@ module MOSAIK
 
       protected
 
-      def visualize
+      def write_graph
         # Write graph to file
         File.write(options[:output], graph.to_csv)
 
         info "Dependency graph written to #{options[:output]}"
+      end
 
+      def visualize_graph
         return unless options[:visualize]
 
         visualizer = MOSAIK::Graph::Visualizer

@@ -50,7 +50,10 @@ module MOSAIK
         info "Graph (#{options[:metrics].map { |m| "#{m}: #{graph.attributes[m].round(2)}" }.join(', ')})"
 
         # Write graph to file
-        visualize
+        write_graph
+
+        # Render graph visualization
+        visualize_graph
 
         return unless options[:statistics]
 

@@ -17,7 +17,7 @@ module MOSAIK
 
       def call(directed: false)
         # Iterate over all combinations of vertices
-        weights = graph.vertices.keys.combination(2).map do |v1, v2|
+        weights = graph.vertices.keys.combination(2).filter_map do |v1, v2|
           # Find all edges between the two vertices
           edges = Set.new(graph.find_edges(v1, v2) + graph.find_edges(v2, v1))
 
@@ -38,6 +38,9 @@ module MOSAIK
           weight += options[:contributor] * edges
             .select { |e| e.attributes[:type] == "contributor" }
             .sum { |e| e.attributes.fetch(:weight, 0.0) }
+
+          # Don't add zero weights
+          next if weight.zero?
 
           # Return vertices and weights
           [v1, v2, weight]

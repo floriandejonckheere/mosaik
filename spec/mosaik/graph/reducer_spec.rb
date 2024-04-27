@@ -2,7 +2,7 @@
 # typed: true
 
 RSpec.describe MOSAIK::Graph::Reducer do
-  subject(:preprocessor) { described_class.new(options, graph) }
+  subject(:reducer) { described_class.new(options, graph) }
 
   let(:options) { { structural: 0.5, logical: 0.3, contributor: 0.2 } }
   let(:graph) { build(:graph) }
@@ -31,13 +31,13 @@ RSpec.describe MOSAIK::Graph::Reducer do
   it "changes the graph to undirected" do
     expect(graph).to be_directed
 
-    preprocessor.call
+    reducer.call
 
     expect(graph).not_to be_directed
   end
 
   it "aggregates the weights of the edges between vertices" do
-    preprocessor.call
+    reducer.call
 
     v1_v2 = ((0.5 * 2) + (0.5 * 3)) + ((0.3 * 2) + (0.3 * 3)) + ((0.2 * 2) + (0.2 * 3))
     v2_v3 = ((0.5 * 3) + (0.5 * 1)) + ((0.3 * 3) + (0.3 * 1)) + ((0.2 * 3) + (0.2 * 1))
@@ -52,11 +52,28 @@ RSpec.describe MOSAIK::Graph::Reducer do
     expect(graph.find_edge("v3", "v1")).to be_nil
   end
 
+  describe "no coupling" do
+    let(:options) { { structural: 0.0, logical: 0.0, contributor: 0.0 } }
+
+    it "does not aggregate edges" do
+      reducer.call
+
+      expect(graph.find_edge("v1", "v2")).to be_nil
+      expect(graph.find_edge("v2", "v1")).to be_nil
+
+      expect(graph.find_edge("v2", "v3")).to be_nil
+      expect(graph.find_edge("v3", "v2")).to be_nil
+
+      expect(graph.find_edge("v1", "v3")).to be_nil
+      expect(graph.find_edge("v3", "v1")).to be_nil
+    end
+  end
+
   describe "structural coupling" do
     let(:options) { { structural: 0.5, logical: 0.0, contributor: 0.0 } }
 
     it "aggregates the weights of the edges between vertices" do
-      preprocessor.call
+      reducer.call
 
       v1_v2 = (0.5 * 2) + (0.5 * 3)
       v2_v3 = (0.5 * 3) + (0.5 * 1)
@@ -76,7 +93,7 @@ RSpec.describe MOSAIK::Graph::Reducer do
     let(:options) { { structural: 0.0, logical: 0.3, contributor: 0.0 } }
 
     it "aggregates the weights of the edges between vertices" do
-      preprocessor.call
+      reducer.call
 
       v1_v2 = (0.3 * 2) + (0.3 * 3)
       v2_v3 = (0.3 * 3) + (0.3 * 1)
@@ -96,7 +113,7 @@ RSpec.describe MOSAIK::Graph::Reducer do
     let(:options) { { structural: 0.0, logical: 0.0, contributor: 0.1 } }
 
     it "aggregates the weights of the edges between vertices" do
-      preprocessor.call
+      reducer.call
 
       v1_v2 = (0.1 * 2) + (0.1 * 3)
       v2_v3 = (0.1 * 3) + (0.1 * 1)

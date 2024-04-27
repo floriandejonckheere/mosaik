@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe MOSAIK::Commands::Evaluate do
-  subject(:command) { build(:evaluate_command, arguments:) }
+  subject(:command) { build(:evaluate_command, options:, arguments:) }
 
+  let(:options) { { input: "README.md" } }
   let(:arguments) { [] }
 
   describe "#validate" do
@@ -18,8 +19,6 @@ RSpec.describe MOSAIK::Commands::Evaluate do
       let(:arguments) { ["--metrics", "modularity,doesnotexist"] }
 
       it "raises an error" do
-        FileUtils.touch("mosaik-candidates.csv")
-
         expect { command.validate }.to raise_error MOSAIK::OptionError, "unknown metrics: doesnotexist"
       end
     end

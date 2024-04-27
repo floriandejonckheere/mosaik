@@ -15,13 +15,16 @@ module MOSAIK
         super
 
         raise OptionError, "input file not found: #{options[:input]}" unless File.exist? options[:input]
+
+        # Force visualization
+        options[:visualize] = true
+
+        # Remove output file extension
+        options[:output] = options[:output].sub(/\.\w+$/, "")
       end
 
       def call
         info "Visualizing graph (#{options.map { |k, v| "#{k}: #{v}" }.join(', ')})"
-
-        # Force visualization
-        options[:visualize] = true
 
         # Render graph visualization
         visualize_graph

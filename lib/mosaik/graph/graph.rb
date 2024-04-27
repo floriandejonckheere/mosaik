@@ -235,6 +235,9 @@ module MOSAIK
         CSV.new(vertices, headers: true, header_converters: :symbol, converters: :numeric).each do |row|
           row => { id:, **attributes }
 
+          # Ensure ID is a strings
+          id = id.to_s
+
           graph.find_or_add_vertex(id, attributes.symbolize_keys)
         end
 
@@ -253,6 +256,10 @@ module MOSAIK
         # Add clusters from the cluster mapping
         CSV.new(clusters, headers: true, header_converters: :symbol, converters: :numeric).each do |row|
           row => { vertex:, cluster:, **attributes }
+
+          # Ensure IDs are strings
+          vertex = vertex.to_s
+          cluster = cluster.to_s
 
           graph
             .find_or_add_cluster(cluster, attributes.symbolize_keys)

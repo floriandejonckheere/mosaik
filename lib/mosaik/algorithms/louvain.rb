@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "ruby-progressbar"
+
 module MOSAIK
   module Algorithms
     ##
@@ -41,16 +43,25 @@ module MOSAIK
           debug "Iteration #{i}: start modularity=#{modularity}, vertices=#{graph.vertices.count}, communities=#{graph.clusters.count}"
 
           # Phase 1: reassign vertices to optimize modularity
+          progress = ProgressBar.create(
+            title: "Reassigning vertices",
+            total: graph.vertices.size,
+            length: 80,
+            format: "%t%e [%b>%i] %p%%".cyan,
+            output: options[:debug] ? $stderr : File.open(File::NULL, "w"),
+          )
+
           graph.vertices.each_value do |vertex|
+            progress.increment
+
             reassign_vertex(graph, vertex)
           end
 
           # Phase 2: reduce communities to a single node
+          debug "Reducing graph"
           g, reduced_mapping = reduce_graph(graph)
 
           debug "Reduced #{graph.vertices.size} vertices to #{g.vertices.size} vertices"
-          debug "Mapping: #{reduced_mapping.inspect}"
-          debug "Changes: #{reduced_mapping.reject { |a, b| a == b }.inspect}"
 
           if options[:visualize]
             MOSAIK::Graph::Visualizer

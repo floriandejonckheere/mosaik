@@ -67,7 +67,7 @@ module MOSAIK
             .call(directed: true)
         end
 
-        file = File.basename(options[:output], ".*")
+        file = options[:output].delete_suffix(".csv")
 
         # Write visualization to file
         debug visualizer.to_dot

@@ -130,7 +130,6 @@ module MOSAIK
         # Set of visited edges (to avoid duplicates in undirected graphs)
         visited = Set.new
 
-        # rubocop:disable Metrics/BlockLength
         CSV.generate do |csv|
           # PREAMBLE
           # Collect all graph attributes

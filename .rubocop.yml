@@ -28,9 +28,7 @@ Metrics/AbcSize:
   Enabled: false
 
 Metrics/BlockLength:
-  Exclude:
-    - "*.gemspec"
-    - spec/**/*.rb
+  Enabled: false
 
 Metrics/ClassLength:
   Enabled: false

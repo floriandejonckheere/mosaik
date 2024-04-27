@@ -19,6 +19,9 @@ module MOSAIK
           vertices_in_cluster = cluster.vertices
           vertices_in_cluster_id = vertices_in_cluster.map(&:id)
 
+          # Skip if the cluster is empty
+          next if vertices_in_cluster.empty?
+
           # Edges outgoing from the cluster
           e_outgoing = vertices_in_cluster
             .map { |v| v.edges.values }
@@ -32,6 +35,9 @@ module MOSAIK
             .map { |v| v.edges.slice(*vertices_in_cluster_id).values }
             .flatten(2)
             .uniq
+
+          # Skip if there are no edges
+          next if e_outgoing.empty? && e_incoming.empty?
 
           # Total weight of edges in the cluster
           c_weight_total = (e_outgoing + e_incoming)

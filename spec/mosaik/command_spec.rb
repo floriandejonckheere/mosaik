@@ -27,5 +27,13 @@ RSpec.describe MOSAIK::Command do
         end
       end
     end
+
+    describe "--format" do
+      let(:arguments) { ["--format", "invalid"] }
+
+      it "raises an error" do
+        expect { command.validate }.to raise_error MOSAIK::OptionError, "unknown format: invalid"
+      end
+    end
   end
 end

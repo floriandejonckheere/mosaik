@@ -17,6 +17,7 @@ module MOSAIK
       defaults input: "mosaik.csv",
                output: "mosaik.csv",
                visualize: false,
+               format: "svg",
                renderer: "dot",
                show_uncoupled: false,
                show_labels: false,
@@ -26,6 +27,7 @@ module MOSAIK
       argument "--output FILE", "Output file for the dependency graph (default: #{defaults[:output]})"
 
       argument "--visualize", "Enable graph visualization (default: #{defaults[:visualize]})"
+      argument "--format FORMAT", "Graph visualization format: svg or png (default: #{defaults[:format]})"
       argument "--renderer RENDERER", "Graph renderer: dot, fdp, sfdp, or neato (default: #{defaults[:renderer]})"
 
       argument("--show-uncoupled", "Show uncoupled vertices in the graph (default: #{defaults[:show_uncoupled]})") { |arg| !arg.nil? }
@@ -34,6 +36,7 @@ module MOSAIK
       argument "--reduce", "Reduce the graph before visualization (default: #{defaults[:reduce]})"
 
       def validate
+        raise OptionError, "unknown format: #{options[:format]}" unless options[:format].in? ["svg", "png"]
         raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "fdp", "sfdp", "neato"]
       end
 
@@ -68,7 +71,13 @@ module MOSAIK
 
         # Write visualization to file
         debug visualizer.to_dot
-        visualizer.to_svg(file)
+
+        case options[:format]
+        when "png"
+          visualizer.to_png(file)
+        when "svg"
+          visualizer.to_svg(file)
+        end
 
         info "Dependency graph written to #{file}.gv and rendered to #{file}.svg"
       end

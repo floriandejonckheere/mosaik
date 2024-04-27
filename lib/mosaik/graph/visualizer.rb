@@ -78,12 +78,12 @@ module MOSAIK
 
       def to_png(file)
         File.write("#{file}.gv", to_dot)
-        system("#{options[:renderer]} -x -Goverlap=scale -Tpng #{file}.gv -o #{file}.png#{' 2> /dev/null' unless options[:debug]}")
+        system("#{options.fetch(:renderer, 'dot')} -x -Goverlap=scale -Tpng #{file}.gv -o #{file}.png#{' 2> /dev/null' unless options[:debug]}")
       end
 
       def to_svg(file)
         File.write("#{file}.gv", to_dot)
-        system("#{options[:renderer]} -x -Goverlap=scale -Tsvg #{file}.gv -o #{file}.svg#{' 2> /dev/null' unless options[:debug]}")
+        system("#{options.fetch(:renderer, 'dot')} -x -Goverlap=scale -Tsvg #{file}.gv -o #{file}.svg#{' 2> /dev/null' unless options[:debug]}")
       end
     end
   end

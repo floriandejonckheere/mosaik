@@ -10,6 +10,15 @@ module MOSAIK
         # Total weight of edges in the graph
         m = graph.total_weight
 
+        if m.zero?
+          warn "Graph has no edges, modularity is zero"
+
+          # Store modularity value in the graph
+          graph.attributes[:modularity] = 0.0
+
+          return 0.0
+        end
+
         # Total modularity
         q = 0.0
 

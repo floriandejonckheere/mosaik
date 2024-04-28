@@ -4,7 +4,7 @@ set -e
 
 ARGS="--directory ~/Code/link"
 
-bin/mosaik evaluate --input tmp/structural-logical-contributor.csv --output tmp/evaluation/structural-logical-contributor.csv --statistics tmp/evaluation/structural-logical-contributor.yml
-bin/mosaik evaluate --input tmp/structural-logical.csv --output tmp/evaluation/structural-logical.csv --statistics tmp/evaluation/structural-logical.yml
-bin/mosaik evaluate --input tmp/structural-contributor.csv --output tmp/evaluation/structural-contributor.csv --statistics tmp/evaluation/structural-contributor.yml
-bin/mosaik evaluate --input tmp/logical-contributor.csv --output tmp/evaluation/logical-contributor.csv --statistics tmp/evaluation/logical-contributor.yml
+bin/mosaik evaluate ${ARGS} --input tmp/structural-logical-contributor.csv --output tmp/evaluation/structural-logical-contributor.csv --statistics tmp/evaluation/structural-logical-contributor.yml
+bin/mosaik evaluate ${ARGS} --input tmp/structural-logical.csv --output tmp/evaluation/structural-logical.csv --statistics tmp/evaluation/structural-logical.yml
+bin/mosaik evaluate ${ARGS} --input tmp/structural-contributor.csv --output tmp/evaluation/structural-contributor.csv --statistics tmp/evaluation/structural-contributor.yml
+bin/mosaik evaluate ${ARGS} --input tmp/logical-contributor.csv --output tmp/evaluation/logical-contributor.csv --statistics tmp/evaluation/logical-contributor.yml

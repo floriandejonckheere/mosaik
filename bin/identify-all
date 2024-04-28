@@ -4,7 +4,7 @@ set -e
 
 ARGS="--directory ~/Code/link --input tmp/link.csv --debug"
 
-bin/mosaik identify --structural 1 --logical 1 --contributor 1 --output tmp/structural-logical-contributor.csv ${ARGS}
-bin/mosaik identify --structural 1 --logical 1 --contributor 0 --output tmp/structural-logical.csv ${ARGS}
-bin/mosaik identify --structural 1 --logical 0 --contributor 1 --output tmp/structural-contributor.csv ${ARGS}
-bin/mosaik identify --structural 0 --logical 1 --contributor 1 --output tmp/logical-contributor.csv ${ARGS}
+bin/mosaik identify ${ARGS} --structural 1 --logical 1 --contributor 1 --output tmp/structural-logical-contributor.csv
+bin/mosaik identify ${ARGS} --structural 1 --logical 1 --contributor 0 --output tmp/structural-logical.csv
+bin/mosaik identify ${ARGS} --structural 1 --logical 0 --contributor 1 --output tmp/structural-contributor.csv
+bin/mosaik identify ${ARGS} --structural 0 --logical 1 --contributor 1 --output tmp/logical-contributor.csv

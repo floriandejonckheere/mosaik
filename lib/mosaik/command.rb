@@ -13,9 +13,11 @@ module MOSAIK
 
     ##
     # Base class for commands that output graphs
+    #
     class Graph < Command
       defaults input: "mosaik.csv",
                output: "mosaik.csv",
+               force: false,
                visualize: false,
                format: "svg",
                renderer: "dot",
@@ -25,6 +27,7 @@ module MOSAIK
 
       argument "--input FILE", "Input file for the dependency graph (default: #{defaults[:input]})"
       argument "--output FILE", "Output file for the dependency graph (default: #{defaults[:output]})"
+      argument "--force", "Overwrite the output file if it exists (default: #{defaults[:force]})"
 
       argument "--visualize", "Enable graph visualization (default: #{defaults[:visualize]})"
       argument "--format FORMAT", "Graph visualization format: svg or png (default: #{defaults[:format]})"
@@ -38,6 +41,7 @@ module MOSAIK
       def validate
         raise OptionError, "unknown format: #{options[:format]}" unless options[:format].in? ["svg", "png"]
         raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "fdp", "sfdp", "neato"]
+        raise OptionError, "output file exists: #{options[:output]}" if File.exist?(options[:output])
       end
 
       protected

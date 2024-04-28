@@ -5,10 +5,18 @@ RSpec.describe MOSAIK::Command do
   describe MOSAIK::Command::Graph do
     subject(:command) { described_class.new(options, *arguments) }
 
-    let(:options) { { input: "README.md" } }
+    let(:options) { { input: "README.md", output: "doesnotexist.csv" } }
     let(:arguments) { [] }
 
     describe "#validate" do
+      describe "--output" do
+        let(:arguments) { ["--output", "README.md"] }
+
+        it "raises an error" do
+          expect { command.validate }.to raise_error MOSAIK::OptionError, "output file exists: README.md"
+        end
+      end
+
       describe "--visualize" do
         let(:arguments) { ["--visualize"] }
 

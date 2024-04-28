@@ -3,7 +3,7 @@
 RSpec.describe MOSAIK::Commands::Evaluate do
   subject(:command) { build(:evaluate_command, options:, arguments:) }
 
-  let(:options) { { input: "README.md" } }
+  let(:options) { { input: "README.md", output: "doesnotexist.csv" } }
   let(:arguments) { [] }
 
   describe "#validate" do

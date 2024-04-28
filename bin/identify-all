@@ -2,7 +2,7 @@
 
 set -e
 
-ARGS="--directory ~/Code/link --input tmp/link.csv --debug --force"
+ARGS="--directory ~/Code/link --input tmp/link.csv --debug --force --visualize"
 
 bin/mosaik identify ${ARGS} --structural 1 --logical 1 --contributor 1 --output tmp/structural_logical_contributor.csv
 bin/mosaik identify ${ARGS} --structural 1 --logical 1 --contributor 0 --output tmp/structural_logical.csv

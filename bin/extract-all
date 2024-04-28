@@ -2,6 +2,4 @@
 
 set -e
 
-ARGS="--directory ~/Code/link --output tmp/link.csv --force"
-
-bin/mosaik extract ${ARGS} --since 2023-10-27 --limit 0 --reduce --visualize --renderer neato
+bin/mosaik extract --directory ~/Code/link --output tmp/link.csv --force --since 2023-10-27 --limit 0 --reduce --visualize --renderer neato

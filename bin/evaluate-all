@@ -2,7 +2,7 @@
 
 set -e
 
-ARGS="--directory ~/Code/link --force"
+ARGS="--directory ~/Code/link --force --visualize"
 
 bin/mosaik evaluate ${ARGS} --input tmp/structural_logical_contributor.csv --output tmp/evaluation/structural_logical_contributor.csv --statistics tmp/evaluation/structural_logical_contributor.yml
 bin/mosaik evaluate ${ARGS} --input tmp/structural_logical.csv --output tmp/evaluation/structural_logical.csv --statistics tmp/evaluation/structural_logical.yml

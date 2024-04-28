@@ -41,7 +41,7 @@ module MOSAIK
       def validate
         raise OptionError, "unknown format: #{options[:format]}" unless options[:format].in? ["svg", "png"]
         raise OptionError, "unknown renderer: #{options[:renderer]}" unless options[:renderer].in? ["dot", "fdp", "sfdp", "neato"]
-        raise OptionError, "output file exists: #{options[:output]}" if File.exist?(options[:output])
+        raise OptionError, "output file exists: #{options[:output]}" if File.exist?(options[:output]) && !options[:force]
       end
 
       protected

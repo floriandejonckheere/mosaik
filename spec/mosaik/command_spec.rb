@@ -15,6 +15,14 @@ RSpec.describe MOSAIK::Command do
         it "raises an error" do
           expect { command.validate }.to raise_error MOSAIK::OptionError, "output file exists: README.md"
         end
+
+        context "with --force" do
+          let(:arguments) { ["--output", "README.md", "--force"] }
+
+          it "does not raise an error" do
+            expect { command.validate }.not_to raise_error
+          end
+        end
       end
 
       describe "--visualize" do

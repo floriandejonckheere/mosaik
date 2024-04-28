@@ -20,6 +20,9 @@ module MOSAIK
         metrics = options[:metrics].to_h do |metric|
           values = graph.clusters.each_value.map { |cluster| cluster.attributes[metric] }
 
+          # Drop zero values
+          values = values.reject { |v| v.nil? || v.zero? }
+
           statistics = {
             min: values.min,
             max: values.max,

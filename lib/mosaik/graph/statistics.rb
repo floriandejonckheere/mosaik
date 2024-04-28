@@ -24,12 +24,12 @@ module MOSAIK
           values = values.reject { |v| v.nil? || v.zero? }
 
           statistics = {
-            min: values.min,
-            max: values.max,
-            mean: values.sum.to_f / values.size,
-            q1: percentile(values, 25),
-            q2: percentile(values, 50),
-            q3: percentile(values, 75),
+            min: values.min || 0.0,
+            max: values.max || 0.0,
+            mean: values.any? ? (values.sum.to_f / values.size) : 0.0,
+            q1: percentile(values, 25) || 0.0,
+            q2: percentile(values, 50) || 0.0,
+            q3: percentile(values, 75) || 0.0,
           }
 
           debug "Statistics for #{metric}: #{statistics.map { |k, v| "#{k} = #{v&.round(2)}" }.join(', ')}"

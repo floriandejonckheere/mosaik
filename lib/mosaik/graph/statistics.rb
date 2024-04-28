@@ -42,6 +42,7 @@ module MOSAIK
           count: graph.clusters.size,
           min: graph.clusters.values.map { |cluster| cluster.vertices.size }.min,
           max: graph.clusters.values.map { |cluster| cluster.vertices.size }.max,
+          mean: graph.clusters.values.any? ? (graph.clusters.values.sum { |cluster| cluster.vertices.size }.to_f / graph.clusters.size) : 0.0,
           size: graph.clusters.values.map { |cluster| cluster.vertices.size }.sort,
         }
 

@@ -25,7 +25,7 @@ RSpec.describe MOSAIK::Graph::Statistics do
                "complexity" => { "min" => 0.2, "max" => 0.3, "mean" => 0.23, "q1" => 0.2, "q2" => 0.2, "q3" => 0.3 },
                "coupling" => { "min" => 0.2, "max" => 0.3, "mean" => 0.27, "q1" => 0.2, "q2" => 0.3, "q3" => 0.3 },
                "modularity" => { "min" => 0.1, "max" => 0.2, "mean" => 0.13, "q1" => 0.1, "q2" => 0.1, "q3" => 0.2 },
-               "clusters" => { "count" => 3, "min" => 1, "max" => 2, "size" => [1, 2, 1] }
+               "clusters" => { "count" => 3, "min" => 1, "max" => 2, "size" => [1, 1, 2] }
     end
   end
 end

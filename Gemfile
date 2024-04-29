@@ -31,6 +31,6 @@ group :development, :test do
   gem "ruby-prof-flamegraph", "0.3.0", require: false
 
   # Type checker
-  gem "sorbet", "0.5.11352", require: false
+  gem "sorbet", "0.5.11361", require: false
   gem "tapioca", "0.13.3", require: false
 end

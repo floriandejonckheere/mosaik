@@ -24,12 +24,14 @@ module MOSAIK
           values = values.reject { |v| v.nil? || v.zero? }
 
           mean = values.any? ? (values.sum.to_f / values.size) : 0.0
+          variance = values.any? ? (values.sum { |v| (v - mean)**2 } / values.size) : 0.0
 
           statistics = {
             min: values.min || 0.0,
             max: values.max || 0.0,
             mean:,
-            variance: values.any? ? (values.sum { |v| (v - mean)**2 } / values.size) : 0.0,
+            variance:,
+            stdev: Math.sqrt(variance),
             q1: percentile(values, 25) || 0.0,
             q2: percentile(values, 50) || 0.0,
             q3: percentile(values, 75) || 0.0,
@@ -42,12 +44,15 @@ module MOSAIK
 
         # Compute cluster statistics
         mean = graph.clusters.values.any? ? (graph.clusters.values.sum { |cluster| cluster.vertices.size }.to_f / graph.clusters.size) : 0.0
+        variance = graph.clusters.values.any? ? (graph.clusters.values.sum { |cluster| (cluster.vertices.size - mean)**2 } / graph.clusters.size) : 0.0
+
         metrics[:clusters] = {
           count: graph.clusters.size,
           min: graph.clusters.values.map { |cluster| cluster.vertices.size }.min,
           max: graph.clusters.values.map { |cluster| cluster.vertices.size }.max,
           mean:,
-          variance: graph.clusters.values.any? ? (graph.clusters.values.sum { |cluster| (cluster.vertices.size - mean)**2 } / graph.clusters.size) : 0.0,
+          variance:,
+          stdev: Math.sqrt(variance),
           size: graph.clusters.values.map { |cluster| cluster.vertices.size }.sort,
         }
 
